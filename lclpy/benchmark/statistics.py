@@ -39,7 +39,7 @@ def _func_on_best_values(benchmark_result, func):
 
         for problem in algorithm:
 
-            aid_list.append(func(map(position_getter, problem)))
+            aid_list.append(func(map(int(position_getter), problem)))
 
         result.append(aid_list)
 
@@ -107,7 +107,6 @@ def stdev(benchmark_result):
         indices one needs to get the results for that pair.
 
     """
-
     return _func_on_best_values(benchmark_result, statistics.stdev)
 
 
@@ -446,6 +445,7 @@ def stat(benchmark_result, algorithm_names=None, problem_names=None):
 
     # get the data
     # best_value
+    print(benchmark_result)
 
     best_value_tuple_class = namedtuple('best_value_statistics', (
         'mean', 'median', 'stdev', 'max', 'min'))

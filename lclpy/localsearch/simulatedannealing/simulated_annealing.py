@@ -226,7 +226,7 @@ class SimulatedAnnealing(AbstractLocalSearch):
         base_value = self._problem.evaluate()
         self._problem.set_as_best(base_value)
 
-        # init iteration (used to vount the amount of iterations)
+        # init iteration (used to count the amount of iterations)
         iteration = 0
 
         # add to data
