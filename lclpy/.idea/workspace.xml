@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CargoProjects">
+    <cargoProject FILE="$PROJECT_DIR$/lclpyRust/Cargo.toml" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="017d4a58-b7ba-45cd-a5c7-a4e0a0296788" name="Changes" comment="init maturin">
+      <change beforePath="$PROJECT_DIR$/.idea/Project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/Activate.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/activate" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/activate.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/deactivate.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/maturin.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/pip.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/pip3.12.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/pip3.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/python.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/Scripts/pythonw.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.env/pyvenv.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.github/workflows/CI.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/Cargo.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/Cargo.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/pyproject.toml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lclpyRust/src/lib.rs" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;r0757743&quot;,
+      &quot;fullname&quot;: &quot;Milan Schollier&quot;
+    }
+  }
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;git@gitlab.kuleuven.be:codes/education/2023-masterproef-milan-schollier.git&quot;,
+    &quot;second&quot;: &quot;6bb6270c-48ac-4e01-a76e-df10c35c93ce&quot;
+  }
+}</component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="1gtpu42v" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2WI1py4cZ3VTfWMzGOduLROjVyg" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/milan/OneDrive - KU Leuven/Ma/Masterproef/Project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\milan\OneDrive - KU Leuven\Ma\Masterproef\Project\venv\Lib\site-packages" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\milan\OneDrive - KU Leuven\Ma\Masterproef\Project\Project" />
+      <recent name="C:\Users\milan\OneDrive - KU Leuven\Ma\Masterproef\Project\lclpyRust\.env\Lib\site-packages" />
+      <recent name="C:\Users\milan\OneDrive - KU Leuven\Ma\Masterproef\Project\notebooks" />
+      <recent name="C:\Users\milan\OneDrive - KU Leuven\Ma\Masterproef\Project\lclpyRust" />
+    </key>
+  </component>
+  <component name="RustProjectSettings">
+    <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="017d4a58-b7ba-45cd-a5c7-a4e0a0296788" name="Changes" comment="" />
+      <created>1696405472379</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1696405472379</updated>
+      <workItem from="1696405473070" duration="1120000" />
+      <workItem from="1696407723175" duration="11987000" />
+      <workItem from="1696668065542" duration="24511000" />
+      <workItem from="1697026576633" duration="1392000" />
+      <workItem from="1697538251734" duration="908000" />
+      <workItem from="1697545520676" duration="261000" />
+      <workItem from="1697546291210" duration="1006000" />
+      <workItem from="1699360830071" duration="19000" />
+      <workItem from="1699712897065" duration="324000" />
+      <workItem from="1699713903571" duration="619000" />
+      <workItem from="1699715728396" duration="3001000" />
+      <workItem from="1699718779319" duration="80000" />
+      <workItem from="1699866347134" duration="3726000" />
+      <workItem from="1699882400741" duration="1327000" />
+      <workItem from="1700993650535" duration="9285000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init maturin" />
+    <option name="LAST_COMMIT_MESSAGE" value="init maturin" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/milan/OneDrive - KU Leuven/Ma/Masterproef/Project/notebooks/Test.ipynb</url>
+          <line>4</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Project$Test.coverage" NAME="Test Coverage Results" MODIFIED="1699881824763" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lclpyRust" />
+  </component>
+</project>
