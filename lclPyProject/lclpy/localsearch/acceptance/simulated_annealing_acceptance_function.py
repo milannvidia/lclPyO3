@@ -104,7 +104,7 @@ class SimulatedAnnealingAcceptanceFunction(AbstractAcceptanceFunction):
 
         # calculate probability
         probability = self._multiplier * \
-            math.exp(-(self._diff_multiplier * delta_value) / temperature)
+                      math.exp(-(self._diff_multiplier * delta_value) / temperature)
 
         # generates a random number in the interval [0, 1[
         random_number = random.random()

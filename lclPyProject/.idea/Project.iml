@@ -5,8 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$/lclpyRust/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/lclpyRust/target" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/lclPyProject/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.12 (Project)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.12 (lclPyProject)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">

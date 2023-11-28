@@ -38,8 +38,10 @@ def _func_on_best_values(benchmark_result, func):
         aid_list = []
 
         for problem in algorithm:
+            data=map(position_getter, problem)
+            data=[x.item() for x in data]
 
-            aid_list.append(func(map(int(position_getter), problem)))
+            aid_list.append(func(data))
 
         result.append(aid_list)
 
@@ -190,7 +192,9 @@ def _func_on_data(benchmark_result, func, position):
             last_items = []
 
             for run in problem:
-                last_items.append(run.data[position][-1])
+                data=run.data[position][-1]
+                data = data.item()
+                last_items.append(data)
 
             aid_list.append(func(last_items))
 
@@ -445,8 +449,6 @@ def stat(benchmark_result, algorithm_names=None, problem_names=None):
 
     # get the data
     # best_value
-    print(benchmark_result)
-
     best_value_tuple_class = namedtuple('best_value_statistics', (
         'mean', 'median', 'stdev', 'max', 'min'))
 
