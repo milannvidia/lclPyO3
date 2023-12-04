@@ -8,381 +8,105 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a5fb48c1-7148-47e2-8741-7b1216ec2093" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../.idea/Masterproef.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/Project.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/LICENSE" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctest/output.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/environment.pickle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/index.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.aidfunc.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.benchmark.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.evaluation.deltaeval.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.evaluation.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.io.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.acceptance.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.move.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.simulatedannealing.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.steepestdescent.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.tabusearch.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.localsearch.vns.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.plot.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.problem.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/lclpy.termination.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/doctrees/modules.doctree" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/.buildinfo" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/index.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.aidfunc.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.benchmark.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.evaluation.deltaeval.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.evaluation.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.io.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.acceptance.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.move.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.simulatedannealing.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.steepestdescent.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.tabusearch.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.localsearch.vns.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.plot.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.problem.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/lclpy.termination.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_sources/modules.rst.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/alabaster.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/basic.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/custom.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/doctools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/documentation_options.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/jquery-3.2.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/language_data.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/minus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/plus.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/pygments.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/searchtools.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/underscore-1.3.1.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/_static/underscore.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/genindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.aidfunc.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.benchmark.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.evaluation.deltaeval.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.evaluation.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.io.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.acceptance.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.move.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.simulatedannealing.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.steepestdescent.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.tabusearch.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.localsearch.vns.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.plot.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.problem.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/lclpy.termination.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/modules.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/objects.inv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/py-modindex.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/search.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/build/html/searchindex.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/make.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/conf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/index.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.aidfunc.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.benchmark.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.evaluation.deltaeval.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.evaluation.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.io.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.acceptance.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.move.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.simulatedannealing.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.steepestdescent.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.tabusearch.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.localsearch.vns.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.plot.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.problem.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/lclpy.termination.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/docs/source/modules.rst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy.egg-info/PKG-INFO" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy.egg-info/SOURCES.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy.egg-info/dependency_links.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy.egg-info/requires.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy.egg-info/top_level.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/add_to_data_func.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/convert_data.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/error_func.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/is_improvement_func.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/logging.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/aidfunc/pass_func.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/benchmark/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/benchmark/benchmark.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/benchmark/statistics.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/abstract_evaluation_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/bin_problem_eval.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/deltaeval/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/deltaeval/delta_eval_func.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/deltaeval/delta_multi_neighbourhood.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/deltaeval/delta_qap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/deltaeval/delta_tsp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/quadratic_assignment_evaluation_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/evaluation/tsp_evaluation_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/io/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/io/csv_io.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/io/qaplib.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/io/tsplib.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/abstract_local_search.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/acceptance/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/acceptance/abstract_acceptance_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/acceptance/simulated_annealing_acceptance_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/abstract_move.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/array_reverse_order.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/array_swap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/multi_neighbourhood.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/move/tsp_array_swap.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/abstr_iterations_temp_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/abstract_cooling_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/cnst_iterations_temp_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/geometric_cooling_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/simulatedannealing/simulated_annealing.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/steepestdescent/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/steepestdescent/steepest_descent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/tabusearch/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/tabusearch/abstract_diff_state.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/tabusearch/sum_diff_state.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/tabusearch/tabu_list.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/tabusearch/tabu_search.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/vns/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/localsearch/vns/variable_neighbourhood.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/plot/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/plot/plot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/problem/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/problem/abstract_local_search_problem.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/problem/array_problem.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/abstract_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/always_true_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/max_iterations_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/max_seconds_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/min_temperature_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/multi_and_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/multi_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/must_improve_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/lclpy/termination/no_improvement_termination_criterion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/Benchmark.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/Logging with benchmark.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/RustTesting.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/Test.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/all_algorithms_examples.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/all_algorithms_examples_and_plot.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/benchmark_example.ipynb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/data/gr48.tsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../lclPyProject/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/.idea/Project.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctest/output.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/environment.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/index.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.aidfunc.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.benchmark.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.evaluation.deltaeval.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.evaluation.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.io.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.acceptance.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.move.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.simulatedannealing.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.steepestdescent.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.tabusearch.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.localsearch.vns.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.plot.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.problem.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/lclpy.termination.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/doctrees/modules.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/.buildinfo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/index.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.aidfunc.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.benchmark.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.evaluation.deltaeval.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.evaluation.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.io.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.acceptance.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.move.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.simulatedannealing.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.steepestdescent.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.tabusearch.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.localsearch.vns.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.plot.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.problem.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/lclpy.termination.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_sources/modules.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/alabaster.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/basic.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/custom.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/doctools.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/documentation_options.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/file.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/jquery-3.2.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/language_data.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/minus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/plus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/pygments.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/searchtools.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/underscore-1.3.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/_static/underscore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/genindex.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.aidfunc.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.benchmark.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.evaluation.deltaeval.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.evaluation.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.io.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.acceptance.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.move.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.simulatedannealing.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.steepestdescent.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.tabusearch.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.localsearch.vns.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.plot.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.problem.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/lclpy.termination.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/modules.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/objects.inv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/py-modindex.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/search.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/build/html/searchindex.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/make.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/conf.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/index.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.aidfunc.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.benchmark.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.evaluation.deltaeval.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.evaluation.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.io.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.acceptance.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.move.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.simulatedannealing.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.steepestdescent.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.tabusearch.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.localsearch.vns.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.plot.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.problem.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/lclpy.termination.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/docs/source/modules.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy.egg-info/PKG-INFO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy.egg-info/SOURCES.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy.egg-info/dependency_links.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy.egg-info/requires.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy.egg-info/top_level.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/add_to_data_func.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/convert_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/error_func.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/is_improvement_func.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/logging.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/aidfunc/pass_func.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/benchmark/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/benchmark/benchmark.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/benchmark/statistics.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/abstract_evaluation_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/bin_problem_eval.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/deltaeval/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/deltaeval/delta_eval_func.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/deltaeval/delta_multi_neighbourhood.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/deltaeval/delta_qap.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/deltaeval/delta_tsp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/quadratic_assignment_evaluation_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/evaluation/tsp_evaluation_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/io/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/io/csv_io.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/io/qaplib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/io/tsplib.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/abstract_local_search.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/acceptance/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/acceptance/abstract_acceptance_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/acceptance/simulated_annealing_acceptance_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/abstract_move.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/array_reverse_order.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/array_swap.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/multi_neighbourhood.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/move/tsp_array_swap.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/abstr_iterations_temp_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/abstract_cooling_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/cnst_iterations_temp_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/geometric_cooling_function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/simulatedannealing/simulated_annealing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/steepestdescent/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/steepestdescent/steepest_descent.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/tabusearch/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/tabusearch/abstract_diff_state.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/tabusearch/sum_diff_state.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/tabusearch/tabu_list.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/tabusearch/tabu_search.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/vns/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/localsearch/vns/variable_neighbourhood.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/plot/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/plot/plot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/problem/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/problem/abstract_local_search_problem.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/problem/array_problem.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/abstract_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/always_true_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/max_iterations_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/max_seconds_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/min_temperature_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/multi_and_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/multi_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/must_improve_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/lclpy/termination/no_improvement_termination_criterion.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/Logging with benchmark.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/RustTesting.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/Test.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/all_algorithms_examples.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/all_algorithms_examples_and_plot.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/benchmark_example.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/notebooks/data/gr48.tsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../lclpy/setup.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lcl_rust/problems.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lcl_rust/simulated_annealing.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lcl_rust/steepest_descent.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lcl_rust/terminationfunc.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-555fa623ba36d805/dep-lib-cfg-if" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-555fa623ba36d805/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-555fa623ba36d805/lib-cfg-if" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-555fa623ba36d805/lib-cfg-if.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-95b6011e44322999/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-95b6011e44322999/lib-cfg-if" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/cfg-if-95b6011e44322999/lib-cfg-if.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-3f9dcd52f41629b6/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-3f9dcd52f41629b6/lib-getrandom" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-3f9dcd52f41629b6/lib-getrandom.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-fcf3ba8677672b8a/dep-lib-getrandom" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-fcf3ba8677672b8a/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-fcf3ba8677672b8a/lib-getrandom" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/getrandom-fcf3ba8677672b8a/lib-getrandom.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-c62ae46788fb4a50/dep-lib-ppv-lite86" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-c62ae46788fb4a50/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-c62ae46788fb4a50/lib-ppv-lite86" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-c62ae46788fb4a50/lib-ppv-lite86.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-e388e0766154c6b8/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-e388e0766154c6b8/lib-ppv-lite86" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/ppv-lite86-e388e0766154c6b8/lib-ppv-lite86.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-4ba8751736b5cf2b/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-4ba8751736b5cf2b/lib-rand" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-4ba8751736b5cf2b/lib-rand.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-717417239246d80b/dep-lib-rand" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-717417239246d80b/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-717417239246d80b/lib-rand" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand-717417239246d80b/lib-rand.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-61fea6b3d81eafc4/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-61fea6b3d81eafc4/lib-rand_chacha" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-61fea6b3d81eafc4/lib-rand_chacha.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-cf92e4a1353c71f9/dep-lib-rand_chacha" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-cf92e4a1353c71f9/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-cf92e4a1353c71f9/lib-rand_chacha" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_chacha-cf92e4a1353c71f9/lib-rand_chacha.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-ddafc8e8f94b66e5/dep-lib-rand_core" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-ddafc8e8f94b66e5/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-ddafc8e8f94b66e5/lib-rand_core" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-ddafc8e8f94b66e5/lib-rand_core.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-f1050d2d299eff43/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-f1050d2d299eff43/lib-rand_core" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rand_core-f1050d2d299eff43/lib-rand_core.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-99e9ce3615ba9fba/bin-rust" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-99e9ce3615ba9fba/bin-rust.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-99e9ce3615ba9fba/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-eb998d970c1ee587/invoked.timestamp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-eb998d970c1ee587/test-bin-rust" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-eb998d970c1ee587/test-bin-rust.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/cfg_if-555fa623ba36d805.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/getrandom-fcf3ba8677672b8a.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libcfg_if-555fa623ba36d805.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libcfg_if-555fa623ba36d805.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libgetrandom-fcf3ba8677672b8a.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libgetrandom-fcf3ba8677672b8a.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libppv_lite86-c62ae46788fb4a50.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/libppv_lite86-c62ae46788fb4a50.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand-717417239246d80b.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand-717417239246d80b.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand_chacha-cf92e4a1353c71f9.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand_chacha-cf92e4a1353c71f9.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand_core-ddafc8e8f94b66e5.rlib" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/librand_core-ddafc8e8f94b66e5.rmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/ppv_lite86-c62ae46788fb4a50.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/rand-717417239246d80b.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/rand_chacha-cf92e4a1353c71f9.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/rand_core-ddafc8e8f94b66e5.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/rust.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/debug/deps/rust.pdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclPyProject/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclPyProject/notebooks/Benchmark.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/Benchmark.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclPyProject/notebooks/benchmark_example.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/benchmark_example.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclpy/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclpy/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lclpy/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/eval/mod.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/eval/tspeval.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/localsearch/mod.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/localsearch/mov/ArraySwap.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/localsearch/mov/mod.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/localsearch/simulatedannealing/mod.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/localsearch/simulatedannealing/simulatedannealing.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/lcl_rust/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/problem/array_problem.rs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lcl_rust/problem/mod.rs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/solution" beforeDir="false" afterPath="$PROJECT_DIR$/../lclPyProject/notebooks/data/solution" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/.rustc_info.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/.rustc_info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/bin-rust" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/bin-rust" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/bin-rust.json" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/bin-rust.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/dep-bin-rust" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/dep-bin-rust" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/output-bin-rust" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/.fingerprint/rust-a65a2e8241518b79/output-bin-rust" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/deps/rust.d" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/deps/rust.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/rust.d" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/rust.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/rust.exe" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/rust.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/debug/rust.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/target/debug/rust.pdb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -402,6 +126,9 @@
   <component name="MacroExpansionManager">
     <option name="directoryName" value="f68ykdms" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -410,29 +137,51 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Cargo.Build `Run`.executor": "Run",
-    "Cargo.Run.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "restructure",
-    "last_opened_file_path": "C:/Users/milan/Documents/Masterproef/lclrust",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/milan/Masterproef/rust/src/lclpyRust/localSearch/move/array_swap.rs": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Cargo.Build `Run release`.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Build `Run`.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run release.executor&quot;: &quot;Run&quot;,
+    &quot;Cargo.Run.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;restructure&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/milan/Documents/Masterproef/lclrust&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/milan/Masterproef/rust/src/lclpyRust/localSearch/move/array_swap.rs&quot;: &quot;true&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\milan\Documents\Masterproef\lclrust\src\lcl_rust" />
       <recent name="C:\Users\milan\Masterproef\rust\src\lcl_rust\localsearch" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo.Run release">
+    <configuration name="Run release" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="command" value="run --release --package rust --bin rust" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <envs />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Run" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="command" value="run --package rust --bin rust" />
       <option name="workingDirectory" value="file://$PROJECT_DIR$" />
@@ -450,6 +199,10 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Cargo.Run release" />
+      <item itemvalue="Cargo.Run" />
+    </list>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -464,6 +217,9 @@
       <updated>1700995486926</updated>
       <workItem from="1700995491393" duration="14931000" />
       <workItem from="1701123892020" duration="7895000" />
+      <workItem from="1701158529085" duration="9774000" />
+      <workItem from="1701247474161" duration="23480000" />
+      <workItem from="1701693606791" duration="7926000" />
     </task>
     <servers />
   </component>
@@ -481,7 +237,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="master" />
+                        <option value="origin/restructure" />
                       </list>
                     </value>
                   </entry>
@@ -492,16 +248,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/main.rs</url>
-          <line>64</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
