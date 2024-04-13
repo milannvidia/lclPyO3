@@ -21,3 +21,4 @@ impl TerminationFunction for MaxSec{
         self.time=Instant::now();
     }
 }
+
