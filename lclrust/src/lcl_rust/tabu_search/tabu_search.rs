@@ -5,13 +5,15 @@ use std::time::Instant;
 
 use super::tabu_list::{self, TabuList};
 
-pub struct TabuSearch<'a> {
-    pub(crate) problem: &'a mut dyn Problem,
-    pub(crate) termination: &'a mut dyn TerminationFunction,
-    pub(crate) tabu_list: TabuList<T>,
+pub struct TabuSearch {
+    // pub(crate) problem: &'a mut dyn Problem,
+    // pub(crate) termination: &'a mut dyn TerminationFunction,
+    pub(crate) problem: Box<dyn Problem>,
+    pub(crate) termination: Box<dyn TerminationFunction>,
+    // pub(crate) tabu_list: TabuList<T>,
 }
 
-impl TabuSearch<'_> {
+impl TabuSearch {
     pub fn reset(&mut self) {
         self.problem.reset()
     }

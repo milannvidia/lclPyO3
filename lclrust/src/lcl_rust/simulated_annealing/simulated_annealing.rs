@@ -5,14 +5,18 @@ use crate::lcl_rust::terminationfunc::TerminationFunction;
 use rand::Rng;
 use std::time::Instant;
 
-pub struct SimulatedAnnealing<'a> {
-    pub(crate) problem: &'a mut dyn Problem,
+pub struct SimulatedAnnealing {
     pub(crate) temp: usize,
-    pub(crate) termination: &'a mut dyn TerminationFunction,
-    pub(crate) cool_func: &'a mut dyn CoolingFunction,
-    pub(crate) iter_temp: &'a dyn IterationsTemperature,
+    pub(crate) problem: Box<dyn Problem>,
+    pub(crate) termination: Box<dyn TerminationFunction>,
+    pub(crate) cool_func: Box<dyn CoolingFunction>,
+    pub(crate) iter_temp: Box<dyn IterationsTemperature>,
+    // pub(crate) termination: &'a mut dyn TerminationFunction,
+    // pub(crate) cool_func: &'a mut dyn CoolingFunction,
+    // pub(crate) iter_temp: &'a dyn IterationsTemperature,
+    // pub(crate) problem: &'a mut dyn Problem,
 }
-impl SimulatedAnnealing<'_> {
+impl SimulatedAnnealing {
     pub fn reset(&mut self) {
         self.problem.reset()
     }
@@ -35,9 +39,6 @@ impl SimulatedAnnealing<'_> {
             )]);
         }
         while self.termination.keep_running() {
-            // while true {
-            // while iterations < 5000000 {
-            //FIXME :: mogelijkse fout dqt self temp als referentie wordt gestuurd
             for _ in 0..self.iter_temp.get_iterations(self.temp) {
                 if !self.termination.keep_running() {
                     break;

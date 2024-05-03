@@ -1,12 +1,7 @@
 mod lcl_rust;
-use crate::lcl_rust::problems::Problem;
-use crate::lcl_rust::simulated_annealing::simulated_annealing::*;
-use crate::lcl_rust::steepest_descent::SteepestDescent;
-use crate::lcl_rust::tabu_search::tabu_search::TabuSearch;
-use lcl_rust::problems;
-use lcl_rust::terminationfunc;
+use lcl_rust::*;
 use std::fs::File;
-use std::io::{BufRead, BufReader, Write};
+use std::io::{BufRead, BufReader};
 use std::time::Instant;
 
 fn main() {
@@ -22,7 +17,7 @@ fn main() {
         })
         .collect();
     let size = matrix.len();
-    let mut problem = problems::TSP {
+    let problem = problems::TSP {
         swap: false,
         distance_matrix: matrix,
         solution: (0..size).collect(),
@@ -31,24 +26,20 @@ fn main() {
         rng: rand::thread_rng(),
         best_solution: (0..size).collect(),
     };
-    let mut termination = terminationfunc::MaxSec {
+    let termination = terminationfunc::MaxSec {
         time: Instant::now(),
         max_sec: 5,
     };
-    // let mut x =SimulatedAnnealing{
-    //     problem: &mut problem,
-    //     it_per_temp: 1500,
-    //     temp: 2000,
-    //     termination: &mut termination,
-    // };
-    let mut x = SteepestDescent {
-        problem: &mut problem,
-        termination: &mut termination,
+    let mut x = SimulatedAnnealing {
+        problem: Box::new(problem),
+        temp: 2000,
+        termination: Box::new(termination),
+        cool_func: Box::new(simulated_annealing::cooling_func::GeometricCooling { alpha: 0.95 }),
+        iter_temp: Box::new(simulated_annealing::iter_temp::CnstIterTemp { iterations: 1000 }),
     };
 
-    let result = x.run(false);
+    let result = x.run(true);
     for values in result {
-        println!("{}", values.0)
+        println!("{}", values.2)
     }
-    problem.solution = problem.best_solution.to_vec();
 }
