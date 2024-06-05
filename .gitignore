@@ -2,6 +2,7 @@
 /lclPyProject/docs/
 /lclPyProject/lclPyProject/
 /lclrust/target/
+lclpyRust/target/
 lclrust/target/debug/
 lclPy/.env/pyvenv.cfg
 lclPy/.env/Scripts/activate
