@@ -12,7 +12,7 @@ pub trait Problem {
     fn reset(&mut self);
     fn set_best(&mut self);
 }
-#[pyclass(unsendable)]
+#[pyclass]
 pub struct TSP {
     //otherwise reverse array
     pub(crate) swap: bool,

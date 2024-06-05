@@ -1,3 +1,4 @@
+pub(crate) mod io;
 pub(crate) mod local_search;
 pub(crate) mod problems;
 pub(crate) mod simulated_annealing;

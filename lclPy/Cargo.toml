@@ -9,5 +9,6 @@ name = "lclRust"
 crate-type = ["cdylib"]
 
 [dependencies]
+csv = "1.3.0"
 pyo3 = { version = "0.21.2", features = ["extension-module"] }
 rand = { version = "0.8.5", features = [] }

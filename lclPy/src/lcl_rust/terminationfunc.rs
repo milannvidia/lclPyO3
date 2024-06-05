@@ -1,13 +1,22 @@
+use pyo3::prelude::*;
 use std::{time::Instant, usize::MAX};
-
 pub trait TerminationFunction {
     fn keep_running(&mut self) -> bool;
     fn init(&mut self);
     fn check_variable(&mut self, var: usize) -> bool;
 }
+#[pyclass(unsendable)]
 pub struct MaxSec {
     pub time: Instant,
     pub max_sec: u64,
+}
+impl MaxSec {
+    pub fn new(max_sec: u64) -> Self {
+        MaxSec {
+            time: Instant::now(),
+            max_sec,
+        }
+    }
 }
 impl TerminationFunction for MaxSec {
     fn keep_running(&mut self) -> bool {
