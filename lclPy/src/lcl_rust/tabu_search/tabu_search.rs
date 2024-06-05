@@ -1,5 +1,6 @@
 use crate::lcl_rust::problems::Problem;
 use crate::lcl_rust::terminationfunc::TerminationFunction;
+use crate::lcl_rust::LocalSearch;
 use std::time::Instant;
 
 pub struct TabuSearch {
@@ -10,11 +11,11 @@ pub struct TabuSearch {
     // pub(crate) tabu_list: TabuList<T>,
 }
 
-impl TabuSearch {
-    pub fn reset(&mut self) {
+impl LocalSearch for TabuSearch {
+    fn reset(&mut self) {
         self.problem.reset()
     }
-    pub fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut current: isize = self.problem.eval() as isize;
         let mut best: isize = current;
         let now = Instant::now();
