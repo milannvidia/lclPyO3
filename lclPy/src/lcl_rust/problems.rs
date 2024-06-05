@@ -1,3 +1,4 @@
+use pyo3::prelude::*;
 use rand::prelude::ThreadRng;
 use rand::Rng;
 use std::mem::swap;
@@ -11,7 +12,7 @@ pub trait Problem {
     fn reset(&mut self);
     fn set_best(&mut self);
 }
-
+#[pyclass(unsendable, frozen)]
 pub struct TSP {
     //otherwise reverse array
     pub(crate) swap: bool,
@@ -20,6 +21,19 @@ pub struct TSP {
     pub(crate) size: usize,
     pub(crate) rng: ThreadRng,
     pub(crate) best_solution: Vec<usize>,
+}
+impl TSP {
+    pub fn new(swap: bool, distance_matrix: Vec<Vec<usize>>) -> Self {
+        let x = distance_matrix.len();
+        TSP {
+            swap,
+            distance_matrix,
+            solution: (0..x).collect(),
+            size: x,
+            rng: rand::thread_rng(),
+            best_solution: (0..x).collect(),
+        }
+    }
 }
 impl Problem for TSP {
     fn mov(&mut self) -> (usize, usize) {

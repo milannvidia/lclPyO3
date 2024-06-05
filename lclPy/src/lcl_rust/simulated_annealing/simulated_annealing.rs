@@ -7,6 +7,7 @@ use pyo3::prelude::*;
 use rand::Rng;
 use std::time::Instant;
 
+#[pyclass(unsendable, frozen)]
 pub struct SimulatedAnnealing {
     temp: usize,
     start_temp: usize,
@@ -19,23 +20,25 @@ pub struct SimulatedAnnealing {
     // pub(crate) iter_temp: &'a dyn IterationsTemperature,
     // pub(crate) problem: &'a mut dyn Problem,
 }
+impl SimulatedAnnealing {
+    pub fn new(
+        temp: usize,
+        problem: Box<dyn Problem>,
+        termination: Box<dyn TerminationFunction>,
+        cooling: Box<dyn CoolingFunction>,
+        iteration_calc: Box<dyn IterationsTemperature>,
+    ) -> Self {
+        SimulatedAnnealing {
+            temp,
+            start_temp: temp,
+            termination: termination,
+            problem: problem,
+            cool_func: cooling,
+            iter_temp: iteration_calc,
+        }
+    }
+}
 impl LocalSearch for SimulatedAnnealing {
-    // pub(crate) fn new(
-    //     problem: Box<dyn Problem>,
-    //     termination: Box<dyn TerminationFunction>,
-    //     cool_func: Box<dyn CoolingFunction>,
-    //     iter_temp: Box<dyn IterationsTemperature>,
-    //     start_temp: usize,
-    // ) -> Self {
-    //     SimulatedAnnealing {
-    //         problem,
-    //         termination,
-    //         cool_func,
-    //         iter_temp,
-    //         start_temp,
-    //         temp: start_temp,
-    //     }
-    // }
     fn reset(&mut self) {
         self.problem.reset();
         self.temp = self.start_temp;
