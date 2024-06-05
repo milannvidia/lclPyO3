@@ -7,7 +7,7 @@ use pyo3::prelude::*;
 use rand::Rng;
 use std::time::Instant;
 
-#[pyclass(unsendable, frozen)]
+#[pyclass(unsendable)]
 pub struct SimulatedAnnealing {
     temp: usize,
     start_temp: usize,
