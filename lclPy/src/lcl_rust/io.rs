@@ -3,22 +3,24 @@ use std::{
     io::{self, BufRead, BufReader, Error},
 };
 
-use csv::ReaderBuilder;
-
-pub(crate) fn read_csv(
-    fileLocation: String,
-    delimiter: char,
-) -> Result<Vec<Vec<usize>>, io::Error> {
-    let f = File::open(fileLocation)?;
+pub(crate) fn read_csv(file_location: &str, delimiter: char) -> Result<Vec<Vec<usize>>, io::Error> {
+    let f = File::open(file_location)?;
     let br = BufReader::new(f);
 
     let matrix: Vec<Vec<usize>> = br
         .lines()
         .map(|l| {
-            l.unwrap()
-                .split(delimiter)
-                .map(|number| number.parse().unwrap())
-                .collect()
+            if delimiter == ' ' {
+                l.unwrap()
+                    .split_whitespace()
+                    .map(|number| number.parse::<usize>().unwrap())
+                    .collect()
+            } else {
+                l.unwrap()
+                    .split(delimiter)
+                    .map(|number| number.parse::<usize>().unwrap())
+                    .collect()
+            }
         })
         .collect();
     if matrix.len() != matrix[0].len() {

@@ -1,9 +1,6 @@
-use pyo3::prelude::*;
-use rand::prelude::ThreadRng;
-use rand::Rng;
-use std::mem::swap;
+use rand::{rngs::SmallRng, Rng, SeedableRng};
 
-pub trait Problem {
+pub trait Problem: Send {
     fn mov(&mut self) -> (usize, usize);
     fn all_mov(&mut self) -> Vec<(usize, usize)>;
     fn domov(&mut self, indices: (usize, usize));
@@ -12,38 +9,43 @@ pub trait Problem {
     fn reset(&mut self);
     fn set_best(&mut self);
 }
-#[pyclass]
 pub struct TSP {
     //otherwise reverse array
     pub(crate) swap: bool,
     pub(crate) distance_matrix: Vec<Vec<usize>>,
     pub(crate) solution: Vec<usize>,
     pub(crate) size: usize,
-    pub(crate) rng: ThreadRng,
+    pub(crate) rng: rand::rngs::SmallRng,
     pub(crate) best_solution: Vec<usize>,
 }
 impl TSP {
-    pub fn new(swap: bool, distance_matrix: Vec<Vec<usize>>) -> Self {
+    pub fn new(swap: bool, distance_matrix: Vec<Vec<usize>>, seed: Option<u64>) -> Self {
         let x = distance_matrix.len();
+        let rng: SmallRng;
+        if seed.is_none() {
+            rng = rand::rngs::SmallRng::from_entropy();
+        } else {
+            rng = rand::rngs::SmallRng::seed_from_u64(seed.unwrap());
+        }
         TSP {
             swap,
             distance_matrix,
             solution: (0..x).collect(),
             size: x,
-            rng: rand::thread_rng(),
+            rng,
             best_solution: (0..x).collect(),
         }
     }
 }
 impl Problem for TSP {
     fn mov(&mut self) -> (usize, usize) {
-        let mut i = self.rng.gen_range(1..self.size);
+        let i = self.rng.gen_range(1..self.size);
         let mut j = self.rng.gen_range(1..self.size);
         while i == j {
             j = self.rng.gen_range(1..self.size);
         }
         if j < i {
-            swap(&mut i, &mut j)
+            return (j, i);
         }
         return (i, j);
     }
@@ -140,24 +142,49 @@ pub struct BinProblem {
     best_solution: Vec<usize>,
     size: usize,
     max_fill: usize,
-    rng: ThreadRng,
+    rng: SmallRng,
 }
 
-enum DeltaRating {
+pub(crate) enum DeltaRating {
     ExponentialEmpty,
     Empty,
     NumOffBins,
 }
+impl BinProblem {
+    pub fn new(
+        rating: DeltaRating,
+        max_fill: usize,
+        weights: Vec<usize>,
+        seed: Option<u64>,
+    ) -> Self {
+        let size = weights.len();
+        let rng;
+        if seed.is_none() {
+            rng = rand::rngs::SmallRng::from_entropy();
+        } else {
+            rng = rand::rngs::SmallRng::seed_from_u64(seed.unwrap());
+        }
 
+        BinProblem {
+            scoring: rating,
+            weights,
+            solution: (0..size).collect(),
+            best_solution: (0..size).collect(),
+            size,
+            max_fill,
+            rng,
+        }
+    }
+}
 impl Problem for BinProblem {
     fn mov(&mut self) -> (usize, usize) {
-        let mut i = self.rng.gen_range(1..self.size);
+        let i = self.rng.gen_range(1..self.size);
         let mut j = self.rng.gen_range(1..self.size);
         while i == j {
             j = self.rng.gen_range(1..self.size);
         }
         if j < i {
-            swap(&mut i, &mut j)
+            return (j, i);
         }
         return (i, j);
     }

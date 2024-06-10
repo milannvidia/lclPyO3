@@ -1,27 +1,40 @@
 use crate::lcl_rust::problems::Problem;
 use crate::lcl_rust::terminationfunc::TerminationFunction;
 use crate::lcl_rust::LocalSearch;
+use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
 pub struct SteepestDescent {
     // pub(crate) problem:&'a mut dyn Problem,
     // pub(crate) termination:&'a mut dyn TerminationFunction,
-    pub(crate) problem: Box<dyn Problem>,
-    pub(crate) termination: Box<dyn TerminationFunction>,
+    pub(crate) problem: Arc<Mutex<dyn Problem>>,
+    pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
 }
-
+impl SteepestDescent {
+    pub fn new(
+        problem: Arc<Mutex<dyn Problem>>,
+        termination: Arc<Mutex<dyn TerminationFunction>>,
+    ) -> Self {
+        SteepestDescent {
+            problem,
+            termination,
+        }
+    }
+}
 impl LocalSearch for SteepestDescent {
     fn reset(&mut self) {
-        self.problem.reset()
+        self.problem.lock().unwrap().reset();
     }
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
-        let mut current: isize = self.problem.eval() as isize;
+        let mut problem = self.problem.lock().unwrap();
+        let mut termination = self.termination.lock().unwrap();
+        let mut current: isize = problem.eval() as isize;
         let mut best: isize = current;
         let now = Instant::now();
         let mut iterations = 0;
         let mut data: Vec<(u128, isize, isize, usize)> = vec![];
 
-        self.termination.init();
+        termination.init();
         if log {
             data.append(&mut vec![(
                 now.elapsed().as_nanos(),
@@ -30,12 +43,12 @@ impl LocalSearch for SteepestDescent {
                 iterations,
             )]);
         }
-        while self.termination.keep_running() {
+        while termination.keep_running() {
             // while iterations<100{
             let mut best_mov = (0, 0);
             let mut best_delta = isize::MAX;
-            for mov in self.problem.all_mov() {
-                let delta = self.problem.delta(mov);
+            for mov in problem.all_mov() {
+                let delta = problem.delta(mov);
                 if delta < best_delta {
                     best_delta = delta;
                     best_mov = mov;
@@ -44,10 +57,8 @@ impl LocalSearch for SteepestDescent {
             current = current + best_delta;
 
             if current < best {
-                let test1 = self.problem.eval();
-                self.problem.domov(best_mov);
-                self.problem.set_best();
-                let test2 = self.problem.eval();
+                problem.domov(best_mov);
+                problem.set_best();
                 best = current;
                 if log {
                     data.append(&mut vec![(

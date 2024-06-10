@@ -1,4 +1,4 @@
-pub trait IterationsTemperature {
+pub trait IterationsTemperature: Send + Sync {
     fn get_iterations(&self, temp: usize) -> usize;
 }
 pub struct CnstIterTemp {

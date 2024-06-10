@@ -1,4 +1,4 @@
-pub trait CoolingFunction {
+pub trait CoolingFunction: Send + Sync {
     fn get_next_temp(&self, temp: usize) -> usize;
 }
 pub struct GeometricCooling {

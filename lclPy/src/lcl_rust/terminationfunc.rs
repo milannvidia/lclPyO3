@@ -1,11 +1,10 @@
-use pyo3::prelude::*;
 use std::{time::Instant, usize::MAX};
-pub trait TerminationFunction {
+pub trait TerminationFunction: Send {
     fn keep_running(&mut self) -> bool;
     fn init(&mut self);
     fn check_variable(&mut self, var: usize) -> bool;
 }
-#[pyclass(unsendable)]
+
 pub struct MaxSec {
     pub time: Instant,
     pub max_sec: u64,
@@ -50,10 +49,17 @@ impl TerminationFunction for AlwaysTrueCriterion {
 }
 
 pub struct MaxIterations {
-    pub max_iterations: u64,
-    current_iterations: u64,
+    pub max_iterations: usize,
+    current_iterations: usize,
 }
-
+impl MaxIterations {
+    pub fn new(max_iterations: usize) -> Self {
+        MaxIterations {
+            max_iterations,
+            current_iterations: 0,
+        }
+    }
+}
 impl TerminationFunction for MaxIterations {
     fn keep_running(&mut self) -> bool {
         if self.current_iterations < self.max_iterations {
@@ -76,7 +82,11 @@ impl TerminationFunction for MaxIterations {
 pub struct MinTemp {
     pub min_temp: usize,
 }
-
+impl MinTemp {
+    pub fn new(min_temp: usize) -> Self {
+        MinTemp { min_temp }
+    }
+}
 impl TerminationFunction for MinTemp {
     fn keep_running(&mut self) -> bool {
         true
@@ -141,6 +151,15 @@ impl TerminationFunction for MultiCritOr {
 pub struct MustImprove {
     pub best: usize,
 }
+impl MustImprove {
+    pub fn new(minimize: bool) -> Self {
+        if minimize {
+            return MustImprove { best: usize::MAX };
+        } else {
+            return MustImprove { best: 0 };
+        }
+    }
+}
 
 impl TerminationFunction for MustImprove {
     fn keep_running(&mut self) -> bool {
@@ -164,6 +183,24 @@ pub struct NoImprove {
     pub best: usize,
     pub max_iterations_without_improve: usize,
     curr_without_improve: usize,
+}
+
+impl NoImprove {
+    pub fn new(minimize: bool, max_iterations_without_improve: usize) -> Self {
+        if minimize {
+            return NoImprove {
+                best: usize::MAX,
+                max_iterations_without_improve,
+                curr_without_improve: 0,
+            };
+        } else {
+            return NoImprove {
+                best: usize::MIN,
+                max_iterations_without_improve,
+                curr_without_improve: 0,
+            };
+        }
+    }
 }
 
 impl TerminationFunction for NoImprove {
