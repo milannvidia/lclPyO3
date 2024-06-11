@@ -1,6 +1,6 @@
-use crate::lcl_rust::problems::Problem;
-use crate::lcl_rust::terminationfunc::TerminationFunction;
-use crate::lcl_rust::LocalSearch;
+use super::LocalSearch;
+use crate::lcl_rust::problem::Problem;
+use crate::lcl_rust::termination::TerminationFunction;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 

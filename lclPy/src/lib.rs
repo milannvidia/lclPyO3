@@ -1,23 +1,16 @@
-use lcl_rust::{
-    io::read_csv,
-    problems::{BinProblem, DeltaRating, Problem, TSP},
-    simulated_annealing::{
-        cooling_func::{CoolingFunction, GeometricCooling},
-        iter_temp::{CnstIterTemp, IterationsTemperature},
-    },
-    terminationfunc::{
-        AlwaysTrueCriterion, MaxIterations, MaxSec, MinTemp, MustImprove, NoImprove,
-        TerminationFunction,
-    },
-    LocalSearch, SimulatedAnnealing, SteepestDescent,
-};
+mod lcl_rust;
+use lcl_rust::io::*;
+use lcl_rust::local_search::simulated_annealing::*;
+use lcl_rust::local_search::steepest_descent::*;
+use lcl_rust::problem::*;
+use lcl_rust::termination::*;
+use must_improve::MustImprove;
+use pyo3::prelude::*;
+
 use std::{
     io::{self},
     sync::{Arc, Mutex},
 };
-
-use pyo3::prelude::*;
-mod lcl_rust;
 
 #[pyclass(frozen, name = "Termination")]
 struct DynTermination {
@@ -131,7 +124,7 @@ impl DynTermination {
     #[staticmethod]
     fn always_true_criterion() -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(AlwaysTrueCriterion {})),
+            termination: Arc::new(Mutex::new(AlwaysTrue::new())),
         }
     }
     #[staticmethod]
