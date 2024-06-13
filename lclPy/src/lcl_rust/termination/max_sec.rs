@@ -26,7 +26,9 @@ impl TerminationFunction for MaxSec {
         self.time = Instant::now();
     }
 
-    fn check_variable(&mut self, _var: usize) -> bool {
+    fn check_variable(&mut self, _var: isize) -> bool {
         true
     }
+
+    fn iteration_done(&mut self) {}
 }

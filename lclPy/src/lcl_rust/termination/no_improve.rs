@@ -1,6 +1,6 @@
 use super::TerminationFunction;
 pub struct NoImprove {
-    pub best: usize,
+    pub best: isize,
     pub max_iterations_without_improve: usize,
     curr_without_improve: usize,
 }
@@ -9,13 +9,13 @@ impl NoImprove {
     pub fn new(minimize: bool, max_iterations_without_improve: usize) -> Self {
         if minimize {
             return NoImprove {
-                best: usize::MAX,
+                best: isize::MAX,
                 max_iterations_without_improve,
                 curr_without_improve: 0,
             };
         } else {
             return NoImprove {
-                best: usize::MIN,
+                best: isize::MIN,
                 max_iterations_without_improve,
                 curr_without_improve: 0,
             };
@@ -27,11 +27,11 @@ impl TerminationFunction for NoImprove {
         true
     }
     fn init(&mut self) {
-        self.best = usize::MAX;
+        self.best = isize::MAX;
         self.curr_without_improve = 0;
     }
 
-    fn check_variable(&mut self, var: usize) -> bool {
+    fn check_variable(&mut self, var: isize) -> bool {
         if self.best < var {
             self.curr_without_improve += 1;
             if self.curr_without_improve > self.max_iterations_without_improve {
@@ -44,4 +44,6 @@ impl TerminationFunction for NoImprove {
             true
         }
     }
+
+    fn iteration_done(&mut self) {}
 }

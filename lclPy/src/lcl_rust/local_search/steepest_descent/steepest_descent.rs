@@ -9,15 +9,18 @@ pub struct SteepestDescent {
     // pub(crate) termination:&'a mut dyn TerminationFunction,
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
+    minimize: bool,
 }
 impl SteepestDescent {
     pub fn new(
+        minimize: bool,
         problem: Arc<Mutex<dyn Problem>>,
         termination: Arc<Mutex<dyn TerminationFunction>>,
     ) -> Self {
         SteepestDescent {
             problem,
             termination,
+            minimize,
         }
     }
 }
@@ -36,49 +39,39 @@ impl LocalSearch for SteepestDescent {
 
         termination.init();
         if log {
-            data.append(&mut vec![(
-                now.elapsed().as_nanos(),
-                best,
-                current,
-                iterations,
-            )]);
+            data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
         while termination.keep_running() {
             // while iterations<100{
             let mut best_mov = (0, 0);
-            let mut best_delta = isize::MAX;
-            for mov in problem.all_mov() {
-                let delta = problem.delta(mov);
-                if delta < best_delta {
+            let mut best_delta = if self.minimize {
+                isize::MAX
+            } else {
+                isize::MIN
+            };
+            for mov in problem.get_all_mov() {
+                let delta = problem.delta_eval(mov);
+                if (delta < best_delta) == self.minimize {
                     best_delta = delta;
                     best_mov = mov;
                 }
             }
             current = current + best_delta;
 
-            if current < best {
-                problem.domov(best_mov);
+            if (current < best) == self.minimize {
+                problem.do_mov(best_mov);
                 problem.set_best();
                 best = current;
                 if log {
-                    data.append(&mut vec![(
-                        now.elapsed().as_nanos(),
-                        best,
-                        current,
-                        iterations,
-                    )]);
+                    data.push((now.elapsed().as_nanos(), best, current, iterations));
                 }
             } else {
                 break;
             }
             iterations += 1;
+            termination.iteration_done();
         }
-        data.append(&mut vec![(
-            now.elapsed().as_nanos(),
-            best,
-            current,
-            iterations,
-        )]);
+        data.push((now.elapsed().as_nanos(), best, current, iterations));
 
         return data;
     }

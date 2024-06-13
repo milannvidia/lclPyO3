@@ -14,7 +14,6 @@ impl MaxIterations {
 impl TerminationFunction for MaxIterations {
     fn keep_running(&mut self) -> bool {
         if self.current_iterations < self.max_iterations {
-            self.current_iterations += 1;
             true
         } else {
             false
@@ -24,7 +23,11 @@ impl TerminationFunction for MaxIterations {
         self.current_iterations = 0;
     }
 
-    fn check_variable(&mut self, _var: usize) -> bool {
+    fn check_variable(&mut self, _var: isize) -> bool {
         true
+    }
+
+    fn iteration_done(&mut self) {
+        self.current_iterations += 1;
     }
 }

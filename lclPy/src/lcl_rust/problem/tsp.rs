@@ -1,9 +1,11 @@
+use std::hash::{DefaultHasher, Hash, Hasher};
+
 use super::Problem;
 use rand::{rngs::SmallRng, Rng, SeedableRng};
 
 pub struct TSP {
     //otherwise reverse array
-    pub(crate) swap: bool,
+    pub(crate) symmetric: bool,
     pub(crate) distance_matrix: Vec<Vec<usize>>,
     pub(crate) solution: Vec<usize>,
     pub(crate) size: usize,
@@ -20,7 +22,7 @@ impl TSP {
             rng = rand::rngs::SmallRng::seed_from_u64(seed.unwrap());
         }
         TSP {
-            swap,
+            symmetric: swap,
             distance_matrix,
             solution: (0..x).collect(),
             size: x,
@@ -30,7 +32,7 @@ impl TSP {
     }
 }
 impl Problem for TSP {
-    fn mov(&mut self) -> (usize, usize) {
+    fn get_mov(&mut self) -> (usize, usize) {
         let i = self.rng.gen_range(1..self.size);
         let mut j = self.rng.gen_range(1..self.size);
         while i == j {
@@ -42,18 +44,18 @@ impl Problem for TSP {
         return (i, j);
     }
 
-    fn all_mov(&mut self) -> Vec<(usize, usize)> {
+    fn get_all_mov(&mut self) -> Vec<(usize, usize)> {
         let mut moves = vec![];
         for i in 1..self.size - 1 {
             for j in i + 1..self.size {
-                moves.append(&mut vec![(i, j)])
+                moves.push((i, j))
             }
         }
         return moves;
     }
 
-    fn domov(&mut self, indices: (usize, usize)) {
-        if self.swap {
+    fn do_mov(&mut self, indices: (usize, usize)) {
+        if self.symmetric {
             self.solution.swap(indices.0, indices.1);
         } else {
             for i in 0..(indices.1 - indices.0 + 1) / 2 {
@@ -62,10 +64,10 @@ impl Problem for TSP {
         }
     }
 
-    fn delta(&mut self, indices: (usize, usize)) -> isize {
+    fn delta_eval(&mut self, indices: (usize, usize)) -> isize {
         let mut initialscore = 0;
         let mut nextscore = 0;
-        return if self.swap {
+        return if self.symmetric {
             let indexsafe = (indices.1 + 1) % self.size;
             initialscore +=
                 self.distance_matrix[self.solution[indices.0 - 1]][self.solution[indices.0]];
@@ -124,5 +126,10 @@ impl Problem for TSP {
 
     fn set_best(&mut self) {
         self.best_solution = self.solution.to_vec();
+    }
+    fn hash(&self) -> u64 {
+        let mut hasher = DefaultHasher::new();
+        self.solution.hash(&mut hasher);
+        hasher.finish()
     }
 }

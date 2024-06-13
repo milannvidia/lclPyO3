@@ -1,3 +1,5 @@
+use std::hash::{DefaultHasher, Hash, Hasher};
+
 use super::Problem;
 use rand::{rngs::SmallRng, Rng, SeedableRng};
 
@@ -43,7 +45,7 @@ impl BinProblem {
     }
 }
 impl Problem for BinProblem {
-    fn mov(&mut self) -> (usize, usize) {
+    fn get_mov(&mut self) -> (usize, usize) {
         let i = self.rng.gen_range(1..self.size);
         let mut j = self.rng.gen_range(1..self.size);
         while i == j {
@@ -55,25 +57,25 @@ impl Problem for BinProblem {
         return (i, j);
     }
 
-    fn all_mov(&mut self) -> Vec<(usize, usize)> {
+    fn get_all_mov(&mut self) -> Vec<(usize, usize)> {
         let mut moves = vec![];
         for i in 0..self.size - 1 {
             for j in i + 1..self.size {
-                moves.append(&mut vec![(i, j)])
+                moves.push((i, j))
             }
         }
         return moves;
     }
 
-    fn domov(&mut self, indices: (usize, usize)) {
+    fn do_mov(&mut self, indices: (usize, usize)) {
         self.solution.swap(indices.0, indices.1);
     }
 
-    fn delta(&mut self, indices: (usize, usize)) -> isize {
+    fn delta_eval(&mut self, indices: (usize, usize)) -> isize {
         let initialscore = self.eval();
-        self.domov(indices);
+        self.do_mov(indices);
         let nextscore = self.eval();
-        self.domov(indices);
+        self.do_mov(indices);
         return (nextscore - initialscore) as isize;
     }
 
@@ -121,5 +123,11 @@ impl Problem for BinProblem {
 
     fn set_best(&mut self) {
         self.best_solution = self.solution.to_vec();
+    }
+
+    fn hash(&self) -> u64 {
+        let mut hasher = DefaultHasher::new();
+        self.solution.hash(&mut hasher);
+        hasher.finish()
     }
 }
