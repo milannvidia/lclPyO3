@@ -3,7 +3,7 @@ use std::{
     io::{self, BufRead, BufReader, Error},
 };
 
-pub(crate) fn read_csv(file_location: &str, delimiter: char) -> Result<Vec<Vec<usize>>, io::Error> {
+pub fn read_csv(file_location: &str, delimiter: char) -> Result<Vec<Vec<usize>>, io::Error> {
     let f = File::open(file_location)?;
     let br = BufReader::new(f);
 

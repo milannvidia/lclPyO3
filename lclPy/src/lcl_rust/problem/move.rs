@@ -1,4 +1,5 @@
 use rand::Rng;
+#[derive(Clone)]
 pub enum MoveType {
     Reverse {
         rng: rand::rngs::SmallRng,
@@ -16,7 +17,7 @@ pub enum MoveType {
 impl MoveType {
     pub fn do_move(&self, array: &mut Vec<usize>, indices: (usize, usize)) {
         match self {
-            MoveType::Reverse { rng, size } => {
+            MoveType::Reverse { rng: _, size: _ } => {
                 for i in 0..(indices.1 - indices.0 + 1) / 2 {
                     array.swap(indices.0 + i, indices.1 - i);
                 }
@@ -49,6 +50,28 @@ impl MoveType {
                     return (j, i);
                 }
                 return (i, j);
+            }
+        }
+    }
+    pub fn get_all_mov(&self) -> Vec<(usize, usize)> {
+        match self {
+            MoveType::Reverse { rng: _, size } | MoveType::Swap { rng: _, size } => {
+                let mut moves: Vec<(usize, usize)> = vec![];
+                for i in 0..(*size - 1) {
+                    for j in (i + 1)..*size {
+                        moves.push((i, j))
+                    }
+                }
+                moves
+            }
+            MoveType::Tsp { rng: _, size } => {
+                let mut moves: Vec<(usize, usize)> = vec![];
+                for i in 1..(*size - 1) {
+                    for j in (i + 1)..*size {
+                        moves.push((i, j))
+                    }
+                }
+                moves
             }
         }
     }

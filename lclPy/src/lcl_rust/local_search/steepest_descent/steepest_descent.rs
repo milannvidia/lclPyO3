@@ -14,12 +14,12 @@ pub struct SteepestDescent {
 impl SteepestDescent {
     pub fn new(
         minimize: bool,
-        problem: Arc<Mutex<dyn Problem>>,
-        termination: Arc<Mutex<dyn TerminationFunction>>,
+        problem: &Arc<Mutex<dyn Problem>>,
+        termination: &Arc<Mutex<dyn TerminationFunction>>,
     ) -> Self {
         SteepestDescent {
-            problem,
-            termination,
+            problem: problem.clone(),
+            termination: termination.clone(),
             minimize,
         }
     }

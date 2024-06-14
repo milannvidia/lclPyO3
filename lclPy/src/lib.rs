@@ -1,56 +1,90 @@
-mod lcl_rust;
-use lcl_rust::io::*;
-use lcl_rust::local_search::simulated_annealing::*;
-use lcl_rust::local_search::steepest_descent::*;
-use lcl_rust::problem::*;
-use lcl_rust::termination::*;
-use must_improve::MustImprove;
+pub mod lcl_rust;
+pub use lcl_rust::io::*;
+pub use lcl_rust::local_search::simulated_annealing::*;
+pub use lcl_rust::local_search::steepest_descent::*;
+pub use lcl_rust::local_search::tabu_search::*;
+pub use lcl_rust::problem::*;
+pub use lcl_rust::termination::*;
+
 use pyo3::prelude::*;
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
+use std::sync::{Arc, Mutex};
 
-use std::{
-    io::{self},
-    sync::{Arc, Mutex},
-};
+#[pyclass(frozen, name = "TspReader")]
+struct DynTspReader {
+    read: TspReader,
+}
+
 #[pyclass(frozen, name = "MoveType")]
 struct DynMoveType {
     mov: MoveType,
+}
+
+#[pyclass(frozen, name = "Evaluation")]
+struct DynEvaluation {
+    eva: Evaluation,
 }
 
 #[pyclass(frozen, name = "Termination")]
 struct DynTermination {
     termination: Arc<Mutex<dyn TerminationFunction>>,
 }
+
 #[pyclass(frozen, name = "Problem")]
 struct DynProblem {
     problem: Arc<Mutex<dyn Problem>>,
 }
+
 #[pyclass(frozen, name = "LocalSearch")]
 struct DynLocalSearch {
     local_search: Arc<Mutex<dyn LocalSearch>>,
 }
+
 #[pyclass(frozen, name = "Cooling")]
 struct DynCooling {
     cooling: Arc<dyn CoolingFunction>,
 }
+
 #[pyclass(frozen, name = "IterationsPerTemp")]
 struct DynIterTemp {
     iter_temp: Arc<dyn IterationsTemperature>,
 }
-
-#[pyclass(frozen, name = "FileReader")]
-struct DynIO {
-    file: String,
-    delimiter: char,
-    read_matrix: Option<fn(&str, char) -> Result<Vec<Vec<usize>>, io::Error>>,
-    read_row: Option<fn(&str, char) -> Vec<usize>>,
+#[pymethods]
+impl DynEvaluation {
+    #[staticmethod]
+    fn empty_bins(weights: Vec<usize>, max_fill: usize) -> Self {
+        DynEvaluation {
+            eva: Evaluation::EmptyBins { weights, max_fill },
+        }
+    }
+    #[staticmethod]
+    fn empty_space(weights: Vec<usize>, max_fill: usize) -> Self {
+        DynEvaluation {
+            eva: Evaluation::EmptySpace { weights, max_fill },
+        }
+    }
+    #[staticmethod]
+    fn empty_space_exp(weights: Vec<usize>, max_fill: usize) -> Self {
+        DynEvaluation {
+            eva: Evaluation::EmptySpaceExp { weights, max_fill },
+        }
+    }
+    #[staticmethod]
+    fn tsp(distance_matrix: Vec<Vec<usize>>) -> Self {
+        DynEvaluation {
+            eva: Evaluation::Tsp {
+                distance_matrix,
+                symmetric: true,
+            },
+        }
+    }
 }
 
 #[pymethods]
 impl DynMoveType {
     #[staticmethod]
-    fn swap(seed: Option<u64>) -> Self {
+    fn swap(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
             rng = SmallRng::seed_from_u64(seed.unwrap());
@@ -58,11 +92,11 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Swap { rng, size: 50 },
+            mov: MoveType::Swap { rng, size },
         }
     }
     #[staticmethod]
-    fn reverse(seed: Option<u64>) -> Self {
+    fn reverse(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
             rng = SmallRng::seed_from_u64(seed.unwrap());
@@ -70,11 +104,11 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Reverse { rng, size: 50 },
+            mov: MoveType::Reverse { rng, size },
         }
     }
     #[staticmethod]
-    fn swap_tsp(seed: Option<u64>) -> Self {
+    fn swap_tsp(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
             rng = SmallRng::seed_from_u64(seed.unwrap());
@@ -82,20 +116,7 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Tsp { rng, size: 50 },
-        }
-    }
-}
-
-#[pymethods]
-impl DynIO {
-    #[staticmethod]
-    fn csv(file: &str, delimiter: char) -> Self {
-        DynIO {
-            file: file.to_owned(),
-            delimiter,
-            read_matrix: Some(lcl_rust::io::read_csv),
-            read_row: None,
+            mov: MoveType::Tsp { rng, size },
         }
     }
 }
@@ -111,17 +132,13 @@ impl DynLocalSearch {
         cooling_function: Py<DynCooling>,
         iterations_temperature: Py<DynIterTemp>,
     ) -> PyResult<Self> {
-        let problem = Arc::clone(&problem.get().problem);
-        let termination = Arc::clone(&termination_function.get().termination);
-        let cooling_func = Arc::clone(&cooling_function.get().cooling);
-        let iter = Arc::clone(&iterations_temperature.get().iter_temp);
         let sim = SimulatedAnnealing::new(
             start_temp,
             minimize,
-            problem,
-            termination,
-            cooling_func,
-            iter,
+            &problem.get().problem,
+            &termination_function.get().termination,
+            &cooling_function.get().cooling,
+            &iterations_temperature.get().iter_temp,
         );
         Ok(DynLocalSearch {
             local_search: Arc::new(Mutex::new(sim)),
@@ -133,9 +150,26 @@ impl DynLocalSearch {
         problem: Py<DynProblem>,
         termination_function: Py<DynTermination>,
     ) -> PyResult<Self> {
-        let problem = Arc::clone(&problem.get().problem);
-        let termination = Arc::clone(&termination_function.get().termination);
-        let sim = SteepestDescent::new(minimize, problem, termination);
+        let sim = SteepestDescent::new(
+            minimize,
+            &problem.get().problem,
+            &termination_function.get().termination,
+        );
+        Ok(DynLocalSearch {
+            local_search: Arc::new(Mutex::new(sim)),
+        })
+    }
+    #[staticmethod]
+    fn tabu_search(
+        minimize: bool,
+        problem: Py<DynProblem>,
+        termination_function: Py<DynTermination>,
+    ) -> PyResult<Self> {
+        let sim = TabuSearch::new(
+            &problem.get().problem,
+            &termination_function.get().termination,
+            minimize,
+        );
         Ok(DynLocalSearch {
             local_search: Arc::new(Mutex::new(sim)),
         })
@@ -154,39 +188,13 @@ impl DynLocalSearch {
 #[pymethods]
 impl DynProblem {
     #[staticmethod]
-    fn array_problem(move_type: Py<DynMoveType>) -> Self {}
-    // #[staticmethod]
-    // fn TSP(
-    //     distance_matrix: Option<Vec<Vec<usize>>>,
-    //     file_reader: Option<Py<DynIO>>,
-    //     seed: Option<u64>,
-    // ) -> Result<Self, io::Error> {
-    //     let problem;
-    //     if distance_matrix.is_some() {
-    //         problem = TSP::new(false, distance_matrix.unwrap(), seed.or(None));
-    //     } else if file_reader.is_some() {
-    //         let dyn_io = file_reader.unwrap();
-    //         let io_function = dyn_io.get().read_matrix;
-    //         if io_function.is_none() {
-    //             return Err(io::Error::other("This filereader is not meant for TSP"));
-    //         }
-    //         let matrix = io_function.unwrap()(dyn_io.get().file.as_str(), dyn_io.get().delimiter)?;
-    //         problem = TSP::new(false, matrix, seed.or(None));
-    //     } else {
-    //         return Err(io::Error::other("matrix or file reader is needed"));
-    //     }
-
-    //     Ok(DynProblem {
-    //         problem: Arc::new(Mutex::new(problem)),
-    //     })
-    // }
-    // #[staticmethod]
-    // fn bin_problem(weights: Vec<usize>, max_per_bin: usize) -> Result<Self, io::Error> {
-    //     let problem = BinProblem::new(DeltaRating::ExponentialEmpty, max_per_bin, weights, None);
-    //     Ok(DynProblem {
-    //         problem: Arc::new(Mutex::new(problem)),
-    //     })
-    // }
+    fn array_problem(move_type: Py<DynMoveType>, evaluation: Py<DynEvaluation>) -> Self {
+        let move_enum = &move_type.get().mov;
+        let eva = &evaluation.get().eva;
+        DynProblem {
+            problem: Arc::new(Mutex::new(Arrayproblem::new(move_enum, eva))),
+        }
+    }
 }
 
 #[pymethods]
@@ -236,7 +244,7 @@ impl DynTermination {
         }
     }
     #[staticmethod]
-    fn MultiCritAnd(vec: Vec<Py<DynTermination>>) -> Self {
+    fn multi_crit_and(vec: Vec<Py<DynTermination>>) -> Self {
         let terminations = vec
             .iter()
             .map(|f| Arc::clone(&f.get().termination))
@@ -246,7 +254,7 @@ impl DynTermination {
         }
     }
     #[staticmethod]
-    fn MultiCritOr(vec: Vec<Py<DynTermination>>) -> Self {
+    fn multi_crit_or(vec: Vec<Py<DynTermination>>) -> Self {
         let terminations = vec
             .iter()
             .map(|f| Arc::clone(&f.get().termination))
@@ -276,5 +284,7 @@ fn lclRust(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynTermination>()?;
     m.add_class::<DynIterTemp>()?;
     m.add_class::<DynCooling>()?;
+    m.add_class::<DynEvaluation>()?;
+    m.add_class::<DynMoveType>()?;
     Ok(())
 }

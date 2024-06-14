@@ -1,4 +1,4 @@
-use super::{tabu_list, LocalSearch};
+use super::LocalSearch;
 use crate::lcl_rust::problem::Problem;
 use crate::lcl_rust::termination::TerminationFunction;
 use std::sync::{Arc, Mutex};
@@ -13,7 +13,19 @@ pub struct TabuSearch {
     minimize: bool,
     // pub(crate) tabu_list: TabuList<T>,
 }
-impl TabuSearch {}
+impl TabuSearch {
+    pub fn new(
+        problem: &Arc<Mutex<dyn Problem>>,
+        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        minimize: bool,
+    ) -> Self {
+        TabuSearch {
+            problem: problem.clone(),
+            termination: termination.clone(),
+            minimize,
+        }
+    }
+}
 
 impl LocalSearch for TabuSearch {
     fn reset(&mut self) {

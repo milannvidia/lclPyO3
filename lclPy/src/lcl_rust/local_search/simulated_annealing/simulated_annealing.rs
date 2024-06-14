@@ -20,19 +20,19 @@ impl SimulatedAnnealing {
     pub fn new(
         temp: usize,
         minimize: bool,
-        problem: Arc<Mutex<dyn Problem>>,
-        termination: Arc<Mutex<dyn TerminationFunction>>,
-        cooling: Arc<dyn CoolingFunction>,
-        iteration_calc: Arc<dyn IterationsTemperature>,
+        problem: &Arc<Mutex<dyn Problem>>,
+        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        cooling: &Arc<dyn CoolingFunction>,
+        iteration_calc: &Arc<dyn IterationsTemperature>,
     ) -> Self {
         SimulatedAnnealing {
             temp,
             minimize,
             start_temp: temp,
-            termination,
-            problem,
-            cool_func: cooling,
-            iter_temp: iteration_calc,
+            termination: termination.clone(),
+            problem: problem.clone(),
+            cool_func: cooling.clone(),
+            iter_temp: iteration_calc.clone(),
         }
     }
 }

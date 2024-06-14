@@ -5,25 +5,28 @@ use crate::{Evaluation, MoveType, Problem};
 pub struct Arrayproblem {
     solution: Vec<usize>,
     best_solution: Vec<usize>,
-    size: usize,
     move_type: MoveType,
     evaluation: Evaluation,
-    rng: rand::rngs::SmallRng,
 }
-
+impl Arrayproblem {
+    pub fn new(move_type: &MoveType, evaluation: &Evaluation) -> Self {
+        let len = evaluation.length();
+        let arrayproblem = Arrayproblem {
+            solution: (0..len).collect(),
+            best_solution: (0..len).collect(),
+            move_type: move_type.clone(),
+            evaluation: evaluation.clone(),
+        };
+        return arrayproblem;
+    }
+}
 impl Problem for Arrayproblem {
     fn get_mov(&mut self) -> (usize, usize) {
         self.move_type.get_mov()
     }
 
     fn get_all_mov(&mut self) -> Vec<(usize, usize)> {
-        let mut moves = vec![];
-        for i in 1..self.size - 1 {
-            for j in i + 1..self.size {
-                moves.push((i, j))
-            }
-        }
-        return moves;
+        self.move_type.get_all_mov()
     }
 
     fn do_mov(&mut self, indices: (usize, usize)) {
@@ -40,8 +43,8 @@ impl Problem for Arrayproblem {
     }
 
     fn reset(&mut self) {
-        self.solution = (0..self.size).collect();
-        self.best_solution = (0..self.size).collect();
+        self.solution = (0..self.solution.len()).collect();
+        self.best_solution = (0..self.solution.len()).collect();
     }
 
     fn set_best(&mut self) {
