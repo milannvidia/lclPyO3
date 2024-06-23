@@ -1,20 +1,23 @@
-pub mod lcl_rust;
-pub use lcl_rust::io::*;
-pub use lcl_rust::local_search::simulated_annealing::*;
-pub use lcl_rust::local_search::steepest_descent::*;
-pub use lcl_rust::local_search::tabu_search::*;
-pub use lcl_rust::problem::*;
-pub use lcl_rust::termination::*;
-
 use pyo3::prelude::*;
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
+use simulated_annealing::{
+    CnstIterTemp, CoolingFunction, GeometricCooling, IterationsTemperature, SimulatedAnnealing,
+};
 use std::sync::{Arc, Mutex};
-
-#[pyclass(frozen, name = "TspReader")]
-struct DynTspReader {
-    read: TspReader,
-}
+use steepest_descent::SteepestDescent;
+use tabu_search::TabuSearch;
+pub mod io;
+pub mod local_search;
+pub mod problem;
+pub mod termination;
+use local_search::*;
+use problem::*;
+use termination::*;
+// #[pyclass(frozen, name = "TspReader")]
+// struct DynTspReader {
+//     read: TspReader,
+// }
 
 #[pyclass(frozen, name = "MoveType")]
 struct DynMoveType {
@@ -78,6 +81,27 @@ impl DynEvaluation {
                 symmetric: true,
             },
         }
+    }
+    #[staticmethod]
+    fn tsp_from_dist_matrix(file: &str) -> PyResult<Self> {
+        let distance_matrix = io::TspReader::DistanceMatrix {
+            file: file.to_owned(),
+        }
+        .get_distance_matrix()?;
+        let mut symmetric = true;
+        for i in 0..distance_matrix.len() {
+            for j in 0..i {
+                if distance_matrix[i][j] == distance_matrix[j][i] {
+                    symmetric = false;
+                }
+            }
+        }
+        Ok(DynEvaluation {
+            eva: Evaluation::Tsp {
+                distance_matrix,
+                symmetric,
+            },
+        })
     }
 }
 
@@ -192,7 +216,7 @@ impl DynProblem {
         let move_enum = &move_type.get().mov;
         let eva = &evaluation.get().eva;
         DynProblem {
-            problem: Arc::new(Mutex::new(Arrayproblem::new(move_enum, eva))),
+            problem: Arc::new(Mutex::new(ArrayProblem::new(move_enum, eva))),
         }
     }
 }
@@ -212,7 +236,7 @@ impl DynIterTemp {
     #[staticmethod]
     fn cnst_iter_temp(iterations: usize) -> Self {
         DynIterTemp {
-            iter_temp: Arc::new(CnstIterTemp { iterations }),
+            iter_temp: Arc::new(CnstIterTemp::new(iterations)),
         }
     }
 }
@@ -278,7 +302,7 @@ impl DynTermination {
 }
 
 #[pymodule]
-fn lclRust(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn lcl_rust(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynLocalSearch>()?;
     m.add_class::<DynProblem>()?;
     m.add_class::<DynTermination>()?;

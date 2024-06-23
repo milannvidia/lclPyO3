@@ -1,9 +1,11 @@
 import lclRust
 
+eval=lclRust.Evaluation.tsp_from_dist_matrix("C:/Users/milan/Documents/Masterproef/lclPy/data/distanceMatrix")
+move=lclRust.MoveType.swap(48)
+problem=lclRust.Problem.array_problem(move,eval)
+term=lclRust.Termination.max_iterations(1000)
 cooling=lclRust.Cooling.geometric_cooling(0.95)
-iteration=lclRust.IterationsPerTemp.cnst_iter_temp(1000)
-termination=lclRust.Termination.max_sec(5)
-problem=lclRust.Problem.TSP([[0]])
-lcl=lclRust.LocalSearch.simulated_annealing(problem,termination,cooling,iteration);
+iter=lclRust.IterationsPerTemp.cnst_iter_temp(1000)
+
+lcl=lclRust.LocalSearch.simulated_annealing(2000,True,problem,term,cooling,iter)
 res=lcl.run()
-print(res)

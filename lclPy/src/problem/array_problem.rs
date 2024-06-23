@@ -1,26 +1,29 @@
-use std::hash::{DefaultHasher, Hash, Hasher};
+use std::{
+    collections::hash_map::DefaultHasher,
+    hash::{Hash, Hasher},
+};
 
-use crate::{Evaluation, MoveType, Problem};
+use super::{Evaluation, MoveType, Problem};
 
-pub struct Arrayproblem {
+pub struct ArrayProblem {
     solution: Vec<usize>,
     best_solution: Vec<usize>,
     move_type: MoveType,
     evaluation: Evaluation,
 }
-impl Arrayproblem {
+impl ArrayProblem {
     pub fn new(move_type: &MoveType, evaluation: &Evaluation) -> Self {
         let len = evaluation.length();
-        let arrayproblem = Arrayproblem {
+        let array_problem = ArrayProblem {
             solution: (0..len).collect(),
             best_solution: (0..len).collect(),
             move_type: move_type.clone(),
             evaluation: evaluation.clone(),
         };
-        return arrayproblem;
+        return array_problem;
     }
 }
-impl Problem for Arrayproblem {
+impl Problem for ArrayProblem {
     fn get_mov(&mut self) -> (usize, usize) {
         self.move_type.get_mov()
     }

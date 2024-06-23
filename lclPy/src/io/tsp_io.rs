@@ -1,45 +1,57 @@
 use std::{
     f64::consts::PI,
     fs::File,
-    io::{self, BufRead, BufReader},
+    io::{self, BufRead, BufReader, Error},
     usize, vec,
 };
 static RRR: f64 = 6378.388;
 
 pub enum TspReader {
-    DistanceMatrix { file: String, size: usize },
-    Coord2d { file: String, size: usize },
-    Dms { file: String, size: usize },
+    DistanceMatrix { file: String },
+    Coord2d { file: String },
+    Dms { file: String },
 }
 impl TspReader {
     pub fn get_distance_matrix(&self) -> Result<Vec<Vec<usize>>, io::Error> {
         match self {
-            TspReader::DistanceMatrix { file, size } => {
+            TspReader::DistanceMatrix { file } => {
                 let f = File::open(file)?;
                 let br = BufReader::new(f);
-                let mut current_line_length = 0;
-                let mut matrix: Vec<Vec<usize>> = vec![vec![]];
+                let mut res: Vec<usize> = vec![];
+
                 for x in br.lines() {
                     let line = x.unwrap();
-                    if line.contains('#') {
+                    if !line.chars().all(|c| c.is_numeric() || c.is_whitespace()) {
                         continue;
                     }
-                    let mut res: Vec<usize> = line
+                    let mut row: Vec<usize> = line
                         .split_whitespace()
                         .map(|number| number.parse::<usize>().unwrap())
                         .collect();
-                    if res.len() + current_line_length <= *size {
-                        current_line_length += res.len();
-                        let index = matrix.len() - 1;
-                        matrix[index].append(&mut res);
-                    } else {
-                        current_line_length = res.len();
-                        matrix.push(res);
+                    res.append(&mut row);
+                }
+                let dimensions: f64 = (res.len() as f64).sqrt();
+                if dimensions % 1f64 != 0f64 {
+                    return Err(Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "distanceMatrix is not a square",
+                    ));
+                }
+                let matrix: Vec<Vec<usize>> = res
+                    .chunks(dimensions as usize)
+                    .map(|chunk| chunk.to_vec())
+                    .collect();
+                for i in 0..dimensions as usize {
+                    if matrix[i][i] != 0 {
+                        return Err(Error::new(
+                            io::ErrorKind::InvalidInput,
+                            format!("distance to location {} itself is not zero", i),
+                        ));
                     }
                 }
                 return Ok(matrix);
             }
-            TspReader::Dms { file, size } => {
+            TspReader::Dms { file } => {
                 let f = File::open(file)?;
                 let br = BufReader::new(f);
                 let mut cities: Vec<(f64, f64)> = vec![];
@@ -65,10 +77,10 @@ impl TspReader {
                     }
                     cities.push((lat, long));
                 }
-                let mut matrix: Vec<Vec<usize>> = long_lat_to_distmatrix(&cities);
+                let mut matrix: Vec<Vec<usize>> = long_lat_to_dist_matrix(&cities);
                 return Ok(matrix);
             }
-            TspReader::Coord2d { file, size } => {
+            TspReader::Coord2d { file } => {
                 let matrix: Vec<Vec<usize>> = vec![vec![]];
                 return Ok(matrix);
             }
@@ -76,12 +88,15 @@ impl TspReader {
     }
 }
 
-fn long_lat_to_distmatrix(cities: &Vec<(f64, f64)>) -> Vec<Vec<usize>> {}
+fn long_lat_to_dist_matrix(cities: &Vec<(f64, f64)>) -> Vec<Vec<usize>> {
+    return vec![vec![0]];
+}
 
 fn dist_globe(a: (f64, f64), b: (f64, f64)) -> usize {
-    let dlat = degree_to_rad(b.0 - a.0);
-    let dlong = degree_to_rad(b.1 - a.1);
-    let a=(dlat/2).sin()*
+    let dLat = degree_to_rad(b.0 - a.0);
+    let dLong = degree_to_rad(b.1 - a.1);
+
+    return 0;
 }
 
 fn degree_to_rad(degree: f64) -> f64 {

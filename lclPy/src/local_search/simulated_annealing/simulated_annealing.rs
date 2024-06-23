@@ -1,6 +1,6 @@
 use super::*;
-use crate::lcl_rust::problem::Problem;
-use crate::lcl_rust::termination::TerminationFunction;
+use crate::problem::Problem;
+use crate::termination::TerminationFunction;
 use rand::Rng;
 use std::{
     sync::{Arc, Mutex},
@@ -72,7 +72,6 @@ impl LocalSearch for SimulatedAnnealing {
                 if (delta <= 0) == self.minimize {
                     problem.do_mov(mov);
                     current += delta;
-
                     if (current < best) == self.minimize {
                         problem.set_best();
                         best = current;

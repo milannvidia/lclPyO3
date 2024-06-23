@@ -42,7 +42,7 @@ impl Evaluation {
                 move_type.do_move(solution, indices);
                 let sec = self.eval(solution);
                 move_type.do_move(solution, indices);
-                return (sec - first) as isize;
+                return sec as isize - first as isize;
             }
             Evaluation::Tsp {
                 distance_matrix,
@@ -53,23 +53,36 @@ impl Evaluation {
                 if matches!(move_type, MoveType::Swap { rng: _, size: _ })
                     || matches!(move_type, MoveType::Tsp { rng: _, size: _ })
                 {
-                    if indices.0 > 0 {
-                        init_score += distance_matrix[solution[indices.0 - 1]][solution[indices.0]];
+                    let from = indices.0;
+                    let to = indices.1;
+                    if from > 0 {
+                        init_score += distance_matrix[solution[from - 1]][solution[from]];
+                    } else {
+                        init_score += distance_matrix[solution[solution.len() - 1]][solution[from]];
                     }
-                    init_score += distance_matrix[solution[indices.0]][solution[indices.0 + 1]];
-                    init_score += distance_matrix[solution[indices.1 - 1]][solution[indices.1]];
-                    init_score += distance_matrix[solution[indices.1]]
-                        [solution[(indices.1 + 1) % solution.len()]];
+
+                    init_score += distance_matrix[solution[from]][solution[from + 1]];
+                    if from != to - 1 {
+                        init_score += distance_matrix[solution[to - 1]][solution[to]];
+                    }
+
+                    init_score +=
+                        distance_matrix[solution[to]][solution[(to + 1) % solution.len()]];
 
                     move_type.do_move(solution, indices);
 
-                    if indices.0 > 0 {
-                        next_score += distance_matrix[solution[indices.0 - 1]][solution[indices.0]];
+                    if from > 0 {
+                        next_score += distance_matrix[solution[from - 1]][solution[from]];
+                    } else {
+                        next_score += distance_matrix[solution[solution.len() - 1]][solution[from]];
                     }
-                    next_score += distance_matrix[solution[indices.0]][solution[indices.0 + 1]];
-                    next_score += distance_matrix[solution[indices.1 - 1]][solution[indices.1]];
-                    next_score += distance_matrix[solution[indices.1]]
-                        [solution[(indices.1 + 1) % solution.len()]];
+
+                    next_score += distance_matrix[solution[from]][solution[from + 1]];
+                    if from != to - 1 {
+                        next_score += distance_matrix[solution[to - 1]][solution[to]];
+                    }
+                    next_score +=
+                        distance_matrix[solution[to]][solution[(to + 1) % solution.len()]];
 
                     move_type.do_move(solution, indices);
                 } else {
@@ -77,30 +90,49 @@ impl Evaluation {
                         if indices.0 > 0 {
                             init_score +=
                                 distance_matrix[solution[indices.0 - 1]][solution[indices.0]];
+                        } else {
+                            init_score +=
+                                distance_matrix[solution[solution.len() - 1]][solution[indices.0]];
                         }
-                        if indices.1 < solution.len() {
-                            init_score += distance_matrix[solution[indices.1]]
-                                [solution[(indices.1 + 1) % solution.len()]];
-                        }
+                        init_score += distance_matrix[solution[indices.1]]
+                            [solution[(indices.1 + 1) % solution.len()]];
                         move_type.do_move(solution, indices);
                         if indices.0 > 0 {
                             next_score +=
                                 distance_matrix[solution[indices.0 - 1]][solution[indices.0]];
+                        } else {
+                            next_score +=
+                                distance_matrix[solution[solution.len() - 1]][solution[indices.0]];
                         }
-                        if indices.1 < solution.len() {
-                            next_score += distance_matrix[solution[indices.1]]
-                                [solution[(indices.1 + 1) % solution.len()]];
-                        }
+
+                        next_score += distance_matrix[solution[indices.1]]
+                            [solution[(indices.1 + 1) % solution.len()]];
+
                         move_type.do_move(solution, indices);
                     } else {
                         for i in indices.0..indices.1 {
                             init_score += distance_matrix[solution[i]][solution[i + 1]];
                         }
+                        if indices.0 > 0 {
+                            init_score +=
+                                distance_matrix[solution[indices.0] - 1][solution[indices.0]];
+                        } else {
+                            init_score +=
+                                distance_matrix[solution[solution.len() - 1]][solution[indices.0]];
+                        }
+
                         init_score += distance_matrix[solution[indices.1]]
                             [solution[(indices.1 + 1) % solution.len()]];
                         move_type.do_move(solution, indices);
                         for i in indices.0..indices.1 {
                             next_score += distance_matrix[solution[i]][solution[i + 1]];
+                        }
+                        if indices.0 > 0 {
+                            next_score +=
+                                distance_matrix[solution[indices.0] - 1][solution[indices.0]];
+                        } else {
+                            next_score +=
+                                distance_matrix[solution[solution.len() - 1]][solution[indices.0]];
                         }
                         next_score += distance_matrix[solution[indices.1]]
                             [solution[(indices.1 + 1) % solution.len()]];
