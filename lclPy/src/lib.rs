@@ -302,7 +302,7 @@ impl DynTermination {
 }
 
 #[pymodule]
-fn lcl_rust(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn lclpy(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynLocalSearch>()?;
     m.add_class::<DynProblem>()?;
     m.add_class::<DynTermination>()?;
