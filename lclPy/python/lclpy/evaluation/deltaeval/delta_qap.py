@@ -377,11 +377,11 @@ def delta_qap(eval_func, move_func):
 
     move_type = move_func.get_move_type()
 
-    if move_type is 'array_swap':
+    if move_type == 'array_swap':
         return QAPDeltaEvaluate(eval_func,
                                 array_swap_changed_locations,
                                 array_swap_transform_next_index_to_current_index)
-    if move_type is 'array_reverse_order':
+    if move_type == 'array_reverse_order':
         return QAPDeltaEvaluate(eval_func,
                                 array_reverse_order_changed_locations,
                                 array_reverse_order_transform_next_index_to_current_index)

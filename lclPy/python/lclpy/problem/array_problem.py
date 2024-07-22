@@ -143,7 +143,7 @@ class ArrayProblem(AbstractLocalSearchProblem):
         self._evaluation_function = evaluation_function
         self._move_function = move_function
 
-        if self._move_function.get_move_type() is not 'multi_neighbourhood':
+        if self._move_function.get_move_type() != 'multi_neighbourhood':
             self.first_neighbourhood = not_multi_move_type
             self.next_neighbourhood = not_multi_move_type
             self.previous_neighbourhood = not_multi_move_type
@@ -455,7 +455,7 @@ class ArrayProblem(AbstractLocalSearchProblem):
 
         """
 
-        if self.current_neighbourhood is not 0:
+        if self.current_neighbourhood != 0:
             self.current_neighbourhood -= 1
 
     def select_get_moves(self):

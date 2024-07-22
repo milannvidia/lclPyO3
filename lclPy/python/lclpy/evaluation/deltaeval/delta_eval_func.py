@@ -24,11 +24,11 @@ def delta_eval_func(problem_eval_func, move_func):
     problem_type = problem_eval_func.get_problem_type()
     move_type = move_func.get_move_type()
 
-    if move_type is 'multi_neighbourhood':
+    if move_type == 'multi_neighbourhood':
         return delta_multi_neighbourhood(problem_eval_func, move_func)
-    if problem_type is 'TSP':
+    if problem_type == 'TSP':
         return delta_tsp(problem_eval_func, move_func)
-    elif problem_type is 'QAP':
+    elif problem_type == 'QAP':
         return delta_qap(problem_eval_func, move_func)
     else:
         raise NotImplementedError

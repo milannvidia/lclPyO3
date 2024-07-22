@@ -19,37 +19,37 @@ use termination::*;
 //     read: TspReader,
 // }
 
-#[pyclass(frozen, name = "MoveType")]
+#[pyclass(frozen, name = "RustMoveType")]
 struct DynMoveType {
     mov: MoveType,
 }
 
-#[pyclass(frozen, name = "Evaluation")]
+#[pyclass(frozen, name = "RustEvaluation")]
 struct DynEvaluation {
     eva: Evaluation,
 }
 
-#[pyclass(frozen, name = "Termination")]
+#[pyclass(frozen, name = "RustTermination")]
 struct DynTermination {
     termination: Arc<Mutex<dyn TerminationFunction>>,
 }
 
-#[pyclass(frozen, name = "Problem")]
+#[pyclass(frozen, name = "RustProblem")]
 struct DynProblem {
     problem: Arc<Mutex<dyn Problem>>,
 }
 
-#[pyclass(frozen, name = "LocalSearch")]
+#[pyclass(frozen, name = "RustLocalSearch")]
 struct DynLocalSearch {
     local_search: Arc<Mutex<dyn LocalSearch>>,
 }
 
-#[pyclass(frozen, name = "Cooling")]
+#[pyclass(frozen, name = "RustCooling")]
 struct DynCooling {
     cooling: Arc<dyn CoolingFunction>,
 }
 
-#[pyclass(frozen, name = "IterationsPerTemp")]
+#[pyclass(frozen, name = "RustIterationsPerTemp")]
 struct DynIterTemp {
     iter_temp: Arc<dyn IterationsTemperature>,
 }
@@ -108,6 +108,7 @@ impl DynEvaluation {
 #[pymethods]
 impl DynMoveType {
     #[staticmethod]
+    #[pyo3(signature = (size, seed=None))]
     fn swap(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
@@ -120,6 +121,7 @@ impl DynMoveType {
         }
     }
     #[staticmethod]
+    #[pyo3(signature = (size, seed=None))]
     fn reverse(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
@@ -132,6 +134,7 @@ impl DynMoveType {
         }
     }
     #[staticmethod]
+    #[pyo3(signature = (size, seed=None))]
     fn swap_tsp(size: usize, seed: Option<u64>) -> Self {
         let rng;
         if seed.is_some() {
