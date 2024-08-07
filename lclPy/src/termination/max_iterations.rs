@@ -30,4 +30,6 @@ impl TerminationFunction for MaxIterations {
     fn iteration_done(&mut self) {
         self.current_iterations += 1;
     }
+
+    fn check_new_variable(&mut self, _var: isize) {}
 }

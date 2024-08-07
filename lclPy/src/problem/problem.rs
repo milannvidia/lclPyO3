@@ -1,3 +1,5 @@
+use super::MoveType;
+
 pub trait Problem: Send {
     fn get_mov(&mut self) -> (usize, usize);
     fn get_all_mov(&mut self) -> Vec<(usize, usize)>;
@@ -7,4 +9,5 @@ pub trait Problem: Send {
     fn reset(&mut self);
     fn set_best(&mut self);
     fn hash(&self) -> u64;
+    fn get_move_type(&self) -> &MoveType;
 }

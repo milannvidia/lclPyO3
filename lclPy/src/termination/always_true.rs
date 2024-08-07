@@ -1,5 +1,4 @@
 use super::TerminationFunction;
-
 pub struct AlwaysTrue {}
 impl AlwaysTrue {
     pub fn new() -> Self {
@@ -17,4 +16,6 @@ impl TerminationFunction for AlwaysTrue {
     }
 
     fn iteration_done(&mut self) {}
+
+    fn check_new_variable(&mut self, _var: isize) {}
 }

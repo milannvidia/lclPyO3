@@ -1,33 +1,49 @@
 use super::LocalSearch;
 use crate::problem::Problem;
 use crate::termination::TerminationFunction;
+use crate::MoveType;
+use std::borrow::Borrow;
+use std::error::Error;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
+use std::vec;
 
-pub struct SteepestDescent {
-    // pub(crate) problem:&'a mut dyn Problem,
-    // pub(crate) termination:&'a mut dyn TerminationFunction,
+pub struct VariableNeighborhood {
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
     minimize: bool,
+    neighborhood: usize,
 }
-impl SteepestDescent {
+
+impl VariableNeighborhood {
     pub fn new(
-        minimize: bool,
         problem: &Arc<Mutex<dyn Problem>>,
         termination: &Arc<Mutex<dyn TerminationFunction>>,
+        minimize: bool,
     ) -> Self {
-        SteepestDescent {
+        VariableNeighborhood {
             problem: problem.clone(),
             termination: termination.clone(),
             minimize,
+            neighborhood: 0,
         }
     }
-}
-impl LocalSearch for SteepestDescent {
-    fn reset(&mut self) {
-        self.problem.lock().unwrap().reset();
+
+    fn get_all_mov_select(&self, move_type: MoveType) -> Vec<(usize, usize)> {
+        move_type.get_all_mov()
     }
+
+    fn delta_eval(&self, mov: (usize, usize)) -> isize {}
+
+    fn do_move(&self, best_move: Option<(usize, usize)>) {
+        todo!()
+    }
+}
+impl LocalSearch for VariableNeighborhood {
+    fn reset(&mut self) {
+        self.problem.lock().unwrap().reset()
+    }
+
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
         let mut termination = self.termination.lock().unwrap();
@@ -36,43 +52,58 @@ impl LocalSearch for SteepestDescent {
         let now = Instant::now();
         let mut iterations = 0;
         let mut data: Vec<(u128, isize, isize, usize)> = vec![];
-
-        termination.init();
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
+        termination.init();
         while termination.keep_running() {
-            // while iterations<100{
-            let mut best_mov = (0, 0);
             let mut best_delta = if self.minimize {
                 isize::MAX
             } else {
                 isize::MIN
             };
-            for mov in problem.get_all_mov() {
-                let delta = problem.delta_eval(mov);
+            let mut best_move: Option<(usize, usize)> = None;
+
+            for mov in self.get_all_mov_select() {
+                let delta: isize = self.delta_eval(mov);
                 if (delta < best_delta) == self.minimize {
                     best_delta = delta;
-                    best_mov = mov;
+                    best_move = Some(mov);
                 }
             }
-            current = current + best_delta;
-            termination.check_variable(current);
+            current += best_delta;
+
+            termination.check_new_variable(current);
+
             if (current < best) == self.minimize {
-                problem.do_mov(best_mov);
+                self.do_move(best_move);
                 problem.set_best();
                 best = current;
                 if log {
-                    data.push((now.elapsed().as_nanos(), best, current, iterations));
+                    data.push((now.elapsed().as_nanos(), best, current, iterations))
                 }
             } else {
-                break;
+                current -= best_delta;
+                match problem.get_move_type() {
+                    MoveType::Reverse { rng: _, size: _ }
+                    | MoveType::Swap { rng: _, size: _ }
+                    | MoveType::Tsp { rng: _, size: _ } => break,
+                    MoveType::MultiNeighbor {
+                        move_types,
+                        weights: _,
+                    } => {
+                        if self.neighborhood + 1 >= move_types.len() {
+                            break;
+                        } else {
+                            self.neighborhood += 1;
+                        }
+                    }
+                }
             }
             iterations += 1;
             termination.iteration_done();
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
-
-        return data;
+        data
     }
 }

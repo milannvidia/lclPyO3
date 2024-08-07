@@ -22,7 +22,11 @@ impl TerminationFunction for MultiCritOr {
         }
         false
     }
-    fn init(&mut self) {}
+    fn init(&mut self) {
+        for crit in &mut self.critirions {
+            crit.lock().unwrap().init();
+        }
+    }
 
     fn check_variable(&mut self, var: isize) -> bool {
         for crit in &mut self.critirions {
@@ -36,6 +40,12 @@ impl TerminationFunction for MultiCritOr {
     fn iteration_done(&mut self) {
         for crit in &mut self.critirions {
             crit.lock().unwrap().iteration_done();
+        }
+    }
+
+    fn check_new_variable(&mut self, var: isize) {
+        for crit in &mut self.critirions {
+            crit.lock().unwrap().check_new_variable(var);
         }
     }
 }

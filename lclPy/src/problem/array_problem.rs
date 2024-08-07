@@ -59,4 +59,8 @@ impl Problem for ArrayProblem {
         self.solution.hash(&mut hasher);
         hasher.finish()
     }
+
+    fn get_move_type(&self) -> &MoveType {
+        return &self.move_type;
+    }
 }

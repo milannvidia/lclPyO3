@@ -44,6 +44,7 @@ impl LocalSearch for TabuSearch {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
 
+        termination.init();
         while termination.keep_running() {
             let mut best_mov: Option<(usize, usize)> = None;
             let mut best_delta = isize::MAX;

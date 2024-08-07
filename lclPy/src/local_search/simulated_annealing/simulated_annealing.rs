@@ -13,8 +13,8 @@ pub struct SimulatedAnnealing {
     minimize: bool,
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
-    pub(crate) cool_func: Arc<dyn CoolingFunction>,
-    pub(crate) iter_temp: Arc<dyn IterationsTemperature>,
+    pub(crate) cool_func: CoolingFunction,
+    pub(crate) iter_temp: IterationsTemperature,
 }
 impl SimulatedAnnealing {
     pub fn new(
@@ -22,8 +22,8 @@ impl SimulatedAnnealing {
         minimize: bool,
         problem: &Arc<Mutex<dyn Problem>>,
         termination: &Arc<Mutex<dyn TerminationFunction>>,
-        cooling: &Arc<dyn CoolingFunction>,
-        iteration_calc: &Arc<dyn IterationsTemperature>,
+        cooling: &CoolingFunction,
+        iteration_calc: &IterationsTemperature,
     ) -> Self {
         SimulatedAnnealing {
             temp,
@@ -39,12 +39,11 @@ impl SimulatedAnnealing {
 impl LocalSearch for SimulatedAnnealing {
     fn reset(&mut self) {
         self.problem.lock().unwrap().reset();
-        self.temp = self.start_temp;
     }
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
         let mut termination = self.termination.lock().unwrap();
-
+        self.temp = self.start_temp;
         let e = std::f64::consts::E;
         let mut iterations: usize = 0;
         let now = Instant::now();

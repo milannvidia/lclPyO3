@@ -18,4 +18,6 @@ impl TerminationFunction for MinTemp {
     }
 
     fn iteration_done(&mut self) {}
+
+    fn check_new_variable(&mut self, _var: isize) {}
 }

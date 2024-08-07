@@ -1,9 +1,7 @@
 use pyo3::prelude::*;
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
-use simulated_annealing::{
-    CnstIterTemp, CoolingFunction, GeometricCooling, IterationsTemperature, SimulatedAnnealing,
-};
+use simulated_annealing::{CoolingFunction, IterationsTemperature, SimulatedAnnealing};
 use std::sync::{Arc, Mutex};
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
@@ -46,12 +44,12 @@ struct DynLocalSearch {
 
 #[pyclass(frozen, name = "RustCooling")]
 struct DynCooling {
-    cooling: Arc<dyn CoolingFunction>,
+    cooling: CoolingFunction,
 }
 
 #[pyclass(frozen, name = "RustIterationsPerTemp")]
 struct DynIterTemp {
-    iter_temp: Arc<dyn IterationsTemperature>,
+    iter_temp: IterationsTemperature,
 }
 #[pymethods]
 impl DynEvaluation {
@@ -89,10 +87,11 @@ impl DynEvaluation {
         }
         .get_distance_matrix()?;
         let mut symmetric = true;
-        for i in 0..distance_matrix.len() {
+        'outer: for i in 0..distance_matrix.len() {
             for j in 0..i {
-                if distance_matrix[i][j] == distance_matrix[j][i] {
+                if distance_matrix[i][j] != distance_matrix[j][i] {
                     symmetric = false;
+                    break 'outer;
                 }
             }
         }
@@ -229,7 +228,7 @@ impl DynCooling {
     #[staticmethod]
     fn geometric_cooling(alpha: f64) -> Self {
         DynCooling {
-            cooling: Arc::new(GeometricCooling { alpha }),
+            cooling: CoolingFunction::GeometricCooling { alpha },
         }
     }
 }
@@ -239,7 +238,7 @@ impl DynIterTemp {
     #[staticmethod]
     fn cnst_iter_temp(iterations: usize) -> Self {
         DynIterTemp {
-            iter_temp: Arc::new(CnstIterTemp::new(iterations)),
+            iter_temp: IterationsTemperature::CnstIterTemp { iterations },
         }
     }
 }

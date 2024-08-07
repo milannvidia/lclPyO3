@@ -1,6 +1,5 @@
-use std::time::Instant;
-
 use super::TerminationFunction;
+use std::time::Instant;
 pub struct MaxSec {
     pub time: Instant,
     pub max_sec: u64,
@@ -31,4 +30,6 @@ impl TerminationFunction for MaxSec {
     }
 
     fn iteration_done(&mut self) {}
+
+    fn check_new_variable(&mut self, _var: isize) {}
 }

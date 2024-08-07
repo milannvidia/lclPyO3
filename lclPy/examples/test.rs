@@ -1,32 +1,34 @@
-use std::sync::{Arc, Mutex};
+use lclpy::io::*;
+use lclpy::local_search::*;
+use lclpy::problem::*;
+use lclpy::termination::*;
+use rand::rngs::SmallRng;
+use rand::SeedableRng;
 
-use lcl_rust::*;
-use local_search::simulated_annealing::*;
-use rand::{rngs::SmallRng, SeedableRng};
+use std::sync::{Arc, Mutex};
 fn main() {
-    let matrix = io::TspReader::DistanceMatrix {
+    let matrix = TspReader::DistanceMatrix {
         file: "./data/usca312/usca312_dist.txt".to_owned(),
     }
     .get_distance_matrix()
     .unwrap();
-    let prob = problem::Evaluation::Tsp {
+    let prob = Evaluation::Tsp {
         distance_matrix: matrix,
         symmetric: true,
     };
-    let move_type = problem::MoveType::Swap {
+    let move_type = MoveType::Swap {
         rng: SmallRng::from_entropy(),
         size: 48,
     };
     let problem: Arc<Mutex<dyn problem::Problem>> =
-        Arc::new(Mutex::new(problem::ArrayProblem::new(&move_type, &prob)));
-    let termination: Arc<Mutex<dyn termination::TerminationFunction>> =
-        Arc::new(Mutex::new(termination::MaxSec::new(600)));
-    let cooling: Arc<dyn local_search::simulated_annealing::CoolingFunction> =
-        Arc::new(local_search::simulated_annealing::GeometricCooling { alpha: 0.95 });
-    let iteration_calc: Arc<dyn local_search::simulated_annealing::IterationsTemperature> =
-        Arc::new(local_search::simulated_annealing::iter_temp::CnstIterTemp::new(1000000));
+        Arc::new(Mutex::new(ArrayProblem::new(&move_type, &prob)));
+    let termination: Arc<Mutex<dyn TerminationFunction>> = Arc::new(Mutex::new(MaxSec::new(600)));
+    let cooling: Arc<dyn simulated_annealing::CoolingFunction> =
+        Arc::new(simulated_annealing::GeometricCooling { alpha: 0.95 });
+    let iteration_calc: Arc<dyn simulated_annealing::IterationsTemperature> =
+        Arc::new(simulated_annealing::iter_temp::CnstIterTemp::new(1000000));
 
-    let mut lcl = local_search::simulated_annealing::SimulatedAnnealing::new(
+    let mut lcl = simulated_annealing::SimulatedAnnealing::new(
         2000,
         true,
         &problem,
