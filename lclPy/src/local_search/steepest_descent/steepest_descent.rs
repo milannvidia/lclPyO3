@@ -50,7 +50,7 @@ impl LocalSearch for SteepestDescent {
                 isize::MIN
             };
             for mov in problem.get_all_mov() {
-                let delta = problem.delta_eval(mov);
+                let delta = problem.delta_eval(mov, None);
                 if (delta < best_delta) == self.minimize {
                     best_delta = delta;
                     best_mov = mov;
@@ -59,7 +59,7 @@ impl LocalSearch for SteepestDescent {
             current = current + best_delta;
             termination.check_variable(current);
             if (current < best) == self.minimize {
-                problem.do_mov(best_mov);
+                problem.do_mov(best_mov, None);
                 problem.set_best();
                 best = current;
                 if log {

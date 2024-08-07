@@ -2,8 +2,6 @@ use super::LocalSearch;
 use crate::problem::Problem;
 use crate::termination::TerminationFunction;
 use crate::MoveType;
-use std::borrow::Borrow;
-use std::error::Error;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use std::vec;
@@ -29,14 +27,46 @@ impl VariableNeighborhood {
         }
     }
 
-    fn get_all_mov_select(&self, move_type: MoveType) -> Vec<(usize, usize)> {
-        move_type.get_all_mov()
+    fn get_all_mov_select(&self, move_type: &MoveType) -> Vec<(usize, usize)> {
+        match move_type {
+            MoveType::Reverse { rng: _, size: _ } => return move_type.get_all_mov(),
+            MoveType::Swap { rng: _, size: _ } => return move_type.get_all_mov(),
+            MoveType::Tsp { rng: _, size: _ } => return move_type.get_all_mov(),
+            MoveType::MultiNeighbor {
+                move_types,
+                weights: _,
+            } => return move_types[self.neighborhood].get_all_mov(),
+        }
     }
 
-    fn delta_eval(&self, mov: (usize, usize)) -> isize {}
+    fn delta_eval(&self, problem: &mut dyn Problem, mov: (usize, usize)) -> isize {
+        match problem.get_move_type().to_owned() {
+            MoveType::Reverse { .. } | MoveType::Swap { .. } | MoveType::Tsp { .. } => {
+                problem.delta_eval(mov, None)
+            }
+            MoveType::MultiNeighbor {
+                move_types,
+                weights: _,
+            } => {
+                let move_type = Some(&move_types[self.neighborhood]);
+                problem.delta_eval(mov, move_type)
+            }
+        }
+    }
 
-    fn do_move(&self, best_move: Option<(usize, usize)>) {
-        todo!()
+    fn do_move(&self, problem: &mut dyn Problem, best_move: (usize, usize)) {
+        match problem.get_move_type().to_owned() {
+            MoveType::Reverse { .. } | MoveType::Swap { .. } | MoveType::Tsp { .. } => {
+                problem.do_mov(best_move, None)
+            }
+            MoveType::MultiNeighbor {
+                move_types,
+                weights: _,
+            } => {
+                let move_type = Some(&move_types[self.neighborhood]);
+                problem.do_mov(best_move, move_type)
+            }
+        }
     }
 }
 impl LocalSearch for VariableNeighborhood {
@@ -64,11 +94,12 @@ impl LocalSearch for VariableNeighborhood {
             };
             let mut best_move: Option<(usize, usize)> = None;
 
-            for mov in self.get_all_mov_select() {
-                let delta: isize = self.delta_eval(mov);
+            for mov in self.get_all_mov_select(problem.get_move_type()) {
+                let delta: isize = self.delta_eval(&mut *(problem), mov);
                 if (delta < best_delta) == self.minimize {
                     best_delta = delta;
                     best_move = Some(mov);
+                    continue;
                 }
             }
             current += best_delta;
@@ -76,7 +107,7 @@ impl LocalSearch for VariableNeighborhood {
             termination.check_new_variable(current);
 
             if (current < best) == self.minimize {
-                self.do_move(best_move);
+                self.do_move(&mut *problem, best_move.unwrap());
                 problem.set_best();
                 best = current;
                 if log {

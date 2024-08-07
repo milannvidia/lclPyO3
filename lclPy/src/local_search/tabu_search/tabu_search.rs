@@ -51,7 +51,7 @@ impl LocalSearch for TabuSearch {
             let mut best_hash: u64 = 0;
 
             for mov in problem.get_all_mov() {
-                let delta = problem.delta_eval(mov);
+                let delta = problem.delta_eval(mov, None);
                 let hash = problem.hash();
                 if !tabu_list.contains(&hash) && (best_delta < delta) == self.minimize {
                     best_delta = delta;
@@ -61,7 +61,7 @@ impl LocalSearch for TabuSearch {
             }
             current = current + best_delta;
             if best_mov.is_some() {
-                problem.do_mov(best_mov.unwrap());
+                problem.do_mov(best_mov.unwrap(), None);
                 if (best < current) == self.minimize {
                     best = current;
                 }

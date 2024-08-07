@@ -3,7 +3,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use super::{Evaluation, MoveType, Problem};
+use super::{r#move, Evaluation, MoveType, Problem};
 
 pub struct ArrayProblem {
     solution: Vec<usize>,
@@ -32,13 +32,20 @@ impl Problem for ArrayProblem {
         self.move_type.get_all_mov()
     }
 
-    fn do_mov(&mut self, indices: (usize, usize)) {
-        self.move_type.do_move(&mut self.solution, indices);
+    fn do_mov(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) {
+        match move_type {
+            Some(x) => x.do_move(&mut self.solution, indices),
+            None => self.move_type.do_move(&mut self.solution, indices),
+        }
     }
 
-    fn delta_eval(&mut self, indices: (usize, usize)) -> isize {
-        self.evaluation
-            .delta_eval(indices, &self.move_type, &mut self.solution)
+    fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> isize {
+        match move_type {
+            Some(x) => self.evaluation.delta_eval(indices, x, &mut self.solution),
+            None => self
+                .evaluation
+                .delta_eval(indices, &self.move_type, &mut self.solution),
+        }
     }
 
     fn eval(&self) -> usize {

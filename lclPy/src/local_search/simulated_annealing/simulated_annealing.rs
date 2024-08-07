@@ -66,10 +66,10 @@ impl LocalSearch for SimulatedAnnealing {
                 }
 
                 let mov = problem.get_mov();
-                let delta = problem.delta_eval(mov);
+                let delta = problem.delta_eval(mov, None);
 
                 if (delta <= 0) == self.minimize {
-                    problem.do_mov(mov);
+                    problem.do_mov(mov, None);
                     current += delta;
                     if (current < best) == self.minimize {
                         problem.set_best();
@@ -84,7 +84,7 @@ impl LocalSearch for SimulatedAnnealing {
                     let probability: f64 = e.powf(exp);
                     let random: f64 = rng.gen();
                     if probability > random {
-                        problem.do_mov(mov);
+                        problem.do_mov(mov, None);
                         current += delta;
                         if log {
                             data.push((now.elapsed().as_nanos(), best, current, iterations));

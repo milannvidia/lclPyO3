@@ -77,7 +77,7 @@ impl TspReader {
                     }
                     cities.push((lat, long));
                 }
-                let mut matrix: Vec<Vec<usize>> = long_lat_to_dist_matrix(&cities);
+                let matrix: Vec<Vec<usize>> = long_lat_to_dist_matrix(&cities);
                 return Ok(matrix);
             }
             TspReader::Coord2d { file } => {
