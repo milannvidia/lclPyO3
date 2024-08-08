@@ -13,12 +13,8 @@ impl MaxSec {
     }
 }
 impl TerminationFunction for MaxSec {
-    fn keep_running(&mut self) -> bool {
-        return if self.time.elapsed().as_secs() < self.max_sec {
-            true
-        } else {
-            false
-        };
+    fn keep_running(&self) -> bool {
+        self.time.elapsed().as_secs() < self.max_sec
     }
 
     fn init(&mut self) {
@@ -29,7 +25,7 @@ impl TerminationFunction for MaxSec {
         true
     }
 
-    fn iteration_done(&mut self) {}
-
     fn check_new_variable(&mut self, _var: isize) {}
+
+    fn iteration_done(&mut self) {}
 }

@@ -12,6 +12,15 @@ pub enum TspReader {
     Dms { file: String },
 }
 impl TspReader {
+    /// Returns the get distance matrix of this [`TspReader`].
+    ///
+    /// # Panics
+    ///
+    /// Panics if .
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if .
     pub fn get_distance_matrix(&self) -> Result<Vec<Vec<usize>>, io::Error> {
         match self {
             TspReader::DistanceMatrix { file } => {

@@ -28,6 +28,42 @@ impl LocalSearch for SteepestDescent {
     fn reset(&mut self) {
         self.problem.lock().unwrap().reset();
     }
+    /// Runs the meta heuristic steepest descent.
+    ///
+    /// # Arguments
+    ///
+    /// * `log`: Whether intermediate results are tracked or not.
+    ///
+    /// returns: a vector of tuples.
+    /// tuple.0 = a timestamp
+    /// tuple.1 = best score found
+    /// tuple.2 = current score
+    /// tuple.3 = #iterations
+    ///
+    /// # Examples
+    ///
+    /// ```
+    ///# use std::sync::{Arc, Mutex};
+    ///# use rand::rngs::SmallRng;
+    ///# use rand::SeedableRng;
+    ///# use lclpy::local_search::{LocalSearch, SteepestDescent};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType};
+    ///# use lclpy::termination::AlwaysTrue;
+    ///# let distamce_matrix=vec![[0, 2, 5, 8],[2, 0, 4, 1],[5, 4, 0, 7],[8, 1, 7, 0]];
+    ///# let rng=SmallRng::seed_from_u64(0);
+    ///# let move_type=MoveType::Tsp {rng,size:4};
+    ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
+    ///# let problem=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
+    ///# let termination=Arc::new(Mutex::new(AlwaysTrue::new()));
+    ///
+    /// let mut sim=SteepestDescent::new(true,&problem,&termination);
+    /// let data=sim.run(false).last()?.1;
+    /// let sol:Vec<usize>=vec![0,1,3,2];
+    /// let res:Vec<usize>=problem.lock().unwrap().best_solution().clone();
+    ///
+    /// assert_eq!(data,15isize);
+    /// assert_eq!(sol,res);
+    /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
         let mut termination = self.termination.lock().unwrap();
@@ -73,6 +109,6 @@ impl LocalSearch for SteepestDescent {
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
 
-        return data;
+        data
     }
 }

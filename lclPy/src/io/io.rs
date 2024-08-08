@@ -3,7 +3,21 @@ use std::{
     io::{self, BufRead, BufReader, Error},
 };
 
-pub fn read_csv(file_location: &str, delimiter: char) -> Result<Vec<Vec<usize>>, io::Error> {
+///
+///
+/// # Arguments
+///
+/// * `file_location`:
+/// * `delimiter`:
+///
+/// returns: Result<Vec<Vec<usize, Global>, Global>, Error>
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+pub fn read_csv(file_location: &str, delimiter: char) -> Result<Vec<Vec<usize>>, Error> {
     let f = File::open(file_location)?;
     let br = BufReader::new(f);
 

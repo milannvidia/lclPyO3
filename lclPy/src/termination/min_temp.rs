@@ -8,7 +8,7 @@ impl MinTemp {
     }
 }
 impl TerminationFunction for MinTemp {
-    fn keep_running(&mut self) -> bool {
+    fn keep_running(&self) -> bool {
         true
     }
     fn init(&mut self) {}
@@ -17,7 +17,7 @@ impl TerminationFunction for MinTemp {
         var > self.min_temp
     }
 
-    fn iteration_done(&mut self) {}
-
     fn check_new_variable(&mut self, _var: isize) {}
+
+    fn iteration_done(&mut self) {}
 }

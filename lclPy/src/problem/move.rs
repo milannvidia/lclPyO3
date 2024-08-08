@@ -2,15 +2,15 @@ use rand::{rngs::SmallRng, Rng, SeedableRng};
 #[derive(Clone)]
 pub enum MoveType {
     Reverse {
-        rng: rand::rngs::SmallRng,
+        rng: SmallRng,
         size: usize,
     },
     Swap {
-        rng: rand::rngs::SmallRng,
+        rng: SmallRng,
         size: usize,
     },
     Tsp {
-        rng: rand::rngs::SmallRng,
+        rng: SmallRng,
         size: usize,
     },
     MultiNeighbor {
@@ -48,7 +48,7 @@ impl MoveType {
                 if j < i {
                     return (j, i);
                 }
-                return (i, j);
+                (i, j)
             }
             MoveType::Tsp { rng, size } => {
                 let i = rng.gen_range(1..*size);
@@ -59,7 +59,7 @@ impl MoveType {
                 if j < i {
                     return (j, i);
                 }
-                return (i, j);
+                (i, j)
             }
             MoveType::MultiNeighbor {
                 move_types: _,
@@ -126,10 +126,10 @@ impl MoveType {
                         return (i, move_types[i].get_mov());
                     }
                 }
-                return (
+                (
                     move_types.len() - 1,
                     move_types[weights.len() - 1].get_mov(),
-                );
+                )
             }
         }
     }
@@ -164,7 +164,7 @@ impl MoveType {
                             .map(|(a, b)| (i, (a, b))),
                     )
                 }
-                return res;
+                res
             }
         }
     }
@@ -175,21 +175,21 @@ impl MoveType {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_all_mov_multi();
+                    self.get_all_mov_multi()
                 }
             }
             MoveType::Swap { rng: _, size: _ } => {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_all_mov_multi();
+                    self.get_all_mov_multi()
                 }
             }
             MoveType::Tsp { rng: _, size: _ } => {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_all_mov_multi();
+                    self.get_all_mov_multi()
                 }
             }
             MoveType::MultiNeighbor {
@@ -199,7 +199,7 @@ impl MoveType {
                 if neighborhood_num > move_types.len() - 1 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 }
-                return move_types[neighborhood_num].get_all_mov_multi();
+                move_types[neighborhood_num].get_all_mov_multi()
             }
         }
     }
@@ -209,21 +209,21 @@ impl MoveType {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_mov_multi();
+                    self.get_mov_multi()
                 }
             }
             MoveType::Swap { rng: _, size: _ } => {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_mov_multi();
+                    self.get_mov_multi()
                 }
             }
             MoveType::Tsp { rng: _, size: _ } => {
                 if neighborhood_num > 0 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 } else {
-                    return self.get_mov_multi();
+                    self.get_mov_multi()
                 }
             }
             MoveType::MultiNeighbor {
@@ -233,7 +233,7 @@ impl MoveType {
                 if neighborhood_num > move_types.len() - 1 {
                     panic!("neighborhoodNumber can't be higher then size-1")
                 }
-                return move_types[neighborhood_num].get_mov_multi();
+                move_types[neighborhood_num].get_mov_multi()
             }
         }
     }

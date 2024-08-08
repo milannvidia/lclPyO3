@@ -14,8 +14,8 @@ impl MultiCritAnd {
 }
 
 impl TerminationFunction for MultiCritAnd {
-    fn keep_running(&mut self) -> bool {
-        for crit in &mut self.critirions {
+    fn keep_running(&self) -> bool {
+        for crit in &self.critirions {
             if !crit.lock().unwrap().keep_running() {
                 return false;
             }
@@ -37,15 +37,15 @@ impl TerminationFunction for MultiCritAnd {
         true
     }
 
-    fn iteration_done(&mut self) {
-        for crit in &mut self.critirions {
-            crit.lock().unwrap().iteration_done();
-        }
-    }
-
     fn check_new_variable(&mut self, var: isize) {
         for crit in &mut self.critirions {
             crit.lock().unwrap().check_new_variable(var);
+        }
+    }
+
+    fn iteration_done(&mut self) {
+        for crit in &mut self.critirions {
+            crit.lock().unwrap().iteration_done();
         }
     }
 }

@@ -37,7 +37,7 @@ impl Evaluation {
                 move_type.do_move(solution, indices);
                 let sec = self.eval(solution);
                 move_type.do_move(solution, indices);
-                return sec as isize - first as isize;
+                sec as isize - first as isize
             }
             Evaluation::Tsp {
                 distance_matrix,
@@ -163,7 +163,7 @@ impl Evaluation {
                 delta_f += A[k][l] as isize * (B[pi[l]][pi[k]] as isize - B[pi[k]][pi[l]] as isize);
                 delta_f += A[l][k] as isize * (B[pi[k]][pi[l]] as isize - B[pi[l]][pi[k]] as isize);
 
-                return 2 * delta_f;
+                2 * delta_f
             }
         }
     }
@@ -181,7 +181,7 @@ impl Evaluation {
                         filllevel += weights[solution[i]];
                     }
                 }
-                return score;
+                score
             }
             Evaluation::EmptySpace { weights, max_fill } => {
                 let mut score = 0usize;
@@ -194,7 +194,7 @@ impl Evaluation {
                         filllevel += weights[solution[i]];
                     }
                 }
-                return score;
+                score
             }
             Evaluation::EmptySpaceExp { weights, max_fill } => {
                 let mut score = 0usize;
@@ -207,7 +207,7 @@ impl Evaluation {
                         filllevel += weights[solution[i]];
                     }
                 }
-                return score;
+                score
             }
             Evaluation::Tsp {
                 distance_matrix,
@@ -218,7 +218,7 @@ impl Evaluation {
                     score += distance_matrix[solution[i - 1]][solution[i]];
                 }
                 score += distance_matrix[solution[solution.len() - 1]][solution[0]];
-                return score;
+                score
             }
             Evaluation::QAP {
                 distance_matrix,

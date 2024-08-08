@@ -1,8 +1,11 @@
-use pyo3::prelude::*;
+use pyo3::{exceptions::PyValueError, ffi::PyErr_BadArgument, prelude::*};
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
 use simulated_annealing::{CoolingFunction, IterationsTemperature, SimulatedAnnealing};
-use std::sync::{Arc, Mutex};
+use std::{
+    borrow::Borrow,
+    sync::{Arc, Mutex},
+};
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
 pub mod io;
@@ -159,19 +162,31 @@ impl DynMoveType {
     fn multi_neighbor(
         move_array: Vec<Py<DynMoveType>>,
         weights: Option<Vec<f64>>,
-    ) -> PyResult<Self> {
+    ) -> Result<Self, PyErr> {
         let mut move_types: Vec<MoveType> = vec![];
         for mov in move_array {
             let cloned_mov = mov.get().mov.clone();
             if let MoveType::MultiNeighbor { .. } = cloned_mov {
-                return PyErr;
+                return Err(PyErr::new::<PyValueError, _>(
+                    "Can't have multi neighbor in multineighbor",
+                ));
             }
             move_types.push(cloned_mov);
+        }
+        let res_weights: Vec<f64>;
+        if weights.is_some() {
+            let sum: f64 = weights.as_ref().unwrap().iter().sum();
+            if (sum - 1.0).abs() > 1e-9 {
+                return Err(PyErr::new::<PyValueError, _>("weights don't add to 1"));
+            }
+            res_weights = weights.unwrap();
+        } else {
+            res_weights = vec![1.0f64 / (move_types.len() as f64); move_types.len()];
         }
         Ok(DynMoveType {
             mov: MoveType::MultiNeighbor {
                 move_types,
-                weights,
+                weights: res_weights,
             },
         })
     }

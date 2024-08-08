@@ -29,13 +29,13 @@ impl VariableNeighborhood {
 
     fn get_all_mov_select(&self, move_type: &MoveType) -> Vec<(usize, usize)> {
         match move_type {
-            MoveType::Reverse { rng: _, size: _ } => return move_type.get_all_mov(),
-            MoveType::Swap { rng: _, size: _ } => return move_type.get_all_mov(),
-            MoveType::Tsp { rng: _, size: _ } => return move_type.get_all_mov(),
+            MoveType::Reverse { rng: _, size: _ } => move_type.get_all_mov(),
+            MoveType::Swap { rng: _, size: _ } => move_type.get_all_mov(),
+            MoveType::Tsp { rng: _, size: _ } => move_type.get_all_mov(),
             MoveType::MultiNeighbor {
                 move_types,
                 weights: _,
-            } => return move_types[self.neighborhood].get_all_mov(),
+            } => move_types[self.neighborhood].get_all_mov(),
         }
     }
 
@@ -74,6 +74,45 @@ impl LocalSearch for VariableNeighborhood {
         self.problem.lock().unwrap().reset()
     }
 
+    /// Runs the meta heuristic variable neighborhood search.
+    ///
+    /// # Arguments
+    ///
+    /// * `log`: Whether intermediate results are tracked or not.
+    ///
+    /// returns: a vector of tuples.
+    /// tuple.0 = a timestamp
+    /// tuple.1 = best score found
+    /// tuple.2 = current score
+    /// tuple.3 = #iterations
+    ///
+    /// # Examples
+    ///
+    /// ```
+    ///# use std::sync::{Arc, Mutex};
+    ///# use rand::rngs::SmallRng;
+    ///# use rand::SeedableRng;
+    ///# use lclpy::local_search::LocalSearch;
+    ///# use lclpy::local_search::vns::VariableNeighborhood;
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType};
+    ///# use lclpy::termination::MaxSec;
+    ///# let distamce_matrix=vec![[0, 2, 5, 8],[2, 0, 4, 1],[5, 4, 0, 7],[8, 1, 7, 0]];
+    ///# let move_type_0=MoveType::Tsp {rng:SmallRng::seed_from_u64(0),size:4};
+    ///# let move_type_1=MoveType::Reverse {rng:SmallRng::seed_from_u64(0),size:4};
+    ///# let move_type_2=MoveType::Swap {rng:SmallRng::seed_from_u64(0),size:4};
+    ///# let move_type=MoveType::MultiNeighbor {move_types:vec![move_type_0,move_type_1,move_type_2],weights:vec![1.0f64/3.0f64;3]};
+    ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
+    ///# let problem=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
+    ///# let termination=Arc::new(Mutex::new(MaxSec::new(1)));
+    ///
+    /// let mut sim=VariableNeighborhood::new(&problem,&termination,true);
+    /// let data=sim.run(false).last()?.1;
+    /// let sol:Vec<usize>=vec![0,2,3,1];
+    /// let res:Vec<usize>=problem.lock().unwrap().best_solution().clone();
+    ///
+    /// assert_eq!(data,15);
+    /// assert_eq!(sol,res);
+    /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
         let mut termination = self.termination.lock().unwrap();

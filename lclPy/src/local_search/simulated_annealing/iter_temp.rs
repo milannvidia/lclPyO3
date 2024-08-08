@@ -1,20 +1,3 @@
-// pub trait IterationsTemperature: Send + Sync {
-//     fn get_iterations(&self, temp: usize) -> usize;
-// }
-// pub struct CnstIterTemp {
-//     iterations: usize,
-// }
-// impl CnstIterTemp {
-//     pub fn new(iterations: usize) -> Self {
-//         CnstIterTemp { iterations }
-//     }
-// }
-// impl IterationsTemperature for CnstIterTemp {
-//     fn get_iterations(&self, _temp: usize) -> usize {
-//         return self.iterations;
-//     }
-// }
-
 #[derive(Clone)]
 pub enum IterationsTemperature {
     CnstIterTemp { iterations: usize },
@@ -23,8 +6,18 @@ impl IterationsTemperature {
     pub(crate) fn get_iterations(&self, _temp: usize) -> usize {
         match &self {
             IterationsTemperature::CnstIterTemp { iterations } => {
-                return *iterations;
+                *iterations
             }
         }
+    }
+}
+#[cfg(test)]
+mod tests{
+    use crate::local_search::simulated_annealing::IterationsTemperature::CnstIterTemp;
+
+    #[test]
+    fn get_iterations_cnst() {
+        let cnst=CnstIterTemp {iterations:1000};
+        assert_eq!(cnst.get_iterations(5),1000);
     }
 }

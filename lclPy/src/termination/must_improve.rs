@@ -1,5 +1,3 @@
-use std::isize;
-
 use super::TerminationFunction;
 pub struct MustImprove {
     pub best: isize,
@@ -9,23 +7,23 @@ pub struct MustImprove {
 impl MustImprove {
     pub fn new(minimize: bool) -> Self {
         if minimize {
-            return MustImprove {
+            MustImprove {
                 best: isize::MAX,
                 flipflop: true,
                 minimize,
-            };
+            }
         } else {
-            return MustImprove {
+            MustImprove {
                 best: isize::MIN,
                 flipflop: true,
                 minimize,
-            };
+            }
         }
     }
 }
 
 impl TerminationFunction for MustImprove {
-    fn keep_running(&mut self) -> bool {
+    fn keep_running(&self) -> bool {
         self.flipflop
     }
     fn init(&mut self) {
@@ -41,8 +39,6 @@ impl TerminationFunction for MustImprove {
         true
     }
 
-    fn iteration_done(&mut self) {}
-
     fn check_new_variable(&mut self, var: isize) {
         if (self.best < var) == self.minimize {
             self.flipflop = false;
@@ -50,4 +46,6 @@ impl TerminationFunction for MustImprove {
             self.best = var;
         }
     }
+
+    fn iteration_done(&mut self) {}
 }
