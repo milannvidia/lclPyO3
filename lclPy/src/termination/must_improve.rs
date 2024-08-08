@@ -40,7 +40,7 @@ impl TerminationFunction for MustImprove {
     }
 
     fn check_new_variable(&mut self, var: isize) {
-        if (self.best < var) == self.minimize {
+        if (self.best <= var) == self.minimize || (self.best >= var) != self.minimize{
             self.flipflop = false;
         } else {
             self.best = var;

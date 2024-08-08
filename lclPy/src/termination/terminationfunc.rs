@@ -1,7 +1,4 @@
-use lclpy::termination::{MaxSec, MinTemp, TerminationFunction};
-
 pub trait TerminationFunction: Send {
-
     /// Checks whether the termination criterion has been reached.
     ///
     /// # Examples
@@ -47,8 +44,10 @@ pub trait TerminationFunction: Send {
     /// ```
     ///# use lclpy::termination::{MustImprove, TerminationFunction};
     /// let mut termination_crit = MustImprove::new(true);
-    /// assert!(termination_crit.check_new_variable(60));
-    /// assert!(!termination_crit.check_new_variable(60));
+    /// termination_crit.check_new_variable(60);
+    /// assert!(termination_crit.keep_running());
+    /// termination_crit.check_new_variable(60);
+    /// assert!(!termination_crit.keep_running());
     /// ```
     fn check_new_variable(&mut self, var: isize);
 
@@ -57,10 +56,11 @@ pub trait TerminationFunction: Send {
     /// # Examples
     ///
     /// ```
-    ///# use lclpy::termination::{MustImprove, TerminationFunction};
-    /// let mut termination_crit = MustImprove::new(true);
-    /// assert!(termination_crit.check_new_variable(60));
-    /// assert!(!termination_crit.check_new_variable(60));
+    ///# use lclpy::termination::{MaxIterations, TerminationFunction};
+    /// let mut termination_crit = MaxIterations::new(1);
+    /// assert!(termination_crit.keep_running());
+    /// termination_crit.iteration_done();
+    /// assert!(!termination_crit.keep_running())
     /// ```
     fn iteration_done(&mut self);
 }

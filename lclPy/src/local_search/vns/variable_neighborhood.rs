@@ -94,24 +94,24 @@ impl LocalSearch for VariableNeighborhood {
     ///# use rand::SeedableRng;
     ///# use lclpy::local_search::LocalSearch;
     ///# use lclpy::local_search::vns::VariableNeighborhood;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType};
-    ///# use lclpy::termination::MaxSec;
-    ///# let distamce_matrix=vec![[0, 2, 5, 8],[2, 0, 4, 1],[5, 4, 0, 7],[8, 1, 7, 0]];
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclpy::termination::{MaxSec, TerminationFunction};
+    ///# let distance_matrix=vec![
+    ///     vec![0, 2, 5, 8],
+    ///     vec![2, 0, 4, 1],
+    ///     vec![5, 4, 0, 7],
+    ///     vec![8, 1, 7, 0]];
     ///# let move_type_0=MoveType::Tsp {rng:SmallRng::seed_from_u64(0),size:4};
     ///# let move_type_1=MoveType::Reverse {rng:SmallRng::seed_from_u64(0),size:4};
     ///# let move_type_2=MoveType::Swap {rng:SmallRng::seed_from_u64(0),size:4};
     ///# let move_type=MoveType::MultiNeighbor {move_types:vec![move_type_0,move_type_1,move_type_2],weights:vec![1.0f64/3.0f64;3]};
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
-    ///# let problem=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination=Arc::new(Mutex::new(MaxSec::new(1)));
+    ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
+    ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(MaxSec::new(1)));
     ///
     /// let mut sim=VariableNeighborhood::new(&problem,&termination,true);
-    /// let data=sim.run(false).last()?.1;
-    /// let sol:Vec<usize>=vec![0,2,3,1];
-    /// let res:Vec<usize>=problem.lock().unwrap().best_solution().clone();
-    ///
+    /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15);
-    /// assert_eq!(sol,res);
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();

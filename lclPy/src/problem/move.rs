@@ -97,144 +97,74 @@ impl MoveType {
             }
         }
     }
+}
 
-    pub fn do_move_multi(&self, array: &mut Vec<usize>, indices: (usize, (usize, usize))) {
-        match self {
-            MoveType::Reverse { rng: _, size: _ } => self.do_move(array, indices.1),
-            MoveType::Swap { rng: _, size: _ } => self.do_move(array, indices.1),
-            MoveType::Tsp { rng: _, size: _ } => self.do_move(array, indices.1),
-            MoveType::MultiNeighbor {
-                move_types,
-                weights: _,
-            } => move_types[0].do_move(array, indices.1),
-        }
-    }
-    pub fn get_mov_multi(&mut self) -> (usize, (usize, usize)) {
-        match self {
-            MoveType::Reverse { rng: _, size: _ } => (0, self.get_mov()),
-            MoveType::Swap { rng: _, size: _ } => (0, self.get_mov()),
-            MoveType::Tsp { rng: _, size: _ } => (0, self.get_mov()),
-            MoveType::MultiNeighbor {
-                move_types,
-                weights,
-            } => {
-                let random: f64 = SmallRng::from_entropy().r#gen();
-                let mut sum: f64 = 0.0;
-                for i in 0..weights.len() {
-                    sum += weights[i];
-                    if sum < random {
-                        return (i, move_types[i].get_mov());
-                    }
-                }
-                (
-                    move_types.len() - 1,
-                    move_types[weights.len() - 1].get_mov(),
-                )
-            }
-        }
-    }
+#[cfg(test)]
+mod tests {
+    use std::panic;
 
-    pub fn get_all_mov_multi(&self) -> Vec<(usize, (usize, usize))> {
-        match self {
-            MoveType::Reverse { rng: _, size: _ } => self
-                .get_all_mov()
-                .into_iter()
-                .map(|(a, b)| (0, (a, b)))
-                .collect(),
-            MoveType::Swap { rng: _, size: _ } => self
-                .get_all_mov()
-                .into_iter()
-                .map(|(a, b)| (0, (a, b)))
-                .collect(),
-            MoveType::Tsp { rng: _, size: _ } => self
-                .get_all_mov()
-                .into_iter()
-                .map(|(a, b)| (0, (a, b)))
-                .collect(),
-            MoveType::MultiNeighbor {
-                move_types,
-                weights: _,
-            } => {
-                let mut res: Vec<(usize, (usize, usize))> = vec![];
-                for i in 0..move_types.len() {
-                    res.extend(
-                        move_types[i]
-                            .get_all_mov()
-                            .into_iter()
-                            .map(|(a, b)| (i, (a, b))),
-                    )
-                }
-                res
-            }
-        }
-    }
+    use rand::{rngs::SmallRng, SeedableRng};
 
-    pub fn get_all_mov_select(&self, neighborhood_num: usize) -> Vec<(usize, (usize, usize))> {
-        match self {
-            MoveType::Reverse { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_all_mov_multi()
-                }
-            }
-            MoveType::Swap { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_all_mov_multi()
-                }
-            }
-            MoveType::Tsp { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_all_mov_multi()
-                }
-            }
-            MoveType::MultiNeighbor {
-                move_types,
-                weights: _,
-            } => {
-                if neighborhood_num > move_types.len() - 1 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                }
-                move_types[neighborhood_num].get_all_mov_multi()
-            }
-        }
+    use crate::MoveType;
+    #[test]
+    fn reverse_move_type_test() {
+        let mut reverse = MoveType::Reverse {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        assert_eq!(reverse.get_mov(), (2, 3));
+        assert_eq!(
+            reverse.get_all_mov(),
+            [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
+        );
+
+        let mut array: Vec<usize> = vec![0, 1, 2, 3];
+        reverse.do_move(&mut array, (0, 3));
+        assert_eq!(array, [3, 2, 1, 0])
     }
-    pub fn get_mov_select(&mut self, neighborhood_num: usize) -> (usize, (usize, usize)) {
-        match self {
-            MoveType::Reverse { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_mov_multi()
-                }
-            }
-            MoveType::Swap { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_mov_multi()
-                }
-            }
-            MoveType::Tsp { rng: _, size: _ } => {
-                if neighborhood_num > 0 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                } else {
-                    self.get_mov_multi()
-                }
-            }
-            MoveType::MultiNeighbor {
-                move_types,
-                weights: _,
-            } => {
-                if neighborhood_num > move_types.len() - 1 {
-                    panic!("neighborhoodNumber can't be higher then size-1")
-                }
-                move_types[neighborhood_num].get_mov_multi()
-            }
-        }
+    #[test]
+    fn tsp_move_type_test() {
+        let mut tsp = MoveType::Tsp {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        assert_eq!(tsp.get_mov(), (2, 3));
+        assert_eq!(tsp.get_all_mov(), [(1, 2), (1, 3), (2, 3)]);
+
+        let mut array: Vec<usize> = vec![0, 1, 2, 3];
+        tsp.do_move(&mut array, (0, 3));
+        assert_eq!(array, [3, 1, 2, 0])
+    }
+    #[test]
+    fn swap_move_type_test() {
+        let mut swap = MoveType::Swap {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        assert_eq!(swap.get_mov(), (2, 3));
+        assert_eq!(
+            swap.get_all_mov(),
+            [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3)]
+        );
+
+        let mut array: Vec<usize> = vec![0, 1, 2, 3];
+        swap.do_move(&mut array, (0, 3));
+        assert_eq!(array, [3, 1, 2, 0])
+    }
+    #[test]
+    fn multi_move_type_test() {
+        let mut multi = MoveType::MultiNeighbor {
+            move_types: vec![],
+            weights: vec![],
+        };
+        let get_all_mov = panic::catch_unwind(|| multi.get_all_mov());
+        let get_mov = panic::catch_unwind(|| multi.clone().get_mov());
+        let get_do_mov = panic::catch_unwind(|| {
+            let mut array: Vec<usize> = vec![0, 1, 2, 3];
+            multi.clone().do_move(&mut array, (0, 1))
+        });
+        assert!(get_all_mov.is_err());
+        assert!(get_mov.is_err());
+        assert!(get_do_mov.is_err());
     }
 }

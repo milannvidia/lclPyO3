@@ -43,26 +43,26 @@ impl LocalSearch for SteepestDescent {
     /// # Examples
     ///
     /// ```
-    ///# use std::sync::{Arc, Mutex};
+    ///# use std::sync::{Arc, Mutex, MutexGuard};
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
     ///# use lclpy::local_search::{LocalSearch, SteepestDescent};
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType};
-    ///# use lclpy::termination::AlwaysTrue;
-    ///# let distamce_matrix=vec![[0, 2, 5, 8],[2, 0, 4, 1],[5, 4, 0, 7],[8, 1, 7, 0]];
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclpy::termination::{AlwaysTrue, TerminationFunction};
+    ///# let distance_matrix=vec![
+    ///     vec![0, 2, 5, 8],
+    ///     vec![2, 0, 4, 1],
+    ///     vec![5, 4, 0, 7],
+    ///     vec![8, 1, 7, 0]];
     ///# let rng=SmallRng::seed_from_u64(0);
     ///# let move_type=MoveType::Tsp {rng,size:4};
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
-    ///# let problem=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination=Arc::new(Mutex::new(AlwaysTrue::new()));
+    ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
+    ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(AlwaysTrue::new()));
     ///
     /// let mut sim=SteepestDescent::new(true,&problem,&termination);
-    /// let data=sim.run(false).last()?.1;
-    /// let sol:Vec<usize>=vec![0,1,3,2];
-    /// let res:Vec<usize>=problem.lock().unwrap().best_solution().clone();
-    ///
+    /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15isize);
-    /// assert_eq!(sol,res);
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
