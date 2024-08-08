@@ -72,11 +72,20 @@ impl DynEvaluation {
         }
     }
     #[staticmethod]
-    fn tsp(distance_matrix: Vec<Vec<usize>>) -> Self {
+    fn TSP(distance_matrix: Vec<Vec<usize>>) -> Self {
         DynEvaluation {
             eva: Evaluation::Tsp {
                 distance_matrix,
                 symmetric: true,
+            },
+        }
+    }
+    #[staticmethod]
+    fn QAP(distance_matrix: Vec<Vec<usize>>, flow_matrix: Vec<Vec<usize>>) -> Self {
+        DynEvaluation {
+            eva: Evaluation::QAP {
+                distance_matrix,
+                flow_matrix,
             },
         }
     }
@@ -144,6 +153,27 @@ impl DynMoveType {
         DynMoveType {
             mov: MoveType::Tsp { rng, size },
         }
+    }
+    #[staticmethod]
+    #[pyo3(signature = (move_array, weights=None))]
+    fn multi_neighbor(
+        move_array: Vec<Py<DynMoveType>>,
+        weights: Option<Vec<f64>>,
+    ) -> PyResult<Self> {
+        let mut move_types: Vec<MoveType> = vec![];
+        for mov in move_array {
+            let cloned_mov = mov.get().mov.clone();
+            if let MoveType::MultiNeighbor { .. } = cloned_mov {
+                return PyErr;
+            }
+            move_types.push(cloned_mov);
+        }
+        Ok(DynMoveType {
+            mov: MoveType::MultiNeighbor {
+                move_types,
+                weights,
+            },
+        })
     }
 }
 

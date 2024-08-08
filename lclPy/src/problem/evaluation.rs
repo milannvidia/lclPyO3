@@ -17,6 +17,10 @@ pub enum Evaluation {
         distance_matrix: Vec<Vec<usize>>,
         symmetric: bool,
     },
+    QAP {
+        distance_matrix: Vec<Vec<usize>>,
+        flow_matrix: Vec<Vec<usize>>,
+    },
 }
 impl Evaluation {
     pub(crate) fn delta_eval(
@@ -26,18 +30,9 @@ impl Evaluation {
         solution: &mut Vec<usize>,
     ) -> isize {
         match self {
-            Evaluation::EmptyBins {
-                weights: _,
-                max_fill: _,
-            }
-            | Evaluation::EmptySpace {
-                weights: _,
-                max_fill: _,
-            }
-            | Evaluation::EmptySpaceExp {
-                weights: _,
-                max_fill: _,
-            } => {
+            Evaluation::EmptyBins { .. }
+            | Evaluation::EmptySpace { .. }
+            | Evaluation::EmptySpaceExp { .. } => {
                 let first = self.eval(solution);
                 move_type.do_move(solution, indices);
                 let sec = self.eval(solution);
@@ -141,6 +136,35 @@ impl Evaluation {
                 }
                 next_score as isize - init_score as isize
             }
+            Evaluation::QAP {
+                distance_matrix,
+                flow_matrix,
+            } => {
+                //TODO: check of het werkt
+                let mut delta_f: isize = 0;
+                let A = distance_matrix;
+                let B = flow_matrix;
+                let pi = solution;
+                let k = indices.0;
+                let l = indices.1;
+
+                for i in 0..distance_matrix.len() {
+                    if i != indices.0 && i != indices.1 {
+                        delta_f += A[k][i] as isize
+                            * (B[pi[l]][pi[i]] as isize - B[pi[k]][pi[i]] as isize);
+                        delta_f += A[i][k] as isize
+                            * (B[pi[i]][pi[l]] as isize - B[pi[i]][pi[k]] as isize);
+                        delta_f += A[l][i] as isize
+                            * (B[pi[k]][pi[i]] as isize - B[pi[l]][pi[i]] as isize);
+                        delta_f += A[i][l] as isize
+                            * (B[pi[i]][pi[k]] as isize - B[pi[i]][pi[l]] as isize);
+                    }
+                }
+                delta_f += A[k][l] as isize * (B[pi[l]][pi[k]] as isize - B[pi[k]][pi[l]] as isize);
+                delta_f += A[l][k] as isize * (B[pi[k]][pi[l]] as isize - B[pi[l]][pi[k]] as isize);
+
+                return 2 * delta_f;
+            }
         }
     }
 
@@ -196,6 +220,18 @@ impl Evaluation {
                 score += distance_matrix[solution[solution.len() - 1]][solution[0]];
                 return score;
             }
+            Evaluation::QAP {
+                distance_matrix,
+                flow_matrix,
+            } => {
+                let mut value = 0;
+                for i in 0..distance_matrix.len() {
+                    for j in (i + 1)..distance_matrix.len() {
+                        value += distance_matrix[i][j] * flow_matrix[solution[i]][solution[j]];
+                    }
+                }
+                value
+            }
         }
     }
     pub(crate) fn length(&self) -> usize {
@@ -215,6 +251,10 @@ impl Evaluation {
             Evaluation::Tsp {
                 distance_matrix,
                 symmetric: _,
+            } => distance_matrix.len(),
+            Evaluation::QAP {
+                distance_matrix,
+                flow_matrix: _,
             } => distance_matrix.len(),
         }
     }
