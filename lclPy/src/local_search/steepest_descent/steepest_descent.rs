@@ -5,8 +5,6 @@ use std::sync::{Arc, Mutex};
 use std::time::Instant;
 
 pub struct SteepestDescent {
-    // pub(crate) problem:&'a mut dyn Problem,
-    // pub(crate) termination:&'a mut dyn TerminationFunction,
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
     minimize: bool,
@@ -110,5 +108,38 @@ impl LocalSearch for SteepestDescent {
         data.push((now.elapsed().as_nanos(), best, current, iterations));
 
         data
+    }
+}
+#[cfg(test)]
+mod tests {
+    use crate::local_search::{LocalSearch, SteepestDescent};
+    use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    use crate::termination::{AlwaysTrue, TerminationFunction};
+    use rand::prelude::SmallRng;
+    use rand::SeedableRng;
+    use std::sync::{Arc, Mutex};
+
+    #[test]
+    fn steepest_descent_test() {
+        let distance_matrix = vec![
+            vec![0, 2, 5, 8],
+            vec![2, 0, 4, 1],
+            vec![5, 4, 0, 7],
+            vec![8, 1, 7, 0],
+        ];
+        let rng = SmallRng::seed_from_u64(0);
+        let move_type = MoveType::Tsp { rng, size: 4 };
+        let eval = Evaluation::Tsp {
+            distance_matrix,
+            symmetric: true,
+        };
+        let problem: Arc<Mutex<dyn Problem>> =
+            Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
+        let termination: Arc<Mutex<dyn TerminationFunction>> =
+            Arc::new(Mutex::new(AlwaysTrue::new()));
+
+        let mut sim = SteepestDescent::new(true, &problem, &termination);
+        let data = sim.run(false).last().unwrap().1;
+        assert_eq!(data, 15isize);
     }
 }

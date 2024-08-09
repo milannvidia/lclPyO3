@@ -177,3 +177,50 @@ impl LocalSearch for VariableNeighborhood {
         data
     }
 }
+#[cfg(test)]
+mod tests {
+    use crate::local_search::vns::VariableNeighborhood;
+    use crate::local_search::LocalSearch;
+    use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    use crate::termination::{MaxSec, TerminationFunction};
+    use rand::prelude::SmallRng;
+    use rand::SeedableRng;
+    use std::sync::{Arc, Mutex};
+
+    #[test]
+    fn vns_test() {
+        let distance_matrix = vec![
+            vec![0, 2, 5, 8],
+            vec![2, 0, 4, 1],
+            vec![5, 4, 0, 7],
+            vec![8, 1, 7, 0],
+        ];
+        let move_type_0 = MoveType::Tsp {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        let move_type_1 = MoveType::Reverse {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        let move_type_2 = MoveType::Swap {
+            rng: SmallRng::seed_from_u64(0),
+            size: 4,
+        };
+        let move_type = MoveType::MultiNeighbor {
+            move_types: vec![move_type_0, move_type_1, move_type_2],
+            weights: vec![1.0f64 / 3.0f64; 3],
+        };
+        let eval = Evaluation::Tsp {
+            distance_matrix,
+            symmetric: true,
+        };
+        let problem: Arc<Mutex<dyn Problem>> =
+            Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
+        let termination: Arc<Mutex<dyn TerminationFunction>> = Arc::new(Mutex::new(MaxSec::new(1)));
+
+        let mut sim = VariableNeighborhood::new(&problem, &termination, true);
+        let data = sim.run(false).last().unwrap().1;
+        assert_eq!(data, 15);
+    }
+}

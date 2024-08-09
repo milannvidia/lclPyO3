@@ -60,7 +60,7 @@ impl LocalSearch for SimulatedAnnealing {
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
     ///# use lclpy::local_search::simulated_annealing::CoolingFunction::GeometricCooling;
-    ///# use lclpy::local_search::simulated_annealing::IterationsTemperature::CnstIterTemp;
+    ///# use lclpy::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
     ///# use lclpy::local_search::{LocalSearch, SimulatedAnnealing};
     ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::termination::{MinTemp, TerminationFunction};
@@ -76,7 +76,7 @@ impl LocalSearch for SimulatedAnnealing {
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
     ///# let cooling=GeometricCooling {alpha:0.75f64};
     ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(MinTemp::new(10)));
-    ///# let iter=CnstIterTemp {iterations:1000};
+    ///# let iter=ConstIterTemp {iterations:1000};
     ///
     /// let mut sim=SimulatedAnnealing::new(2000,true,&problem,&termination,&cooling,&iter);
     /// let data=sim.run(false).last().unwrap().1;
@@ -144,5 +144,42 @@ impl LocalSearch for SimulatedAnnealing {
 
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
+    }
+}
+#[cfg(test)]
+mod tests {
+    use crate::local_search::simulated_annealing::CoolingFunction::GeometricCooling;
+    use crate::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
+    use crate::local_search::{LocalSearch, SimulatedAnnealing, TabuSearch};
+    use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    use crate::termination::{MaxSec, MinTemp, TerminationFunction};
+    use rand::prelude::SmallRng;
+    use rand::SeedableRng;
+    use std::sync::{Arc, Mutex};
+
+    #[test]
+    fn simulated_annealing_test() {
+        let distance_matrix = vec![
+            vec![0, 2, 5, 8],
+            vec![2, 0, 4, 1],
+            vec![5, 4, 0, 7],
+            vec![8, 1, 7, 0],
+        ];
+        let rng = SmallRng::seed_from_u64(0);
+        let move_type = MoveType::Tsp { rng, size: 4 };
+        let eval = Evaluation::Tsp {
+            distance_matrix,
+            symmetric: true,
+        };
+        let problem: Arc<Mutex<dyn Problem>> =
+            Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
+        let cooling = GeometricCooling { alpha: 0.75f64 };
+        let termination: Arc<Mutex<dyn TerminationFunction>> =
+            Arc::new(Mutex::new(MinTemp::new(10)));
+        let iter = ConstIterTemp { iterations: 1000 };
+
+        let mut sim = SimulatedAnnealing::new(2000, true, &problem, &termination, &cooling, &iter);
+        let data = sim.run(false).last().unwrap().1;
+        assert_eq!(data, 15);
     }
 }

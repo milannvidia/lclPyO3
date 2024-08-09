@@ -6,12 +6,9 @@ use std::time::Instant;
 use std::vec;
 
 pub struct TabuSearch {
-    // pub(crate) problem: &'a mut dyn Problem,
-    // pub(crate) termination: &'a mut dyn TerminationFunction,
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
     minimize: bool,
-    // pub(crate) tabu_list: TabuList<T>,
 }
 impl TabuSearch {
     pub fn new(

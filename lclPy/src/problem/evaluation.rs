@@ -340,7 +340,7 @@ mod tests {
         }
     }
     #[test]
-    fn QAP_test() {
+    fn qap_test() {
         let distance_matrix: Vec<Vec<usize>> = vec![
             vec![0, 2, 9, 5],
             vec![2, 0, 4, 6],

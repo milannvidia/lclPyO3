@@ -283,7 +283,7 @@ impl DynIterTemp {
     #[staticmethod]
     fn cnst_iter_temp(iterations: usize) -> Self {
         DynIterTemp {
-            iter_temp: IterationsTemperature::CnstIterTemp { iterations },
+            iter_temp: IterationsTemperature::ConstIterTemp { iterations },
         }
     }
 }
