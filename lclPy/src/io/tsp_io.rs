@@ -4,7 +4,7 @@ use std::{
     io::{self, BufRead, BufReader, Error},
     usize, vec,
 };
-static RRR: f64 = 6378.388;
+static RRR: f64 = 6371f64;
 
 pub enum TspReader {
     DistanceMatrix { file: String },
@@ -20,7 +20,7 @@ impl TspReader {
     ///
     /// # Errors
     ///
-    /// This function will return an error if .
+    /// This function will return an error if the file isn't found or data has shortcommings.
     pub fn get_distance_matrix(&self) -> Result<Vec<Vec<usize>>, io::Error> {
         match self {
             TspReader::DistanceMatrix { file } => {
