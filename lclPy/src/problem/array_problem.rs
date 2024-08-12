@@ -78,4 +78,12 @@ impl Problem for ArrayProblem {
     fn get_move_type(&self) -> &MoveType {
         &self.move_type
     }
+
+    fn set_move_type(&mut self, move_type: MoveType) {
+        self.move_type = move_type;
+    }
+
+    fn set_eval_type(&mut self, eval_type: Evaluation) {
+        self.evaluation = eval_type;
+    }
 }

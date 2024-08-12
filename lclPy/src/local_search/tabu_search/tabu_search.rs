@@ -1,6 +1,7 @@
 use super::LocalSearch;
 use crate::problem::Problem;
 use crate::termination::TerminationFunction;
+use crate::MoveType;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use std::vec;
@@ -115,6 +116,18 @@ impl LocalSearch for TabuSearch {
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
+    }
+
+    fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>) {
+        if let MoveType::MultiNeighbor { .. } = problem.lock().unwrap().get_move_type() {
+            panic!("Can't use multiNeighbor in Tabu Search")
+        } else {
+            self.problem = problem.clone();
+        }
+    }
+
+    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+        self.termination = termination.clone();
     }
 }
 #[cfg(test)]

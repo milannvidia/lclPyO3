@@ -250,9 +250,24 @@ impl DynLocalSearch {
         let mut x = self.local_search.lock().unwrap();
         return x.run(true);
     }
+
     fn reset(&self) {
         let mut x = self.local_search.lock().unwrap();
         x.reset();
+    }
+
+    fn set_problem(&self, problem: Py<DynProblem>) {
+        self.local_search
+            .lock()
+            .unwrap()
+            .set_problem(&problem.get().problem.clone())
+    }
+
+    fn set_termination(&self, termination_function: Py<DynTermination>) {
+        self.local_search
+            .lock()
+            .unwrap()
+            .set_termination(&termination_function.get().termination.clone())
     }
 }
 
@@ -265,6 +280,20 @@ impl DynProblem {
         DynProblem {
             problem: Arc::new(Mutex::new(ArrayProblem::new(move_enum, eva))),
         }
+    }
+
+    fn set_eval_type(&self, eval_type: Py<DynEvaluation>) {
+        self.problem
+            .lock()
+            .unwrap()
+            .set_eval_type(eval_type.get().eva.clone());
+    }
+
+    fn set_move_type(&self, move_type: Py<DynMoveType>) {
+        self.problem
+            .lock()
+            .unwrap()
+            .set_move_type(move_type.get().mov.clone());
     }
 }
 

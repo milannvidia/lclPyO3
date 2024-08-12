@@ -1,7 +1,6 @@
-use super::MoveType;
+use super::{Evaluation, MoveType};
 
 pub trait Problem: Send {
-
     /// Get a random move
     ///
     /// # Examples
@@ -196,4 +195,10 @@ pub trait Problem: Send {
 
     /// Gives the move-type the current problem uses. Used for variable neighborhood search.
     fn get_move_type(&self) -> &MoveType;
+
+    /// Sets the move type
+    fn set_move_type(&mut self, move_type: MoveType);
+
+    /// Sets the evaluation type
+    fn set_eval_type(&mut self, eval_type: Evaluation);
 }

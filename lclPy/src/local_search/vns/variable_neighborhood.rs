@@ -176,6 +176,14 @@ impl LocalSearch for VariableNeighborhood {
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
     }
+
+    fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>) {
+        self.problem = problem.clone();
+    }
+
+    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+        self.termination = termination.clone();
+    }
 }
 #[cfg(test)]
 mod tests {

@@ -1,6 +1,6 @@
 use super::*;
-use crate::problem::Problem;
 use crate::termination::TerminationFunction;
+use crate::{problem::Problem, MoveType};
 use rand::Rng;
 use std::{
     sync::{Arc, Mutex},
@@ -144,6 +144,18 @@ impl LocalSearch for SimulatedAnnealing {
 
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
+    }
+
+    fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>) {
+        if let MoveType::MultiNeighbor { .. } = problem.lock().unwrap().get_move_type() {
+            panic!("Can't use multiNeighbor in Simulated Annealing")
+        } else {
+            self.problem = problem.clone();
+        }
+    }
+
+    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+        self.termination = termination.clone();
     }
 }
 #[cfg(test)]
