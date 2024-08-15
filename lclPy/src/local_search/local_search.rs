@@ -17,11 +17,9 @@ pub trait LocalSearch: Send {
     /// tuple.1 = best score found
     /// tuple.2 = current score
     /// tuple.3 = #iterations
-    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)>;
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, u64)>;
 
     fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>);
 
     fn set_termination(&mut self, termination: &TerminationFunction);
-
-    fn set_goal(&mut self, minimize: bool);
 }

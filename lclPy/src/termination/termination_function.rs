@@ -214,10 +214,10 @@ impl TerminationFunction {
 
     pub fn set_goal(&mut self, goal_minimize: bool) {
         match self {
-            TerminationFunction::AlwaysTrue {} => todo!(),
-            TerminationFunction::MaxIterations { .. } => todo!(),
-            TerminationFunction::MaxSec { .. } => todo!(),
-            TerminationFunction::MinTemp { .. } => todo!(),
+            TerminationFunction::AlwaysTrue {}
+            | TerminationFunction::MaxIterations { .. }
+            | TerminationFunction::MaxSec { .. }
+            | TerminationFunction::MinTemp { .. } => (),
             TerminationFunction::MultiCritAnd { criterion }
             | TerminationFunction::MultiCritOr { criterion } => {
                 for crit in criterion {

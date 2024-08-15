@@ -17,13 +17,13 @@ impl TabuSearch {
         termination: &TerminationFunction,
         minimize: bool,
     ) -> Self {
-        let mut res = TabuSearch {
+        let mut term = termination.clone();
+        term.set_goal(minimize);
+        TabuSearch {
             problem: problem.clone(),
-            termination: termination.clone(),
+            termination: term,
             minimize,
-        };
-        res.set_goal(minimize);
-        res
+        }
     }
 }
 
@@ -47,34 +47,32 @@ impl LocalSearch for TabuSearch {
     ///
     /// ```
     ///# use std::sync::{Arc, Mutex};
+    /// use std::time::Instant;
     ///# use rand::rngs::SmallRng;
-    /// use rand::SeedableRng;
+    ///# use rand::SeedableRng;
     ///# use lclpy::local_search::{LocalSearch, TabuSearch};
     ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::{MaxSec, TerminationFunction};
+    ///# use lclpy::termination::TerminationFunction;
     ///
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///# let distance_matrix: Vec<Vec<f64>> = vec![vec![0.0, 2.0, 5.0, 8.0],vec![2.0, 0.0, 4.0, 1.0],vec![5.0, 4.0, 0.0, 7.0],vec![8.0, 1.0, 7.0, 0.0]];
     ///# let rng=SmallRng::seed_from_u64(0);
-    ///# let move_type=MoveType::Tsp {rng,size:4};
+    ///# let move_type=MoveType::Tsp {rng:Box::new(rng),size:4};
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(MaxSec::new(1)));
+    /// let termination=TerminationFunction::MaxSec {time: Instant::now(),max_sec: 1};
     ///
     /// let mut sim=TabuSearch::new(&problem,&termination,true);
     /// let data=sim.run(false).last().unwrap().1;
-    /// assert_eq!(data,15);
+    ///
+    /// assert_eq!(data,15.0);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, u64)> {
         let mut problem = self.problem.lock().unwrap();
         let mut current = problem.eval();
         let mut best = current;
         let now = Instant::now();
         let mut iterations = 0;
-        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, u64)> = vec![];
         let mut tabu_list: Vec<u64> = vec![];
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
@@ -129,10 +127,6 @@ impl LocalSearch for TabuSearch {
 
     fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
-    }
-
-    fn set_goal(&mut self, minimize: bool) {
-        self.termination.set_goal(minimize);
     }
 }
 #[cfg(test)]

@@ -10,13 +10,15 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
-    /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///# use lclpy::termination::TerminationFunction;
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
+    ///     let mut problem = ArrayProblem::new(
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     ///
     /// assert_eq!((2,3), problem.get_mov())
@@ -32,13 +34,14 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// let solution:Vec<(usize,usize)>=vec![(1,2),(1,3),(2,3)];
     ///
@@ -55,13 +58,14 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// problem.do_mov((1,2),None);
     ///
@@ -79,21 +83,23 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     ///
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// let before=problem.eval();
     /// let res=problem.delta_eval((1,2),None);
     /// problem.do_mov((1,2),None);
     /// let after=problem.eval();
     ///
-    /// assert_eq!(res, after as isize - before as isize)
+    /// assert_eq!(res, after  - before )
     /// ```
     fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> f64;
 
@@ -106,20 +112,21 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// let before=problem.eval();
     /// let res=problem.delta_eval((1,2),None);
     /// problem.do_mov((1,2),None);
     /// let after=problem.eval();
     ///
-    /// assert_eq!(res, after as isize - before as isize)
+    /// assert_eq!(res, after - before )
     /// ```
     fn eval(&self) -> f64;
 
@@ -132,13 +139,14 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// problem.do_mov((1,2),None);
     /// problem.reset();
@@ -156,13 +164,14 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     /// problem.do_mov((1,2),None);
     /// problem.set_best();
@@ -180,13 +189,14 @@ pub trait Problem: Send {
     ///# use rand::SeedableRng;
     ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:SmallRng::seed_from_u64(0),size:4},
+    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
     ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
     ///
     /// assert_eq!(problem.hash(), 9144871353323486087)

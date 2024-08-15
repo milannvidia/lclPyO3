@@ -7,6 +7,13 @@ use std::{
 };
 
 const RRR: f64 = 6371.0;
+/// Reads the given file, skips over all lines with a "#" (used for comments) and returns a vector with all values;
+///
+/// # Arguments
+/// file_location,delimiter
+///
+/// returns: Result<Vec<f64>, Error>
+///
 pub fn read_csv(file_location: &str, delimiter: Option<char>) -> Result<Vec<f64>, io::Error> {
     let f = File::open(file_location)?;
     let br = BufReader::new(f);
@@ -37,6 +44,14 @@ pub fn read_csv(file_location: &str, delimiter: Option<char>) -> Result<Vec<f64>
     Ok(matrix)
 }
 
+/// Uses read_csv to read a file and restructure it in a matrix
+///
+/// # Arguments
+///
+/// * `file`: file location
+///
+/// returns: Result<Vec<Vec<f64>>, Error>
+///
 pub fn read_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Error> {
     let res: Vec<f64> = read_csv(file, None)?;
 
@@ -60,15 +75,23 @@ pub fn read_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Error> {
             ));
         }
     }
-    return Ok(matrix);
+    Ok(matrix)
 }
 
+
+/// Uses read_csv to read a file, calculates the distance and restructures it in a matrix
+///
+/// # Arguments
+///
+/// * `file`: file location
+///
+/// returns: Result<Vec<Vec<f64>>, Error>
 pub fn read_coord2d_to_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Error> {
     let res: Vec<f64> = read_csv(file, None)?;
     let n: usize = res.len() / 2;
     let mut matrix: Vec<Vec<f64>> = vec![vec![0.0; n]; n];
     for i in 0..n {
-        for j in i + 1..n {
+        for j in (i + 1)..n {
             let dist: f64 = f64::sqrt(
                 (res[i * 2] - res[j * 2]).powf(2f64) + (res[i * 2 + 1] - res[j * 2 + 1]).powf(2f64),
             );
@@ -76,8 +99,17 @@ pub fn read_coord2d_to_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::
             matrix[j][i] = dist;
         }
     }
-    return Ok(matrix);
+    Ok(matrix)
 }
+/// Uses read_csv to read a file, calculates the distance and restructures it in a matrix
+///
+/// # Arguments
+///
+/// * `file`: file location
+///
+/// returns: Result<Vec<Vec<f64>>, Error>
+///
+
 pub fn read_dms_to_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Error> {
     let f = File::open(file)?;
     let br = BufReader::new(f);
@@ -106,7 +138,7 @@ pub fn read_dms_to_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Erro
     }
 
     let matrix: Vec<Vec<f64>> = long_lat_to_dist_matrix(&cities);
-    return Ok(matrix);
+    Ok(matrix)
 }
 
 fn long_lat_to_dist_matrix(cities: &Vec<(f64, f64)>) -> Vec<Vec<f64>> {
@@ -135,6 +167,27 @@ fn dist_globe(a: (f64, f64), b: (f64, f64)) -> f64 {
     RRR * 2.0 * a.sqrt().asin()
 }
 
+/// Simple function to test if a distance matrix is symmetric or not
+///
+/// # Arguments
+///
+/// * `dist_matrix`:
+///
+/// returns: bool
+///
+/// # Examples
+///
+/// ```
+/// use lclpy::aidfunc::io::check_if_distance_matrix_symmetric;
+/// let distance_matrix: Vec<Vec<f64>> = vec![
+///     vec![0.0, 2.0, 5.0, 8.0],
+///     vec![2.0, 0.0, 4.0, 1.0],
+///     vec![5.0, 4.0, 0.0, 7.0],
+///     vec![8.0, 1.0, 7.0, 0.0],
+/// ];
+///
+/// assert!(check_if_distance_matrix_symmetric(&distance_matrix))
+/// ```
 pub fn check_if_distance_matrix_symmetric(dist_matrix: &Vec<Vec<f64>>) -> bool {
     for i in 0..dist_matrix.len() {
         for j in 0..i {

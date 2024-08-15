@@ -16,13 +16,13 @@ impl SteepestDescent {
         problem: &Arc<Mutex<dyn Problem>>,
         termination: &TerminationFunction,
     ) -> Self {
-        let mut res = SteepestDescent {
+        let mut term = termination.clone();
+        term.set_goal(minimize);
+        SteepestDescent {
             problem: problem.clone(),
-            termination: termination.clone(),
+            termination: term,
             minimize,
-        };
-        res.set_goal(minimize);
-        res
+        }
     }
 }
 impl LocalSearch for SteepestDescent {
@@ -49,29 +49,30 @@ impl LocalSearch for SteepestDescent {
     ///# use rand::SeedableRng;
     ///# use lclpy::local_search::{LocalSearch, SteepestDescent};
     ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::{AlwaysTrue, TerminationFunction};
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
-    ///# let rng=SmallRng::seed_from_u64(0);
+    ///# use lclpy::termination::TerminationFunction;
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
+    ///# let rng=Box::new(SmallRng::seed_from_u64(0));
     ///# let move_type=MoveType::Tsp {rng,size:4};
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(AlwaysTrue::new()));
+    ///# let termination=TerminationFunction::AlwaysTrue {};
     ///
     /// let mut sim=SteepestDescent::new(true,&problem,&termination);
     /// let data=sim.run(false).last().unwrap().1;
-    /// assert_eq!(data,15isize);
+    /// assert_eq!(data,15.0);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, u64)> {
         let mut problem = self.problem.lock().unwrap();
         let mut current = problem.eval();
         let mut best = current;
         let now = Instant::now();
         let mut iterations = 0;
-        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, u64)> = vec![];
 
         self.termination.init();
         if log {
@@ -120,10 +121,6 @@ impl LocalSearch for SteepestDescent {
 
     fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
-    }
-
-    fn set_goal(&mut self, minimize: bool) {
-        self.termination.set_goal(minimize);
     }
 }
 #[cfg(test)]

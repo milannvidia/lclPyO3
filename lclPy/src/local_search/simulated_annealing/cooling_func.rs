@@ -3,7 +3,22 @@ pub enum CoolingFunction {
     GeometricCooling { alpha: f64 },
 }
 impl CoolingFunction {
-    pub(crate) fn get_next_temp(&self, temp: usize) -> usize {
+    /// Used to get the next temperature for simulated annealing
+    ///
+    /// # Arguments
+    ///
+    /// * `temp`: current temp
+    ///
+    /// returns: next temp
+    ///
+    /// # Examples
+    ///
+    /// ```
+    ///  use lclpy::local_search::simulated_annealing::CoolingFunction::GeometricCooling;
+    ///  let geo=GeometricCooling {alpha:0.5f64};
+    ///  assert_eq!(geo.get_next_temp(1000),500usize);
+    /// ```
+    pub fn get_next_temp(&self, temp: usize) -> usize {
         match &self {
             CoolingFunction::GeometricCooling { alpha } => {
                 let result = alpha * temp as f64;

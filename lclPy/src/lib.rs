@@ -1,7 +1,9 @@
-use io::io::check_if_distance_matrix_symmetric;
+use aidfunc::*;
+use local_search::*;
+use problem::*;
 use pyo3::{exceptions::PyValueError, prelude::*};
-use rand::rngs::SmallRng;
-use rand::SeedableRng;
+use rand::{rngs::SmallRng, SeedableRng};
+
 use simulated_annealing::{CoolingFunction, IterationsTemperature, SimulatedAnnealing};
 use std::{
     isize,
@@ -10,14 +12,11 @@ use std::{
 };
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
+use termination::*;
 pub mod aidfunc;
-pub mod io;
 pub mod local_search;
 pub mod problem;
 pub mod termination;
-use local_search::*;
-use problem::*;
-use termination::*;
 // #[pyclass(frozen, name = "TspReader")]
 // struct DynTspReader {
 //     read: TspReader,
@@ -106,7 +105,7 @@ impl DynEvaluation {
     }
     #[staticmethod]
     fn tsp_from_dist_matrix(file: &str) -> PyResult<Self> {
-        let distance_matrix = io::read_distance_matrix(file)?;
+        let distance_matrix = aidfunc::io::read_distance_matrix(file)?;
         let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
             eva: Evaluation::Tsp {
@@ -117,7 +116,7 @@ impl DynEvaluation {
     }
     #[staticmethod]
     fn tsp_from_coord2d(file: &str) -> PyResult<Self> {
-        let distance_matrix = io::read_coord2d_to_distance_matrix(file)?;
+        let distance_matrix = aidfunc::io::read_coord2d_to_distance_matrix(file)?;
         let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
             eva: Evaluation::Tsp {
@@ -128,7 +127,7 @@ impl DynEvaluation {
     }
     #[staticmethod]
     fn tsp_from_dms(file: &str) -> PyResult<Self> {
-        let distance_matrix = io::read_dms_to_distance_matrix(file)?;
+        let distance_matrix = aidfunc::io::read_dms_to_distance_matrix(file)?;
         let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
             eva: Evaluation::Tsp {
@@ -278,7 +277,7 @@ impl DynLocalSearch {
         })
     }
 
-    fn run(&self) -> Vec<(u128, f64, f64, usize)> {
+    fn run(&self) -> Vec<(u128, f64, f64, u64)> {
         let mut x = self.local_search.lock().unwrap();
         return x.run(true);
     }

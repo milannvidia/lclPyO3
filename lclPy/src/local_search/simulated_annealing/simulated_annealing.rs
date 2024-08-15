@@ -25,17 +25,17 @@ impl SimulatedAnnealing {
         cooling: &CoolingFunction,
         iteration_calc: &IterationsTemperature,
     ) -> Self {
-        let mut res = SimulatedAnnealing {
+        let mut term = termination.clone();
+        term.set_goal(minimize);
+        SimulatedAnnealing {
             temp,
             minimize,
             start_temp: temp,
-            termination: termination.clone(),
+            termination: term,
             problem: problem.clone(),
             cool_func: cooling.clone(),
             iter_temp: iteration_calc.clone(),
-        };
-        res.set_goal(minimize);
-        res
+        }
     }
 }
 impl LocalSearch for SimulatedAnnealing {
@@ -65,34 +65,35 @@ impl LocalSearch for SimulatedAnnealing {
     ///# use lclpy::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
     ///# use lclpy::local_search::{LocalSearch, SimulatedAnnealing};
     ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::{MinTemp, TerminationFunction};
+    ///# use lclpy::termination::TerminationFunction;
     ///
-    ///# let distance_matrix=vec![
-    ///     vec![0, 2, 5, 8],
-    ///     vec![2, 0, 4, 1],
-    ///     vec![5, 4, 0, 7],
-    ///     vec![8, 1, 7, 0]];
+    ///    let distance_matrix: Vec<Vec<f64>> = vec![
+    ///        vec![0.0, 2.0, 5.0, 8.0],
+    ///        vec![2.0, 0.0, 4.0, 1.0],
+    ///        vec![5.0, 4.0, 0.0, 7.0],
+    ///        vec![8.0, 1.0, 7.0, 0.0],
+    ///    ];
     ///# let rng=SmallRng::seed_from_u64(0);
-    ///# let move_type=MoveType::Tsp {rng,size:4};
+    ///# let move_type=MoveType::Tsp {rng:Box::new(rng),size:4};
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
     ///# let cooling=GeometricCooling {alpha:0.75f64};
-    ///# let termination:Arc<Mutex<dyn TerminationFunction>>=Arc::new(Mutex::new(MinTemp::new(10)));
+    ///# let termination:TerminationFunction=TerminationFunction::MinTemp {min_temp: 10};
     ///# let iter=ConstIterTemp {iterations:1000};
     ///
     /// let mut sim=SimulatedAnnealing::new(2000,true,&problem,&termination,&cooling,&iter);
     /// let data=sim.run(false).last().unwrap().1;
-    /// assert_eq!(data,15);
+    /// assert_eq!(data,15.0);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, u64)> {
         let mut problem = self.problem.lock().unwrap();
         self.temp = self.start_temp;
         let e = std::f64::consts::E;
-        let mut iterations: usize = 0;
+        let mut iterations = 0;
         let now = Instant::now();
         let mut current = problem.eval();
         let mut best = current;
-        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, u64)> = vec![];
         let mut rng = rand::thread_rng();
 
         problem.set_best();
@@ -157,10 +158,6 @@ impl LocalSearch for SimulatedAnnealing {
 
     fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
-    }
-
-    fn set_goal(&mut self, minimize: bool) {
-        self.termination.set_goal(minimize)
     }
 }
 #[cfg(test)]

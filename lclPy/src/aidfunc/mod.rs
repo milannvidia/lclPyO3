@@ -1,2 +1,5 @@
 pub mod benchmark;
-pub use benchmark::benchmark;
+pub mod io;
+
+pub use benchmark::*;
+pub use io::*;
