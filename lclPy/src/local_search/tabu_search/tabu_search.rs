@@ -68,13 +68,13 @@ impl LocalSearch for TabuSearch {
     /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut current: isize = problem.eval() as isize;
-        let mut best: isize = current;
+        let mut current = problem.eval();
+        let mut best = current;
         let now = Instant::now();
         let mut iterations = 0;
-        let mut data: Vec<(u128, isize, isize, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
         let mut tabu_list: Vec<u64> = vec![];
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
@@ -83,7 +83,7 @@ impl LocalSearch for TabuSearch {
         self.termination.init();
         while self.termination.keep_running() {
             let mut best_mov: Option<(usize, usize)> = None;
-            let mut best_delta = isize::MAX;
+            let mut best_delta = if self.minimize { f64::MAX } else { f64::MIN };
             let mut best_hash: u64 = 0;
 
             for mov in problem.get_all_mov() {
@@ -146,11 +146,11 @@ mod tests {
 
     #[test]
     fn tabu_search_test() {
-        let distance_matrix = vec![
-            vec![0, 2, 5, 8],
-            vec![2, 0, 4, 1],
-            vec![5, 4, 0, 7],
-            vec![8, 1, 7, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 5.0, 8.0],
+            vec![2.0, 0.0, 4.0, 1.0],
+            vec![5.0, 4.0, 0.0, 7.0],
+            vec![8.0, 1.0, 7.0, 0.0],
         ];
         let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
@@ -167,6 +167,6 @@ mod tests {
 
         let mut sim = TabuSearch::new(&problem, &termination, true);
         let data = sim.run(false).last().unwrap().1;
-        assert_eq!(data, 15);
+        assert_eq!(data, 15.0);
     }
 }

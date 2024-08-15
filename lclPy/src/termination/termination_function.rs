@@ -21,12 +21,12 @@ pub enum TerminationFunction {
         criterion: Vec<TerminationFunction>,
     },
     MustImprove {
-        best: isize,
+        best: f64,
         flipflop: bool,
         minimize: bool,
     },
     NoImprove {
-        best: isize,
+        best: f64,
         max_iterations_without_improve: usize,
         curr_without_improve: usize,
         flipflop: bool,
@@ -92,9 +92,9 @@ impl TerminationFunction {
                 minimize,
             } => {
                 if *minimize {
-                    *best = isize::MAX
+                    *best = f64::MAX
                 } else {
-                    *best = isize::MIN
+                    *best = f64::MIN
                 }
                 *flipflop = true;
             }
@@ -107,9 +107,9 @@ impl TerminationFunction {
                 ..
             } => {
                 if *minimize {
-                    *best = isize::MAX
+                    *best = f64::MAX
                 } else {
-                    *best = isize::MIN
+                    *best = f64::MIN
                 }
                 *flipflop = true;
                 *curr_without_improve = 0;
@@ -146,7 +146,7 @@ impl TerminationFunction {
         }
     }
 
-    pub fn check_new_variable(&mut self, var: isize) {
+    pub fn check_new_variable(&mut self, var: f64) {
         match self {
             TerminationFunction::AlwaysTrue {}
             | TerminationFunction::MaxIterations { .. }

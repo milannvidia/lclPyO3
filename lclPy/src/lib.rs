@@ -1,3 +1,4 @@
+use io::io::check_if_distance_matrix_symmetric;
 use pyo3::{exceptions::PyValueError, prelude::*};
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
@@ -68,25 +69,25 @@ struct DynIterTemp {
 #[pymethods]
 impl DynEvaluation {
     #[staticmethod]
-    fn empty_bins(weights: Vec<usize>, max_fill: usize) -> Self {
+    fn empty_bins(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
             eva: Evaluation::EmptyBins { weights, max_fill },
         }
     }
     #[staticmethod]
-    fn empty_space(weights: Vec<usize>, max_fill: usize) -> Self {
+    fn empty_space(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
             eva: Evaluation::EmptySpace { weights, max_fill },
         }
     }
     #[staticmethod]
-    fn empty_space_exp(weights: Vec<usize>, max_fill: usize) -> Self {
+    fn empty_space_exp(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
             eva: Evaluation::EmptySpaceExp { weights, max_fill },
         }
     }
     #[staticmethod]
-    fn tsp(distance_matrix: Vec<Vec<usize>>) -> Self {
+    fn tsp(distance_matrix: Vec<Vec<f64>>) -> Self {
         DynEvaluation {
             eva: Evaluation::Tsp {
                 distance_matrix,
@@ -95,7 +96,7 @@ impl DynEvaluation {
         }
     }
     #[staticmethod]
-    fn qap(distance_matrix: Vec<Vec<usize>>, flow_matrix: Vec<Vec<usize>>) -> Self {
+    fn qap(distance_matrix: Vec<Vec<f64>>, flow_matrix: Vec<Vec<f64>>) -> Self {
         DynEvaluation {
             eva: Evaluation::QAP {
                 distance_matrix,
@@ -105,19 +106,30 @@ impl DynEvaluation {
     }
     #[staticmethod]
     fn tsp_from_dist_matrix(file: &str) -> PyResult<Self> {
-        let distance_matrix = io::TspReader::DistanceMatrix {
-            file: file.to_owned(),
-        }
-        .get_distance_matrix()?;
-        let mut symmetric = true;
-        'outer: for i in 0..distance_matrix.len() {
-            for j in 0..i {
-                if distance_matrix[i][j] != distance_matrix[j][i] {
-                    symmetric = false;
-                    break 'outer;
-                }
-            }
-        }
+        let distance_matrix = io::read_distance_matrix(file)?;
+        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
+        Ok(DynEvaluation {
+            eva: Evaluation::Tsp {
+                distance_matrix,
+                symmetric,
+            },
+        })
+    }
+    #[staticmethod]
+    fn tsp_from_coord2d(file: &str) -> PyResult<Self> {
+        let distance_matrix = io::read_coord2d_to_distance_matrix(file)?;
+        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
+        Ok(DynEvaluation {
+            eva: Evaluation::Tsp {
+                distance_matrix,
+                symmetric,
+            },
+        })
+    }
+    #[staticmethod]
+    fn tsp_from_dms(file: &str) -> PyResult<Self> {
+        let distance_matrix = io::read_dms_to_distance_matrix(file)?;
+        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
             eva: Evaluation::Tsp {
                 distance_matrix,
@@ -266,7 +278,7 @@ impl DynLocalSearch {
         })
     }
 
-    fn run(&self) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&self) -> Vec<(u128, f64, f64, usize)> {
         let mut x = self.local_search.lock().unwrap();
         return x.run(true);
     }
@@ -320,7 +332,7 @@ impl DynProblem {
         self.problem.lock().unwrap().reset();
     }
 
-    fn eval(&self) -> usize {
+    fn eval(&self) -> f64 {
         self.problem.lock().unwrap().eval()
     }
 
@@ -403,7 +415,7 @@ impl DynTermination {
     fn must_improve() -> Self {
         DynTermination {
             termination: TerminationFunction::MustImprove {
-                best: isize::MAX,
+                best: f64::MAX,
                 flipflop: true,
                 minimize: true,
             },
@@ -413,7 +425,7 @@ impl DynTermination {
     fn no_improve(iter_without_imp: usize) -> Self {
         DynTermination {
             termination: TerminationFunction::NoImprove {
-                best: isize::MAX,
+                best: f64::MAX,
                 max_iterations_without_improve: iter_without_imp,
                 curr_without_improve: 0,
                 flipflop: true,

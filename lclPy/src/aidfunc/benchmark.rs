@@ -21,19 +21,19 @@ pub fn benchmark(
     termination_function: &TerminationFunction,
     runs: Option<u64>,
     seeds: Option<Vec<u64>>,
-) -> Vec<Vec<Vec<(u128, isize, isize, usize)>>> {
+) -> Vec<Vec<Vec<(u128, f64, f64, usize)>>> {
     let seed_list: Vec<u64> = seeds
         .or(Some((0..(runs.or(Some(10)).unwrap())).collect()))
         .unwrap();
 
-    let res: Vec<Vec<Vec<(u128, isize, isize, usize)>>> = Vec::new();
+    let res: Vec<Vec<Vec<(u128, f64, f64, usize)>>> = Vec::new();
     for algorithm in &algorithms {
-        let mut algo_res: Vec<Vec<(u128, isize, isize, usize)>> = Vec::new();
+        let mut algo_res: Vec<Vec<(u128, f64, f64, usize)>> = Vec::new();
         let mut current_alg = algorithm.lock().unwrap();
         current_alg.set_termination(&termination_function);
 
         for problem in &problems {
-            let mut problem_res: Vec<(u128, isize, isize, usize)> = Vec::new();
+            let mut problem_res: Vec<(u128, f64, f64, usize)> = Vec::new();
 
             current_alg.set_problem(problem);
 

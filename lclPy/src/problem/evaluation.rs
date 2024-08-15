@@ -2,24 +2,24 @@ use super::MoveType;
 #[derive(Clone)]
 pub enum Evaluation {
     EmptyBins {
-        weights: Vec<usize>,
-        max_fill: usize,
+        weights: Vec<f64>,
+        max_fill: f64,
     },
     EmptySpace {
-        weights: Vec<usize>,
-        max_fill: usize,
+        weights: Vec<f64>,
+        max_fill: f64,
     },
     EmptySpaceExp {
-        weights: Vec<usize>,
-        max_fill: usize,
+        weights: Vec<f64>,
+        max_fill: f64,
     },
     Tsp {
-        distance_matrix: Vec<Vec<usize>>,
+        distance_matrix: Vec<Vec<f64>>,
         symmetric: bool,
     },
     QAP {
-        distance_matrix: Vec<Vec<usize>>,
-        flow_matrix: Vec<Vec<usize>>,
+        distance_matrix: Vec<Vec<f64>>,
+        flow_matrix: Vec<Vec<f64>>,
     },
 }
 impl Evaluation {
@@ -28,7 +28,7 @@ impl Evaluation {
         indices: (usize, usize),
         move_type: &MoveType,
         order: &mut Vec<usize>,
-    ) -> isize {
+    ) -> f64 {
         match self {
             Evaluation::EmptyBins { .. }
             | Evaluation::EmptySpace { .. }
@@ -37,14 +37,14 @@ impl Evaluation {
                 move_type.do_move(order, indices);
                 let sec = self.eval(order);
                 move_type.do_move(order, indices);
-                sec as isize - first as isize
+                sec - first
             }
             Evaluation::Tsp {
                 distance_matrix,
                 symmetric,
             } => {
-                let mut init_score = 0;
-                let mut next_score = 0;
+                let mut init_score = 0.0;
+                let mut next_score = 0.0;
                 if matches!(move_type, MoveType::Swap { rng: _, size: _ })
                     || matches!(move_type, MoveType::Tsp { rng: _, size: _ })
                 {
@@ -87,13 +87,14 @@ impl Evaluation {
                         }
                         init_score +=
                             distance_matrix[order[indices.1]][order[(indices.1 + 1) % order.len()]];
+
                         move_type.do_move(order, indices);
+
                         if indices.0 > 0 {
                             next_score += distance_matrix[order[indices.0 - 1]][order[indices.0]];
                         } else {
                             next_score += distance_matrix[order[order.len() - 1]][order[indices.0]];
                         }
-
                         next_score +=
                             distance_matrix[order[indices.1]][order[(indices.1 + 1) % order.len()]];
 
@@ -124,7 +125,7 @@ impl Evaluation {
                         move_type.do_move(order, indices);
                     }
                 }
-                next_score as isize - init_score as isize
+                next_score - init_score
             }
             Evaluation::QAP {
                 distance_matrix,
@@ -141,28 +142,26 @@ impl Evaluation {
                 let p = order;
                 let r = indices.0;
                 let s = indices.1;
-                let mut delta = 0;
+                let mut delta = 0.0;
                 for i in 0..distance_matrix.len() {
                     if i == r || i == s {
                         continue;
                     }
-                    delta += (d[s][i] as isize - d[r][i] as isize)
-                        * (f[p[r]][p[i]] as isize - f[p[s]][p[i]] as isize);
+                    delta += (d[s][i] - d[r][i]) * (f[p[r]][p[i]] - f[p[s]][p[i]]);
                 }
-
                 delta
             }
         }
     }
 
-    pub(crate) fn eval(&self, order: &[usize]) -> usize {
+    pub(crate) fn eval(&self, order: &[usize]) -> f64 {
         match self {
             Evaluation::EmptyBins { weights, max_fill } => {
-                let mut score = 0usize;
-                let mut fill_level = 0usize;
+                let mut score = 0.0;
+                let mut fill_level = 0.0;
                 for i in 0..order.len() {
                     if fill_level + weights[order[i]] > *max_fill {
-                        score += 1;
+                        score += 1.0;
                         fill_level = weights[order[i]];
                     } else {
                         fill_level += weights[order[i]];
@@ -171,8 +170,8 @@ impl Evaluation {
                 score
             }
             Evaluation::EmptySpace { weights, max_fill } => {
-                let mut score = 0usize;
-                let mut fill_level = 0usize;
+                let mut score = 0.0;
+                let mut fill_level = 0.0;
                 for i in 0..order.len() {
                     if fill_level + weights[order[i]] > *max_fill {
                         score += max_fill - fill_level;
@@ -185,24 +184,24 @@ impl Evaluation {
                 score
             }
             Evaluation::EmptySpaceExp { weights, max_fill } => {
-                let mut score = 0usize;
-                let mut fill_level = 0usize;
+                let mut score = 0.0;
+                let mut fill_level = 0.0;
                 for i in 0..order.len() {
                     if fill_level + weights[order[i]] > *max_fill {
-                        score += (max_fill - fill_level).pow(2);
+                        score += (max_fill - fill_level).powf(2.0);
                         fill_level = weights[order[i]];
                     } else {
                         fill_level += weights[order[i]];
                     }
                 }
-                score += (max_fill - fill_level).pow(2);
+                score += (max_fill - fill_level).powf(2.0);
                 score
             }
             Evaluation::Tsp {
                 distance_matrix,
                 symmetric: _,
             } => {
-                let mut score: usize = 0;
+                let mut score = 0.0;
                 for i in 1..order.len() {
                     score += distance_matrix[order[i - 1]][order[i]];
                 }
@@ -213,7 +212,7 @@ impl Evaluation {
                 distance_matrix,
                 flow_matrix,
             } => {
-                let mut value = 0;
+                let mut value = 0.0;
                 for i in 0..distance_matrix.len() {
                     for j in (i + 1)..distance_matrix.len() {
                         value += distance_matrix[i][j] * flow_matrix[order[i]][order[j]];
@@ -261,8 +260,8 @@ mod tests {
     #[test]
     fn empty_space_test() {
         let eval = Evaluation::EmptySpace {
-            weights: vec![2, 5, 4, 7, 1, 3, 8],
-            max_fill: 10,
+            weights: vec![2.0, 5.0, 4.0, 7.0, 1.0, 3.0, 8.0],
+            max_fill: 10.0,
         };
         let swap_move = &MoveType::Swap {
             rng: Box::new(SmallRng::seed_from_u64(0)),
@@ -273,14 +272,14 @@ mod tests {
         let delta = eval.delta_eval((0, 3), swap_move, &mut array);
         swap_move.do_move(&mut array, (0, 3));
         let score_1 = eval.eval(&array);
-        assert_eq!(score_0, 20);
-        assert_eq!(delta, score_1 as isize - score_0 as isize);
+        assert_eq!(score_0, 20.0);
+        assert_eq!(delta, score_1 - score_0);
     }
     #[test]
     fn bins_test() {
         let eval = Evaluation::EmptyBins {
-            weights: vec![2, 5, 4, 7, 1, 3, 8],
-            max_fill: 10,
+            weights: vec![2.0, 5.0, 4.0, 7.0, 1.0, 3.0, 8.0],
+            max_fill: 10.0,
         };
         let swap_move = &MoveType::Swap {
             rng: Box::new(SmallRng::seed_from_u64(0)),
@@ -291,14 +290,14 @@ mod tests {
         let delta = eval.delta_eval((0, 3), swap_move, &mut array);
         swap_move.do_move(&mut array, (0, 3));
         let score_1 = eval.eval(&array);
-        assert_eq!(score_0, 4);
-        assert_eq!(delta, score_1 as isize - score_0 as isize);
+        assert_eq!(score_0, 4.0);
+        assert_eq!(delta, score_1 - score_0);
     }
     #[test]
     fn empty_space_exp_test() {
         let eval = Evaluation::EmptySpaceExp {
-            weights: vec![2, 5, 4, 7, 1, 3, 8],
-            max_fill: 10,
+            weights: vec![2.0, 5.0, 4.0, 7.0, 1.0, 3.0, 8.0],
+            max_fill: 10.0,
         };
         let swap_move = &MoveType::Swap {
             rng: Box::new(SmallRng::seed_from_u64(0)),
@@ -309,16 +308,16 @@ mod tests {
         let delta = eval.delta_eval((0, 3), swap_move, &mut array);
         swap_move.do_move(&mut array, (0, 3));
         let score_1 = eval.eval(&array);
-        assert_eq!(score_0, 102);
-        assert_eq!(delta, score_1 as isize - score_0 as isize);
+        assert_eq!(score_0, 102.0);
+        assert_eq!(delta, score_1 - score_0);
     }
     #[test]
     fn tsp_test() {
-        let distance_matrix: Vec<Vec<usize>> = vec![
-            vec![0, 2, 5, 8],
-            vec![2, 0, 4, 1],
-            vec![5, 4, 0, 7],
-            vec![8, 1, 7, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 5.0, 8.0],
+            vec![2.0, 0.0, 4.0, 1.0],
+            vec![5.0, 4.0, 0.0, 7.0],
+            vec![8.0, 1.0, 7.0, 0.0],
         ];
         let eval = Evaluation::Tsp {
             distance_matrix,
@@ -336,22 +335,22 @@ mod tests {
             swap_move.do_move(&mut array, test_move);
             let score_1 = eval.eval(&array);
             swap_move.do_move(&mut array, test_move);
-            assert_eq!(delta, score_1 as isize - score_0 as isize);
+            assert_eq!(delta, score_1 - score_0);
         }
     }
     #[test]
     fn qap_test() {
-        let distance_matrix: Vec<Vec<usize>> = vec![
-            vec![0, 2, 9, 5],
-            vec![2, 0, 4, 6],
-            vec![9, 4, 0, 3],
-            vec![5, 6, 3, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 9.0, 5.0],
+            vec![2.0, 0.0, 4.0, 6.0],
+            vec![9.0, 4.0, 0.0, 3.0],
+            vec![5.0, 6.0, 3.0, 0.0],
         ];
         let flow_matrix = vec![
-            vec![0, 2, 0, 0],
-            vec![2, 0, 4, 0],
-            vec![0, 4, 0, 8],
-            vec![0, 0, 8, 0],
+            vec![0.0, 2.0, 0.0, 0.0],
+            vec![2.0, 0.0, 4.0, 0.0],
+            vec![0.0, 4.0, 0.0, 8.0],
+            vec![0.0, 0.0, 8.0, 0.0],
         ];
         let eval = Evaluation::QAP {
             distance_matrix,
@@ -369,7 +368,7 @@ mod tests {
             swap_move.do_move(&mut array, test_move);
             let score_1 = eval.eval(&array);
             swap_move.do_move(&mut array, test_move);
-            assert_eq!(delta, score_1 as isize - score_0 as isize);
+            assert_eq!(delta, score_1 - score_0);
         }
     }
 }

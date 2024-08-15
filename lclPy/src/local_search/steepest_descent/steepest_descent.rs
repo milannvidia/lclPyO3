@@ -65,13 +65,13 @@ impl LocalSearch for SteepestDescent {
     /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15isize);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut current: isize = problem.eval() as isize;
-        let mut best: isize = current;
+        let mut current = problem.eval();
+        let mut best = current;
         let now = Instant::now();
         let mut iterations = 0;
-        let mut data: Vec<(u128, isize, isize, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
 
         self.termination.init();
         if log {
@@ -80,20 +80,18 @@ impl LocalSearch for SteepestDescent {
         while self.termination.keep_running() {
             // while iterations<100{
             let mut best_mov = (0, 0);
-            let mut best_delta = if self.minimize {
-                isize::MAX
-            } else {
-                isize::MIN
-            };
+            let mut best_delta = if self.minimize { f64::MAX } else { f64::MIN };
             for mov in problem.get_all_mov() {
                 let delta = problem.delta_eval(mov, None);
-                if (delta < best_delta) == self.minimize {
+                if (delta <= best_delta) == self.minimize || (delta >= best_delta) != self.minimize
+                {
                     best_delta = delta;
                     best_mov = mov;
                 }
             }
             current = current + best_delta;
-            self.termination.check_variable(current);
+
+            self.termination.check_new_variable(current);
             if (current < best) == self.minimize {
                 problem.do_mov(best_mov, None);
                 problem.set_best();
@@ -139,11 +137,11 @@ mod tests {
 
     #[test]
     fn steepest_descent_test() {
-        let distance_matrix = vec![
-            vec![0, 2, 5, 8],
-            vec![2, 0, 4, 1],
-            vec![5, 4, 0, 7],
-            vec![8, 1, 7, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 5.0, 8.0],
+            vec![2.0, 0.0, 4.0, 1.0],
+            vec![5.0, 4.0, 0.0, 7.0],
+            vec![8.0, 1.0, 7.0, 0.0],
         ];
         let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
@@ -157,6 +155,6 @@ mod tests {
 
         let mut sim = SteepestDescent::new(true, &problem, &termination);
         let data = sim.run(false).last().unwrap().1;
-        assert_eq!(data, 15isize);
+        assert_eq!(data, 15.0);
     }
 }

@@ -1,4 +1,5 @@
 pub mod io;
-pub mod tsp_io;
+pub use io::read_coord2d_to_distance_matrix;
 pub use io::read_csv;
-pub use tsp_io::TspReader;
+pub use io::read_distance_matrix;
+pub use io::read_dms_to_distance_matrix;

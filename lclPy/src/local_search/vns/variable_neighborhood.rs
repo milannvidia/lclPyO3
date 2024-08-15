@@ -41,7 +41,7 @@ impl VariableNeighborhood {
         }
     }
 
-    fn delta_eval(&self, problem: &mut dyn Problem, mov: (usize, usize)) -> isize {
+    fn delta_eval(&self, problem: &mut dyn Problem, mov: (usize, usize)) -> f64 {
         match problem.get_move_type().to_owned() {
             MoveType::Reverse { .. } | MoveType::Swap { .. } | MoveType::Tsp { .. } => {
                 problem.delta_eval(mov, None)
@@ -115,27 +115,23 @@ impl LocalSearch for VariableNeighborhood {
     /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut current: isize = problem.eval() as isize;
-        let mut best: isize = current;
+        let mut current = problem.eval();
+        let mut best = current;
         let now = Instant::now();
         let mut iterations = 0;
-        let mut data: Vec<(u128, isize, isize, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
         self.termination.init();
         while self.termination.keep_running() {
-            let mut best_delta = if self.minimize {
-                isize::MAX
-            } else {
-                isize::MIN
-            };
+            let mut best_delta = if self.minimize { f64::MAX } else { f64::MIN };
             let mut best_move: Option<(usize, usize)> = None;
 
             for mov in self.get_all_mov_select(problem.get_move_type()) {
-                let delta: isize = self.delta_eval(&mut *(problem), mov);
+                let delta = self.delta_eval(&mut *(problem), mov);
                 if (delta < best_delta) == self.minimize {
                     best_delta = delta;
                     best_move = Some(mov);
@@ -203,11 +199,11 @@ mod tests {
 
     #[test]
     fn vns_test() {
-        let distance_matrix = vec![
-            vec![0, 2, 5, 8],
-            vec![2, 0, 4, 1],
-            vec![5, 4, 0, 7],
-            vec![8, 1, 7, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 5.0, 8.0],
+            vec![2.0, 0.0, 4.0, 1.0],
+            vec![5.0, 4.0, 0.0, 7.0],
+            vec![8.0, 1.0, 7.0, 0.0],
         ];
         let move_type_0 = MoveType::Tsp {
             rng: Box::new(SmallRng::seed_from_u64(0)),
@@ -238,6 +234,6 @@ mod tests {
 
         let mut sim = VariableNeighborhood::new(&problem, &termination, true);
         let data = sim.run(false).last().unwrap().1;
-        assert_eq!(data, 15);
+        assert_eq!(data, 15.0);
     }
 }

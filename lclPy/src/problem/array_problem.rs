@@ -47,7 +47,7 @@ impl Problem for ArrayProblem {
         }
     }
 
-    fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> isize {
+    fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> f64 {
         match move_type {
             Some(x) => self.evaluation.delta_eval(indices, x, &mut self.state),
             None => self
@@ -56,7 +56,7 @@ impl Problem for ArrayProblem {
         }
     }
 
-    fn eval(&self) -> usize {
+    fn eval(&self) -> f64 {
         self.evaluation.eval(&self.state)
     }
 

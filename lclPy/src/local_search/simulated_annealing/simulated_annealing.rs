@@ -84,15 +84,15 @@ impl LocalSearch for SimulatedAnnealing {
     /// let data=sim.run(false).last().unwrap().1;
     /// assert_eq!(data,15);
     /// ```
-    fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
+    fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, usize)> {
         let mut problem = self.problem.lock().unwrap();
         self.temp = self.start_temp;
         let e = std::f64::consts::E;
         let mut iterations: usize = 0;
         let now = Instant::now();
-        let mut current: isize = problem.eval() as isize;
+        let mut current = problem.eval();
         let mut best = current;
-        let mut data: Vec<(u128, isize, isize, usize)> = vec![];
+        let mut data: Vec<(u128, f64, f64, usize)> = vec![];
         let mut rng = rand::thread_rng();
 
         problem.set_best();
@@ -111,7 +111,7 @@ impl LocalSearch for SimulatedAnnealing {
                 let mov = problem.get_mov();
                 let delta = problem.delta_eval(mov, None);
 
-                if (delta <= 0) == self.minimize {
+                if (delta <= 0.0) == self.minimize || (delta >= 0.0) != self.minimize {
                     problem.do_mov(mov, None);
                     current += delta;
                     if (current < best) == self.minimize {
@@ -176,11 +176,11 @@ mod tests {
 
     #[test]
     fn simulated_annealing_test() {
-        let distance_matrix = vec![
-            vec![0, 2, 5, 8],
-            vec![2, 0, 4, 1],
-            vec![5, 4, 0, 7],
-            vec![8, 1, 7, 0],
+        let distance_matrix: Vec<Vec<f64>> = vec![
+            vec![0.0, 2.0, 5.0, 8.0],
+            vec![2.0, 0.0, 4.0, 1.0],
+            vec![5.0, 4.0, 0.0, 7.0],
+            vec![8.0, 1.0, 7.0, 0.0],
         ];
         let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
@@ -196,6 +196,6 @@ mod tests {
 
         let mut sim = SimulatedAnnealing::new(2000, true, &problem, &termination, &cooling, &iter);
         let data = sim.run(false).last().unwrap().1;
-        assert_eq!(data, 15);
+        assert_eq!(data, 15.0);
     }
 }

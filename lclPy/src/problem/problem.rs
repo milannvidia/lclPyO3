@@ -95,7 +95,7 @@ pub trait Problem: Send {
     ///
     /// assert_eq!(res, after as isize - before as isize)
     /// ```
-    fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> isize;
+    fn delta_eval(&mut self, indices: (usize, usize), move_type: Option<&MoveType>) -> f64;
 
     /// Calculates the current score.
     ///
@@ -121,7 +121,7 @@ pub trait Problem: Send {
     ///
     /// assert_eq!(res, after as isize - before as isize)
     /// ```
-    fn eval(&self) -> usize;
+    fn eval(&self) -> f64;
 
     /// Resets the state to ascending indices.
     ///
