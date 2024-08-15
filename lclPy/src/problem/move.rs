@@ -1,3 +1,5 @@
+use std::usize;
+
 use rand::{rngs::SmallRng, Rng, SeedableRng};
 #[derive(Clone)]
 pub enum MoveType {
@@ -19,7 +21,48 @@ pub enum MoveType {
     },
 }
 impl MoveType {
-    pub fn do_move(&self, array: &mut Vec<usize>, indices: (usize, usize)) {
+    pub fn reverse(seed: Option<u64>) -> MoveType {
+        let rng = if seed.is_some() {
+            SmallRng::seed_from_u64(seed.unwrap())
+        } else {
+            SmallRng::from_entropy()
+        };
+        MoveType::Reverse {
+            rng: Box::new(rng),
+            size: 0,
+        }
+    }
+    pub fn swap(seed: Option<u64>) -> MoveType {
+        let rng = if seed.is_some() {
+            SmallRng::seed_from_u64(seed.unwrap())
+        } else {
+            SmallRng::from_entropy()
+        };
+        MoveType::Swap {
+            rng: Box::new(rng),
+            size: 0,
+        }
+    }
+    pub fn tsp(seed: Option<u64>) -> MoveType {
+        let rng = if seed.is_some() {
+            SmallRng::seed_from_u64(seed.unwrap())
+        } else {
+            SmallRng::from_entropy()
+        };
+        MoveType::Tsp {
+            rng: Box::new(rng),
+            size: 0,
+        }
+    }
+    pub fn multi_neighbor(move_types: Vec<MoveType>, weights: Option<Vec<f64>>) -> MoveType {
+        let len = move_types.len();
+        MoveType::MultiNeighbor {
+            move_types,
+            weights: weights.unwrap_or(vec![1.0 / len as f64; len]),
+        }
+    }
+
+    pub(crate) fn do_move(&self, array: &mut Vec<usize>, indices: (usize, usize)) {
         match self {
             MoveType::Reverse { rng: _, size: _ } => {
                 for i in 0..(indices.1 - indices.0 + 1) / 2 {
@@ -38,7 +81,7 @@ impl MoveType {
         }
     }
 
-    pub fn get_mov(&mut self) -> (usize, usize) {
+    pub(crate) fn get_mov(&mut self) -> (usize, usize) {
         match self {
             MoveType::Reverse { rng, size } | MoveType::Swap { rng, size } => {
                 let i = rng.gen_range(0..*size);
@@ -71,7 +114,7 @@ impl MoveType {
         }
     }
 
-    pub fn get_all_mov(&self) -> Vec<(usize, usize)> {
+    pub(crate) fn get_all_mov(&self) -> Vec<(usize, usize)> {
         match self {
             MoveType::Reverse { rng: _, size } | MoveType::Swap { rng: _, size } => {
                 let mut moves: Vec<(usize, usize)> = vec![];
@@ -100,7 +143,7 @@ impl MoveType {
         }
     }
 
-    pub fn set_seed(&mut self, seed: u64) {
+    pub(crate) fn set_seed(&mut self, seed: u64) {
         match self {
             MoveType::Reverse { rng, size: _ }
             | MoveType::Swap { rng, size: _ }
@@ -113,6 +156,19 @@ impl MoveType {
             } => {
                 for mov in move_types {
                     mov.set_seed(seed);
+                }
+            }
+        }
+    }
+
+    pub(crate) fn set_size(&mut self, new_size: usize) {
+        match self {
+            MoveType::Reverse { size, .. }
+            | MoveType::Swap { size, .. }
+            | MoveType::Tsp { size, .. } => *size = new_size,
+            MoveType::MultiNeighbor { move_types, .. } => {
+                for move_type in move_types {
+                    move_type.set_size(new_size);
                 }
             }
         }

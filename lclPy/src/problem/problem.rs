@@ -81,7 +81,7 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
     ///
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
@@ -92,8 +92,8 @@ pub trait Problem: Send {
     ///    ];
     ///
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
-    ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
+    ///     &MoveType::tsp(Some(0)),
+    ///     &Evaluation::tsp(distance_matrix));
     /// let before=problem.eval();
     /// let res=problem.delta_eval((1,2),None);
     /// problem.do_mov((1,2),None);
@@ -110,7 +110,7 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
@@ -119,8 +119,8 @@ pub trait Problem: Send {
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
-    ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
+    ///     &MoveType::tsp(Some(0)),
+    ///     &Evaluation::tsp(distance_matrix));
     /// let before=problem.eval();
     /// let res=problem.delta_eval((1,2),None);
     /// problem.do_mov((1,2),None);
@@ -137,7 +137,7 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
@@ -146,8 +146,8 @@ pub trait Problem: Send {
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
-    ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
+    ///     &MoveType::tsp(Some(0)),
+    ///     &Evaluation::tsp(distance_matrix));
     /// problem.do_mov((1,2),None);
     /// problem.reset();
     ///
@@ -162,7 +162,7 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
@@ -171,8 +171,8 @@ pub trait Problem: Send {
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
-    ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
+    ///     &MoveType::tsp(Some(0)),
+    ///     &Evaluation::tsp(distance_matrix));
     /// problem.do_mov((1,2),None);
     /// problem.set_best();
     ///
@@ -187,7 +187,7 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     ///# use lclpy::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
@@ -196,8 +196,8 @@ pub trait Problem: Send {
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
     /// let mut problem = ArrayProblem::new(
-    ///     &Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4},
-    ///     &Evaluation::Tsp {distance_matrix,symmetric:true});
+    ///     &MoveType::tsp(Some(0)),
+    ///     &Evaluation::tsp(distance_matrix));
     ///
     /// assert_eq!(problem.hash(), 9144871353323486087)
     /// ```
@@ -211,6 +211,6 @@ pub trait Problem: Send {
 
     /// Sets the evaluation type
     fn set_eval_type(&mut self, eval_type: Evaluation);
-
+    /// Sets the seed of the underlying MoveType
     fn set_seed(&mut self, seed: u64);
 }

@@ -14,10 +14,12 @@ pub struct ArrayProblem {
 impl ArrayProblem {
     pub fn new(move_type: &MoveType, evaluation: &Evaluation) -> Self {
         let len = evaluation.length();
+        let mut mov = move_type.clone();
+        mov.set_size(len);
         let array_problem = ArrayProblem {
             state: (0..len).collect(),
             best_solution: (0..len).collect(),
-            move_type: move_type.clone(),
+            move_type: mov,
             evaluation: evaluation.clone(),
         };
         array_problem

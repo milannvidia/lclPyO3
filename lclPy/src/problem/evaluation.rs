@@ -1,7 +1,8 @@
+use crate::aidfunc::check_if_distance_matrix_symmetric;
 use super::MoveType;
 #[derive(Clone)]
 pub enum Evaluation {
-    EmptyBins {
+    Bins {
         weights: Vec<f64>,
         max_fill: f64,
     },
@@ -23,6 +24,29 @@ pub enum Evaluation {
     },
 }
 impl Evaluation {
+    pub fn bins(weights: Vec<f64>, max_fill: f64) -> Evaluation {
+        Evaluation::Bins { weights, max_fill }
+    }
+    pub fn empty_space(weights: Vec<f64>, max_fill: f64) -> Evaluation {
+        Evaluation::EmptySpace { weights, max_fill }
+    }
+    pub fn empty_space_exp(weights: Vec<f64>, max_fill: f64) -> Evaluation {
+        Evaluation::EmptySpaceExp { weights, max_fill }
+    }
+    pub fn tsp(distance_matrix: Vec<Vec<f64>>) -> Evaluation {
+        let symmetric=check_if_distance_matrix_symmetric(&distance_matrix);
+        Evaluation::Tsp {
+            distance_matrix,
+            symmetric,
+        }
+    }
+    pub fn qap(distance_matrix: Vec<Vec<f64>>, flow_matrix: Vec<Vec<f64>>) -> Evaluation {
+        Evaluation::QAP {
+            distance_matrix,
+            flow_matrix,
+        }
+    }
+
     pub(crate) fn delta_eval(
         &self,
         indices: (usize, usize),
@@ -30,7 +54,7 @@ impl Evaluation {
         order: &mut Vec<usize>,
     ) -> f64 {
         match self {
-            Evaluation::EmptyBins { .. }
+            Evaluation::Bins { .. }
             | Evaluation::EmptySpace { .. }
             | Evaluation::EmptySpaceExp { .. } => {
                 let first = self.eval(order);
@@ -131,12 +155,6 @@ impl Evaluation {
                 distance_matrix,
                 flow_matrix,
             } => {
-                // let before = self.eval(&order);
-                // move_type.do_move(order, indices);
-                // let after = self.eval(order);
-                // move_type.do_move(order, indices);
-                // after as isize - before as isize
-                //TODO: debug
                 let d = distance_matrix;
                 let f = flow_matrix;
                 let p = order;
@@ -156,7 +174,7 @@ impl Evaluation {
 
     pub(crate) fn eval(&self, order: &[usize]) -> f64 {
         match self {
-            Evaluation::EmptyBins { weights, max_fill } => {
+            Evaluation::Bins { weights, max_fill } => {
                 let mut score = 0.0;
                 let mut fill_level = 0.0;
                 for i in 0..order.len() {
@@ -224,7 +242,7 @@ impl Evaluation {
     }
     pub(crate) fn length(&self) -> usize {
         match self {
-            Evaluation::EmptyBins {
+            Evaluation::Bins {
                 weights,
                 max_fill: _,
             } => weights.len(),
@@ -277,7 +295,7 @@ mod tests {
     }
     #[test]
     fn bins_test() {
-        let eval = Evaluation::EmptyBins {
+        let eval = Evaluation::Bins {
             weights: vec![2.0, 5.0, 4.0, 7.0, 1.0, 3.0, 8.0],
             max_fill: 10.0,
         };

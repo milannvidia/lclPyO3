@@ -1,3 +1,4 @@
+use core::f64;
 use std::time::Instant;
 
 #[derive(Clone)]
@@ -35,6 +36,47 @@ pub enum TerminationFunction {
 }
 
 impl TerminationFunction {
+    pub fn always_true() -> TerminationFunction {
+        TerminationFunction::AlwaysTrue {}
+    }
+    pub fn max_iterations(max_iterations: usize) -> TerminationFunction {
+        TerminationFunction::MaxIterations {
+            max_iterations,
+            current_iterations: 0,
+        }
+    }
+    pub fn max_sec(max_sec: u64) -> TerminationFunction {
+        TerminationFunction::MaxSec {
+            time: Instant::now(),
+            max_sec,
+        }
+    }
+    pub fn min_temp(min_temp: isize) -> TerminationFunction {
+        TerminationFunction::MinTemp { min_temp }
+    }
+    pub fn multi_crit_and(criterion: Vec<TerminationFunction>) -> TerminationFunction {
+        TerminationFunction::MultiCritAnd { criterion }
+    }
+    pub fn multi_crit_or(criterion: Vec<TerminationFunction>) -> TerminationFunction {
+        TerminationFunction::MultiCritOr { criterion }
+    }
+    pub fn must_improve() -> TerminationFunction {
+        TerminationFunction::MustImprove {
+            best: f64::MAX,
+            flipflop: true,
+            minimize: true,
+        }
+    }
+    pub fn no_improve(max_iterations_without_improve: usize) -> TerminationFunction {
+        TerminationFunction::NoImprove {
+            best: f64::MAX,
+            max_iterations_without_improve,
+            curr_without_improve: 0,
+            flipflop: true,
+            minimize: true,
+        }
+    }
+
     pub fn keep_running(&self) -> bool {
         match self {
             TerminationFunction::AlwaysTrue {} | TerminationFunction::MinTemp { .. } => true,

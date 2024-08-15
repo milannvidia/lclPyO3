@@ -1,15 +1,9 @@
-use aidfunc::*;
 use local_search::*;
 use problem::*;
 use pyo3::{exceptions::PyValueError, prelude::*};
-use rand::{rngs::SmallRng, SeedableRng};
 
 use simulated_annealing::{CoolingFunction, IterationsTemperature, SimulatedAnnealing};
-use std::{
-    isize,
-    sync::{Arc, Mutex},
-    time::Instant,
-};
+use std::sync::{Arc, Mutex};
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
 use termination::*;
@@ -25,38 +19,34 @@ pub mod termination;
 // ====================================================================================================================================================================
 // Classes
 // ====================================================================================================================================================================
-
-#[pyclass(frozen, name = "RustMoveType")]
+#[pyclass(frozen, name = "MoveType")]
 struct DynMoveType {
     mov: MoveType,
 }
-
-#[pyclass(frozen, name = "RustEvaluation")]
+#[pyclass(frozen, name = "Evaluation")]
 struct DynEvaluation {
     eva: Evaluation,
 }
-
-#[pyclass(frozen, name = "RustTermination")]
+#[pyclass(frozen, name = "Termination")]
 struct DynTermination {
     termination: TerminationFunction,
 }
-
-#[pyclass(frozen, name = "RustProblem")]
+#[pyclass(frozen, name = "Problem")]
 struct DynProblem {
     problem: Arc<Mutex<dyn Problem>>,
 }
 
-#[pyclass(frozen, name = "RustLocalSearch")]
+#[pyclass(frozen, name = "LocalSearch")]
 struct DynLocalSearch {
     local_search: Arc<Mutex<dyn LocalSearch>>,
 }
 
-#[pyclass(frozen, name = "RustCooling")]
+#[pyclass(frozen, name = "Cooling")]
 struct DynCooling {
     cooling: CoolingFunction,
 }
 
-#[pyclass(frozen, name = "RustIterationsPerTemp")]
+#[pyclass(frozen, name = "IterationsPerTemp")]
 struct DynIterTemp {
     iter_temp: IterationsTemperature,
 }
@@ -70,70 +60,52 @@ impl DynEvaluation {
     #[staticmethod]
     fn empty_bins(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
-            eva: Evaluation::EmptyBins { weights, max_fill },
+            eva: Evaluation::bins(weights, max_fill),
         }
     }
     #[staticmethod]
     fn empty_space(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
-            eva: Evaluation::EmptySpace { weights, max_fill },
+            eva: Evaluation::empty_space(weights, max_fill),
         }
     }
     #[staticmethod]
     fn empty_space_exp(weights: Vec<f64>, max_fill: f64) -> Self {
         DynEvaluation {
-            eva: Evaluation::EmptySpaceExp { weights, max_fill },
+            eva: Evaluation::empty_space_exp(weights, max_fill),
         }
     }
     #[staticmethod]
     fn tsp(distance_matrix: Vec<Vec<f64>>) -> Self {
         DynEvaluation {
-            eva: Evaluation::Tsp {
-                distance_matrix,
-                symmetric: true,
-            },
+            eva: Evaluation::tsp(distance_matrix),
         }
     }
     #[staticmethod]
     fn qap(distance_matrix: Vec<Vec<f64>>, flow_matrix: Vec<Vec<f64>>) -> Self {
         DynEvaluation {
-            eva: Evaluation::QAP {
-                distance_matrix,
-                flow_matrix,
-            },
+            eva: Evaluation::qap(distance_matrix, flow_matrix),
         }
     }
     #[staticmethod]
     fn tsp_from_dist_matrix(file: &str) -> PyResult<Self> {
         let distance_matrix = aidfunc::io::read_distance_matrix(file)?;
-        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
-            eva: Evaluation::Tsp {
-                distance_matrix,
-                symmetric,
-            },
+            eva: Evaluation::tsp(distance_matrix),
         })
     }
     #[staticmethod]
     fn tsp_from_coord2d(file: &str) -> PyResult<Self> {
         let distance_matrix = aidfunc::io::read_coord2d_to_distance_matrix(file)?;
-        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
-            eva: Evaluation::Tsp {
-                distance_matrix,
-                symmetric,
-            },
+            eva: Evaluation::tsp(distance_matrix),
         })
     }
     #[staticmethod]
     fn tsp_from_dms(file: &str) -> PyResult<Self> {
         let distance_matrix = aidfunc::io::read_dms_to_distance_matrix(file)?;
-        let symmetric = check_if_distance_matrix_symmetric(&distance_matrix);
         Ok(DynEvaluation {
-            eva: Evaluation::Tsp {
-                distance_matrix,
-                symmetric,
-            },
+            eva: Evaluation::tsp(distance_matrix),
         })
     }
 }
@@ -141,51 +113,24 @@ impl DynEvaluation {
 #[pymethods]
 impl DynMoveType {
     #[staticmethod]
-    #[pyo3(signature = (size, seed=None))]
-    fn swap(size: usize, seed: Option<u64>) -> Self {
-        let rng;
-        if seed.is_some() {
-            rng = SmallRng::seed_from_u64(seed.unwrap());
-        } else {
-            rng = SmallRng::from_entropy();
-        }
+    #[pyo3(signature = (seed=None))]
+    fn swap(seed: Option<u64>) -> Self {
         DynMoveType {
-            mov: MoveType::Swap {
-                rng: Box::new(rng),
-                size,
-            },
+            mov: MoveType::swap(seed),
         }
     }
     #[staticmethod]
-    #[pyo3(signature = (size, seed=None))]
-    fn reverse(size: usize, seed: Option<u64>) -> Self {
-        let rng;
-        if seed.is_some() {
-            rng = SmallRng::seed_from_u64(seed.unwrap());
-        } else {
-            rng = SmallRng::from_entropy();
-        }
+    #[pyo3(signature = (seed=None))]
+    fn reverse(seed: Option<u64>) -> Self {
         DynMoveType {
-            mov: MoveType::Reverse {
-                rng: Box::new(rng),
-                size,
-            },
+            mov: MoveType::reverse(seed),
         }
     }
     #[staticmethod]
-    #[pyo3(signature = (size, seed=None))]
-    fn swap_tsp(size: usize, seed: Option<u64>) -> Self {
-        let rng;
-        if seed.is_some() {
-            rng = SmallRng::seed_from_u64(seed.unwrap());
-        } else {
-            rng = SmallRng::from_entropy();
-        }
+    #[pyo3(signature = ( seed=None))]
+    fn swap_tsp(seed: Option<u64>) -> Self {
         DynMoveType {
-            mov: MoveType::Tsp {
-                rng: Box::new(rng),
-                size,
-            },
+            mov: MoveType::tsp(seed),
         }
     }
     #[staticmethod]
@@ -204,21 +149,8 @@ impl DynMoveType {
             }
             move_types.push(cloned_mov);
         }
-        let res_weights: Vec<f64>;
-        if weights.is_some() {
-            let sum: f64 = weights.as_ref().unwrap().iter().sum();
-            if (sum - 1.0).abs() > 1e-9 {
-                return Err(PyErr::new::<PyValueError, _>("weights don't add to 1"));
-            }
-            res_weights = weights.unwrap();
-        } else {
-            res_weights = vec![1.0f64 / (move_types.len() as f64); move_types.len()];
-        }
         Ok(DynMoveType {
-            mov: MoveType::MultiNeighbor {
-                move_types,
-                weights: res_weights,
-            },
+            mov: MoveType::multi_neighbor(move_types, weights),
         })
     }
 }
@@ -279,7 +211,7 @@ impl DynLocalSearch {
 
     fn run(&self) -> Vec<(u128, f64, f64, u64)> {
         let mut x = self.local_search.lock().unwrap();
-        return x.run(true);
+        x.run(true)
     }
 
     fn reset(&self) {
@@ -345,7 +277,7 @@ impl DynCooling {
     #[staticmethod]
     fn geometric_cooling(alpha: f64) -> Self {
         DynCooling {
-            cooling: CoolingFunction::GeometricCooling { alpha },
+            cooling: CoolingFunction::geometric_cooling(alpha),
         }
     }
 }
@@ -355,7 +287,7 @@ impl DynIterTemp {
     #[staticmethod]
     fn cnst_iter_temp(iterations: usize) -> Self {
         DynIterTemp {
-            iter_temp: IterationsTemperature::ConstIterTemp { iterations },
+            iter_temp: IterationsTemperature::const_iter_temp(iterations),
         }
     }
 }
@@ -365,71 +297,51 @@ impl DynTermination {
     #[staticmethod]
     fn max_sec(max_sec: u64) -> Self {
         DynTermination {
-            termination: TerminationFunction::MaxSec {
-                time: Instant::now(),
-                max_sec,
-            },
+            termination: TerminationFunction::max_sec(max_sec),
         }
     }
     #[staticmethod]
     fn always_true_criterion() -> Self {
         DynTermination {
-            termination: TerminationFunction::AlwaysTrue {},
+            termination: TerminationFunction::always_true(),
         }
     }
     #[staticmethod]
     fn max_iterations(max_iterations: usize) -> Self {
         DynTermination {
-            termination: TerminationFunction::MaxIterations {
-                max_iterations,
-                current_iterations: 0,
-            },
+            termination: TerminationFunction::max_iterations(max_iterations),
         }
     }
     #[staticmethod]
     fn min_temp(min_temp: isize) -> Self {
         DynTermination {
-            termination: TerminationFunction::MinTemp { min_temp },
+            termination: TerminationFunction::min_temp(min_temp),
         }
     }
     #[staticmethod]
     fn multi_crit_and(vec: Vec<Py<DynTermination>>) -> Self {
         let terminations = vec.iter().map(|f| f.get().termination.clone()).collect();
         DynTermination {
-            termination: TerminationFunction::MultiCritAnd {
-                criterion: terminations,
-            },
+            termination: TerminationFunction::multi_crit_and(terminations),
         }
     }
     #[staticmethod]
     fn multi_crit_or(vec: Vec<Py<DynTermination>>) -> Self {
         let terminations = vec.iter().map(|f| f.get().termination.clone()).collect();
         DynTermination {
-            termination: TerminationFunction::MultiCritOr {
-                criterion: terminations,
-            },
+            termination: TerminationFunction::multi_crit_or(terminations),
         }
     }
     #[staticmethod]
     fn must_improve() -> Self {
         DynTermination {
-            termination: TerminationFunction::MustImprove {
-                best: f64::MAX,
-                flipflop: true,
-                minimize: true,
-            },
+            termination: TerminationFunction::must_improve(),
         }
     }
     #[staticmethod]
     fn no_improve(iter_without_imp: usize) -> Self {
         DynTermination {
-            termination: TerminationFunction::NoImprove {
-                best: f64::MAX,
-                max_iterations_without_improve: iter_without_imp,
-                curr_without_improve: 0,
-                flipflop: true,
-                minimize: true,
-            },
+            termination: TerminationFunction::no_improve(iter_without_imp),
         }
     }
 }

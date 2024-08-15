@@ -19,7 +19,9 @@ pub trait LocalSearch: Send {
     /// tuple.3 = #iterations
     fn run(&mut self, log: bool) -> Vec<(u128, f64, f64, u64)>;
 
+    ///Setter for internal problem
     fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>);
 
+    ///Setter for termination function
     fn set_termination(&mut self, termination: &TerminationFunction);
 }

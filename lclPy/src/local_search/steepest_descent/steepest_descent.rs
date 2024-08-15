@@ -56,11 +56,10 @@ impl LocalSearch for SteepestDescent {
     ///        vec![5.0, 4.0, 0.0, 7.0],
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
-    ///# let rng=Box::new(SmallRng::seed_from_u64(0));
-    ///# let move_type=MoveType::Tsp {rng,size:4};
-    ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
+    ///# let move_type=MoveType::tsp(Some(0)) ;
+    ///# let eval=Evaluation::tsp(distance_matrix);
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination=TerminationFunction::AlwaysTrue {};
+    ///# let termination=TerminationFunction::always_true();
     ///
     /// let mut sim=SteepestDescent::new(true,&problem,&termination);
     /// let data=sim.run(false).last().unwrap().1;
@@ -128,8 +127,6 @@ mod tests {
     use crate::local_search::{LocalSearch, SteepestDescent};
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     use crate::termination::TerminationFunction;
-    use rand::prelude::SmallRng;
-    use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
 
     #[test]
@@ -140,15 +137,11 @@ mod tests {
             vec![5.0, 4.0, 0.0, 7.0],
             vec![8.0, 1.0, 7.0, 0.0],
         ];
-        let rng = Box::new(SmallRng::seed_from_u64(0));
-        let move_type = MoveType::Tsp { rng, size: 4 };
-        let eval = Evaluation::Tsp {
-            distance_matrix,
-            symmetric: true,
-        };
+        let move_type = MoveType::tsp(Some(0));
+        let eval = Evaluation::tsp(distance_matrix);
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
-        let termination = TerminationFunction::AlwaysTrue {};
+        let termination = TerminationFunction::always_true();
 
         let mut sim = SteepestDescent::new(true, &problem, &termination);
         let data = sim.run(false).last().unwrap().1;

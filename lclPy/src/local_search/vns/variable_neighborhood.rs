@@ -105,13 +105,13 @@ impl LocalSearch for VariableNeighborhood {
     ///        vec![5.0, 4.0, 0.0, 7.0],
     ///        vec![8.0, 1.0, 7.0, 0.0],
     ///    ];
-    ///# let move_type_0=MoveType::Tsp {rng:Box::new(SmallRng::seed_from_u64(0)),size:4};
-    ///# let move_type_1=MoveType::Reverse {rng:Box::new(SmallRng::seed_from_u64(0)),size:4};
-    ///# let move_type_2=MoveType::Swap {rng:Box::new(SmallRng::seed_from_u64(0)),size:4};
-    ///# let move_type=MoveType::MultiNeighbor {move_types:vec![move_type_0,move_type_1,move_type_2],weights:vec![1.0f64/3.0f64;3]};
+    ///# let move_type_0=MoveType::tsp(Some(0));
+    ///# let move_type_1=MoveType::reverse(Some(0));
+    ///# let move_type_2=MoveType::swap(Some(0));
+    ///# let move_type=MoveType::multi_neighbor(vec![move_type_0,move_type_1,move_type_2],None);
     ///# let eval=Evaluation::Tsp {distance_matrix,symmetric:true};
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
-    ///# let termination=TerminationFunction::MaxSec {time: Instant::now(),max_sec: 1};
+    ///# let termination=TerminationFunction::max_sec(1);
     ///
     /// let mut sim=VariableNeighborhood::new(&problem,&termination,true);
     /// let data=sim.run(false).last().unwrap().1;
@@ -190,10 +190,7 @@ mod tests {
     use crate::local_search::LocalSearch;
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
     use crate::termination::TerminationFunction;
-    use rand::prelude::SmallRng;
-    use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
-    use std::time::Instant;
 
     #[test]
     fn vns_test() {
@@ -203,32 +200,14 @@ mod tests {
             vec![5.0, 4.0, 0.0, 7.0],
             vec![8.0, 1.0, 7.0, 0.0],
         ];
-        let move_type_0 = MoveType::Tsp {
-            rng: Box::new(SmallRng::seed_from_u64(0)),
-            size: 4,
-        };
-        let move_type_1 = MoveType::Reverse {
-            rng: Box::new(SmallRng::seed_from_u64(0)),
-            size: 4,
-        };
-        let move_type_2 = MoveType::Swap {
-            rng: Box::new(SmallRng::seed_from_u64(0)),
-            size: 4,
-        };
-        let move_type = MoveType::MultiNeighbor {
-            move_types: vec![move_type_0, move_type_1, move_type_2],
-            weights: vec![1.0f64 / 3.0f64; 3],
-        };
-        let eval = Evaluation::Tsp {
-            distance_matrix,
-            symmetric: true,
-        };
+        let move_type_0 = MoveType::tsp(Some(0));
+        let move_type_1 = MoveType::swap(Some(0));
+        let move_type_2 = MoveType::reverse(Some(0));
+        let move_type = MoveType::multi_neighbor(vec![move_type_0, move_type_1, move_type_2], None);
+        let eval = Evaluation::tsp(distance_matrix);
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
-        let termination = TerminationFunction::MaxSec {
-            time: Instant::now(),
-            max_sec: 1,
-        };
+        let termination = TerminationFunction::max_sec(1);
 
         let mut sim = VariableNeighborhood::new(&problem, &termination, true);
         let data = sim.run(false).last().unwrap().1;
