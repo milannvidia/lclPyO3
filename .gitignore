@@ -10,7 +10,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-.venv/
+.env/
 env/
 bin/
 build/
@@ -28,6 +28,7 @@ venv/
 *.egg-info/
 .installed.cfg
 *.egg
+target/
 
 # Installer logs
 pip-log.txt
