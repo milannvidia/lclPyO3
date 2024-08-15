@@ -7,8 +7,8 @@ use std::time::Instant;
 use std::vec;
 
 pub struct VariableNeighborhood {
-    pub(crate) problem: Arc<Mutex<dyn Problem>>,
-    pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
+    problem: Arc<Mutex<dyn Problem>>,
+    termination: TerminationFunction,
     minimize: bool,
     neighborhood: usize,
 }
@@ -16,15 +16,17 @@ pub struct VariableNeighborhood {
 impl VariableNeighborhood {
     pub fn new(
         problem: &Arc<Mutex<dyn Problem>>,
-        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        termination: &TerminationFunction,
         minimize: bool,
     ) -> Self {
-        VariableNeighborhood {
+        let mut res = VariableNeighborhood {
             problem: problem.clone(),
             termination: termination.clone(),
             minimize,
             neighborhood: 0,
-        }
+        };
+        res.set_goal(minimize);
+        res
     }
 
     fn get_all_mov_select(&self, move_type: &MoveType) -> Vec<(usize, usize)> {
@@ -115,7 +117,6 @@ impl LocalSearch for VariableNeighborhood {
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut termination = self.termination.lock().unwrap();
         let mut current: isize = problem.eval() as isize;
         let mut best: isize = current;
         let now = Instant::now();
@@ -124,8 +125,8 @@ impl LocalSearch for VariableNeighborhood {
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
-        termination.init();
-        while termination.keep_running() {
+        self.termination.init();
+        while self.termination.keep_running() {
             let mut best_delta = if self.minimize {
                 isize::MAX
             } else {
@@ -143,7 +144,7 @@ impl LocalSearch for VariableNeighborhood {
             }
             current += best_delta;
 
-            termination.check_new_variable(current);
+            self.termination.check_new_variable(current);
 
             if (current < best) == self.minimize {
                 self.do_move(&mut *problem, best_move.unwrap());
@@ -171,7 +172,7 @@ impl LocalSearch for VariableNeighborhood {
                 }
             }
             iterations += 1;
-            termination.iteration_done();
+            self.termination.iteration_done();
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
@@ -181,8 +182,12 @@ impl LocalSearch for VariableNeighborhood {
         self.problem = problem.clone();
     }
 
-    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+    fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
+    }
+
+    fn set_goal(&mut self, minimize: bool) {
+        self.termination.set_goal(minimize);
     }
 }
 #[cfg(test)]
@@ -190,10 +195,11 @@ mod tests {
     use crate::local_search::vns::VariableNeighborhood;
     use crate::local_search::LocalSearch;
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    use crate::termination::{MaxSec, TerminationFunction};
+    use crate::termination::TerminationFunction;
     use rand::prelude::SmallRng;
     use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
+    use std::time::Instant;
 
     #[test]
     fn vns_test() {
@@ -204,15 +210,15 @@ mod tests {
             vec![8, 1, 7, 0],
         ];
         let move_type_0 = MoveType::Tsp {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         let move_type_1 = MoveType::Reverse {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         let move_type_2 = MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         let move_type = MoveType::MultiNeighbor {
@@ -225,7 +231,10 @@ mod tests {
         };
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
-        let termination: Arc<Mutex<dyn TerminationFunction>> = Arc::new(Mutex::new(MaxSec::new(1)));
+        let termination = TerminationFunction::MaxSec {
+            time: Instant::now(),
+            max_sec: 1,
+        };
 
         let mut sim = VariableNeighborhood::new(&problem, &termination, true);
         let data = sim.run(false).last().unwrap().1;

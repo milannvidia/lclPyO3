@@ -21,5 +21,7 @@ pub trait LocalSearch: Send {
 
     fn set_problem(&mut self, problem: &Arc<Mutex<dyn Problem>>);
 
-    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>);
+    fn set_termination(&mut self, termination: &TerminationFunction);
+
+    fn set_goal(&mut self, minimize:bool);
 }

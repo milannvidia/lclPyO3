@@ -201,4 +201,6 @@ pub trait Problem: Send {
 
     /// Sets the evaluation type
     fn set_eval_type(&mut self, eval_type: Evaluation);
+
+    fn set_seed(&mut self, seed: u64);
 }

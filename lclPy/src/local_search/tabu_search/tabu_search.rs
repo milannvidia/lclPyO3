@@ -8,20 +8,22 @@ use std::vec;
 
 pub struct TabuSearch {
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
-    pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
+    pub(crate) termination: TerminationFunction,
     minimize: bool,
 }
 impl TabuSearch {
     pub fn new(
         problem: &Arc<Mutex<dyn Problem>>,
-        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        termination: &TerminationFunction,
         minimize: bool,
     ) -> Self {
-        TabuSearch {
+        let mut res = TabuSearch {
             problem: problem.clone(),
             termination: termination.clone(),
             minimize,
-        }
+        };
+        res.set_goal(minimize);
+        res
     }
 }
 
@@ -68,7 +70,6 @@ impl LocalSearch for TabuSearch {
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut termination = self.termination.lock().unwrap();
         let mut current: isize = problem.eval() as isize;
         let mut best: isize = current;
         let now = Instant::now();
@@ -79,8 +80,8 @@ impl LocalSearch for TabuSearch {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
 
-        termination.init();
-        while termination.keep_running() {
+        self.termination.init();
+        while self.termination.keep_running() {
             let mut best_mov: Option<(usize, usize)> = None;
             let mut best_delta = isize::MAX;
             let mut best_hash: u64 = 0;
@@ -107,12 +108,12 @@ impl LocalSearch for TabuSearch {
                 if log {
                     data.push((now.elapsed().as_nanos(), best, current, iterations));
                 }
-                termination.check_new_variable(current);
+                self.termination.check_new_variable(current);
             } else {
                 break;
             }
             iterations += 1;
-            termination.iteration_done();
+            self.termination.iteration_done();
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
         data
@@ -126,15 +127,19 @@ impl LocalSearch for TabuSearch {
         }
     }
 
-    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+    fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
+    }
+
+    fn set_goal(&mut self, minimize: bool) {
+        self.termination.set_goal(minimize);
     }
 }
 #[cfg(test)]
 mod tests {
     use crate::local_search::{LocalSearch, TabuSearch};
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    use crate::termination::{MaxSec, TerminationFunction};
+    use crate::termination::TerminationFunction;
     use rand::prelude::SmallRng;
     use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
@@ -147,7 +152,7 @@ mod tests {
             vec![5, 4, 0, 7],
             vec![8, 1, 7, 0],
         ];
-        let rng = SmallRng::seed_from_u64(0);
+        let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
         let eval = Evaluation::Tsp {
             distance_matrix,
@@ -155,8 +160,10 @@ mod tests {
         };
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
-        let termination: Arc<Mutex<dyn TerminationFunction>> =
-            Arc::new(Mutex::new(MaxSec::new(1000)));
+        let termination = TerminationFunction::MaxIterations {
+            max_iterations: 1000,
+            current_iterations: 0,
+        };
 
         let mut sim = TabuSearch::new(&problem, &termination, true);
         let data = sim.run(false).last().unwrap().1;

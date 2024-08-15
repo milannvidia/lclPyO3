@@ -7,20 +7,22 @@ use std::time::Instant;
 
 pub struct SteepestDescent {
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
-    pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
+    pub(crate) termination: TerminationFunction,
     minimize: bool,
 }
 impl SteepestDescent {
     pub fn new(
         minimize: bool,
         problem: &Arc<Mutex<dyn Problem>>,
-        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        termination: &TerminationFunction,
     ) -> Self {
-        SteepestDescent {
+        let mut res = SteepestDescent {
             problem: problem.clone(),
             termination: termination.clone(),
             minimize,
-        }
+        };
+        res.set_goal(minimize);
+        res
     }
 }
 impl LocalSearch for SteepestDescent {
@@ -65,18 +67,17 @@ impl LocalSearch for SteepestDescent {
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut termination = self.termination.lock().unwrap();
         let mut current: isize = problem.eval() as isize;
         let mut best: isize = current;
         let now = Instant::now();
         let mut iterations = 0;
         let mut data: Vec<(u128, isize, isize, usize)> = vec![];
 
-        termination.init();
+        self.termination.init();
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
-        while termination.keep_running() {
+        while self.termination.keep_running() {
             // while iterations<100{
             let mut best_mov = (0, 0);
             let mut best_delta = if self.minimize {
@@ -92,7 +93,7 @@ impl LocalSearch for SteepestDescent {
                 }
             }
             current = current + best_delta;
-            termination.check_variable(current);
+            self.termination.check_variable(current);
             if (current < best) == self.minimize {
                 problem.do_mov(best_mov, None);
                 problem.set_best();
@@ -104,7 +105,7 @@ impl LocalSearch for SteepestDescent {
                 break;
             }
             iterations += 1;
-            termination.iteration_done();
+            self.termination.iteration_done();
         }
         data.push((now.elapsed().as_nanos(), best, current, iterations));
 
@@ -119,15 +120,19 @@ impl LocalSearch for SteepestDescent {
         }
     }
 
-    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+    fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
+    }
+
+    fn set_goal(&mut self, minimize: bool) {
+        self.termination.set_goal(minimize);
     }
 }
 #[cfg(test)]
 mod tests {
     use crate::local_search::{LocalSearch, SteepestDescent};
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    use crate::termination::{AlwaysTrue, TerminationFunction};
+    use crate::termination::TerminationFunction;
     use rand::prelude::SmallRng;
     use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
@@ -140,7 +145,7 @@ mod tests {
             vec![5, 4, 0, 7],
             vec![8, 1, 7, 0],
         ];
-        let rng = SmallRng::seed_from_u64(0);
+        let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
         let eval = Evaluation::Tsp {
             distance_matrix,
@@ -148,8 +153,7 @@ mod tests {
         };
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
-        let termination: Arc<Mutex<dyn TerminationFunction>> =
-            Arc::new(Mutex::new(AlwaysTrue::new()));
+        let termination = TerminationFunction::AlwaysTrue {};
 
         let mut sim = SteepestDescent::new(true, &problem, &termination);
         let data = sim.run(false).last().unwrap().1;

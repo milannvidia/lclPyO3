@@ -1,13 +1,15 @@
-use pyo3::{exceptions::PyValueError, ffi::PyErr_BadArgument, prelude::*};
+use pyo3::{exceptions::PyValueError, prelude::*};
 use rand::rngs::SmallRng;
 use rand::SeedableRng;
 use simulated_annealing::{CoolingFunction, IterationsTemperature, SimulatedAnnealing};
 use std::{
-    borrow::Borrow,
+    isize,
     sync::{Arc, Mutex},
+    time::Instant,
 };
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
+pub mod aidfunc;
 pub mod io;
 pub mod local_search;
 pub mod problem;
@@ -19,6 +21,10 @@ use termination::*;
 // struct DynTspReader {
 //     read: TspReader,
 // }
+
+// ====================================================================================================================================================================
+// Classes
+// ====================================================================================================================================================================
 
 #[pyclass(frozen, name = "RustMoveType")]
 struct DynMoveType {
@@ -32,7 +38,7 @@ struct DynEvaluation {
 
 #[pyclass(frozen, name = "RustTermination")]
 struct DynTermination {
-    termination: Arc<Mutex<dyn TerminationFunction>>,
+    termination: TerminationFunction,
 }
 
 #[pyclass(frozen, name = "RustProblem")]
@@ -54,6 +60,11 @@ struct DynCooling {
 struct DynIterTemp {
     iter_temp: IterationsTemperature,
 }
+
+// ====================================================================================================================================================================
+// Methods
+// ====================================================================================================================================================================
+
 #[pymethods]
 impl DynEvaluation {
     #[staticmethod]
@@ -75,7 +86,7 @@ impl DynEvaluation {
         }
     }
     #[staticmethod]
-    fn TSP(distance_matrix: Vec<Vec<usize>>) -> Self {
+    fn tsp(distance_matrix: Vec<Vec<usize>>) -> Self {
         DynEvaluation {
             eva: Evaluation::Tsp {
                 distance_matrix,
@@ -84,7 +95,7 @@ impl DynEvaluation {
         }
     }
     #[staticmethod]
-    fn QAP(distance_matrix: Vec<Vec<usize>>, flow_matrix: Vec<Vec<usize>>) -> Self {
+    fn qap(distance_matrix: Vec<Vec<usize>>, flow_matrix: Vec<Vec<usize>>) -> Self {
         DynEvaluation {
             eva: Evaluation::QAP {
                 distance_matrix,
@@ -128,7 +139,10 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Swap { rng, size },
+            mov: MoveType::Swap {
+                rng: Box::new(rng),
+                size,
+            },
         }
     }
     #[staticmethod]
@@ -141,7 +155,10 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Reverse { rng, size },
+            mov: MoveType::Reverse {
+                rng: Box::new(rng),
+                size,
+            },
         }
     }
     #[staticmethod]
@@ -154,7 +171,10 @@ impl DynMoveType {
             rng = SmallRng::from_entropy();
         }
         DynMoveType {
-            mov: MoveType::Tsp { rng, size },
+            mov: MoveType::Tsp {
+                rng: Box::new(rng),
+                size,
+            },
         }
     }
     #[staticmethod]
@@ -168,7 +188,7 @@ impl DynMoveType {
             let cloned_mov = mov.get().mov.clone();
             if let MoveType::MultiNeighbor { .. } = cloned_mov {
                 return Err(PyErr::new::<PyValueError, _>(
-                    "Can't have multi neighbor in multineighbor",
+                    "Can't have multi neighbor in multiNeighbor",
                 ));
             }
             move_types.push(cloned_mov);
@@ -295,6 +315,18 @@ impl DynProblem {
             .unwrap()
             .set_move_type(move_type.get().mov.clone());
     }
+
+    fn reset(&self) {
+        self.problem.lock().unwrap().reset();
+    }
+
+    fn eval(&self) -> usize {
+        self.problem.lock().unwrap().eval()
+    }
+
+    fn set_seed(&self, seed: u64) {
+        self.problem.lock().unwrap().set_seed(seed);
+    }
 }
 
 #[pymethods]
@@ -322,57 +354,71 @@ impl DynTermination {
     #[staticmethod]
     fn max_sec(max_sec: u64) -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(MaxSec::new(max_sec))),
+            termination: TerminationFunction::MaxSec {
+                time: Instant::now(),
+                max_sec,
+            },
         }
     }
     #[staticmethod]
     fn always_true_criterion() -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(AlwaysTrue::new())),
+            termination: TerminationFunction::AlwaysTrue {},
         }
     }
     #[staticmethod]
     fn max_iterations(max_iterations: usize) -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(MaxIterations::new(max_iterations))),
+            termination: TerminationFunction::MaxIterations {
+                max_iterations,
+                current_iterations: 0,
+            },
         }
     }
     #[staticmethod]
     fn min_temp(min_temp: isize) -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(MinTemp::new(min_temp))),
+            termination: TerminationFunction::MinTemp { min_temp },
         }
     }
     #[staticmethod]
     fn multi_crit_and(vec: Vec<Py<DynTermination>>) -> Self {
-        let terminations = vec
-            .iter()
-            .map(|f| Arc::clone(&f.get().termination))
-            .collect();
+        let terminations = vec.iter().map(|f| f.get().termination.clone()).collect();
         DynTermination {
-            termination: Arc::new(Mutex::new(MultiCritAnd::new(terminations))),
+            termination: TerminationFunction::MultiCritAnd {
+                criterion: terminations,
+            },
         }
     }
     #[staticmethod]
     fn multi_crit_or(vec: Vec<Py<DynTermination>>) -> Self {
-        let terminations = vec
-            .iter()
-            .map(|f| Arc::clone(&f.get().termination))
-            .collect();
+        let terminations = vec.iter().map(|f| f.get().termination.clone()).collect();
         DynTermination {
-            termination: Arc::new(Mutex::new(MultiCritOr::new(terminations))),
+            termination: TerminationFunction::MultiCritOr {
+                criterion: terminations,
+            },
         }
     }
     #[staticmethod]
     fn must_improve() -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(MustImprove::new(true))),
+            termination: TerminationFunction::MustImprove {
+                best: isize::MAX,
+                flipflop: true,
+                minimize: true,
+            },
         }
     }
     #[staticmethod]
     fn no_improve(iter_without_imp: usize) -> Self {
         DynTermination {
-            termination: Arc::new(Mutex::new(NoImprove::new(true, iter_without_imp))),
+            termination: TerminationFunction::NoImprove {
+                best: isize::MAX,
+                max_iterations_without_improve: iter_without_imp,
+                curr_without_improve: 0,
+                flipflop: true,
+                minimize: true,
+            },
         }
     }
 }

@@ -260,12 +260,12 @@ mod tests {
     use super::Evaluation;
     #[test]
     fn empty_space_test() {
-        let mut eval = Evaluation::EmptySpace {
+        let eval = Evaluation::EmptySpace {
             weights: vec![2, 5, 4, 7, 1, 3, 8],
             max_fill: 10,
         };
         let swap_move = &MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 7,
         };
         let mut array: Vec<usize> = (0..7).collect();
@@ -278,12 +278,12 @@ mod tests {
     }
     #[test]
     fn bins_test() {
-        let mut eval = Evaluation::EmptyBins {
+        let eval = Evaluation::EmptyBins {
             weights: vec![2, 5, 4, 7, 1, 3, 8],
             max_fill: 10,
         };
         let swap_move = &MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 7,
         };
         let mut array: Vec<usize> = (0..7).collect();
@@ -296,12 +296,12 @@ mod tests {
     }
     #[test]
     fn empty_space_exp_test() {
-        let mut eval = Evaluation::EmptySpaceExp {
+        let eval = Evaluation::EmptySpaceExp {
             weights: vec![2, 5, 4, 7, 1, 3, 8],
             max_fill: 10,
         };
         let swap_move = &MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 7,
         };
         let mut array: Vec<usize> = (0..7).collect();
@@ -320,12 +320,12 @@ mod tests {
             vec![5, 4, 0, 7],
             vec![8, 1, 7, 0],
         ];
-        let mut eval = Evaluation::Tsp {
+        let eval = Evaluation::Tsp {
             distance_matrix,
             symmetric: true,
         };
         let swap_move = &MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         let tests = vec![(1, 2), (0, 2), (0, 3)];
@@ -353,12 +353,12 @@ mod tests {
             vec![0, 4, 0, 8],
             vec![0, 0, 8, 0],
         ];
-        let mut eval = Evaluation::QAP {
+        let eval = Evaluation::QAP {
             distance_matrix,
             flow_matrix,
         };
         let swap_move = &MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         let tests = vec![(1, 2), (0, 2), (0, 3)];

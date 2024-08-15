@@ -86,4 +86,8 @@ impl Problem for ArrayProblem {
     fn set_eval_type(&mut self, eval_type: Evaluation) {
         self.evaluation = eval_type;
     }
+
+    fn set_seed(&mut self, seed: u64) {
+        self.move_type.set_seed(seed)
+    }
 }

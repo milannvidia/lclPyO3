@@ -2,15 +2,15 @@ use rand::{rngs::SmallRng, Rng, SeedableRng};
 #[derive(Clone)]
 pub enum MoveType {
     Reverse {
-        rng: SmallRng,
+        rng: Box<SmallRng>,
         size: usize,
     },
     Swap {
-        rng: SmallRng,
+        rng: Box<SmallRng>,
         size: usize,
     },
     Tsp {
-        rng: SmallRng,
+        rng: Box<SmallRng>,
         size: usize,
     },
     MultiNeighbor {
@@ -37,6 +37,7 @@ impl MoveType {
             }
         }
     }
+
     pub fn get_mov(&mut self) -> (usize, usize) {
         match self {
             MoveType::Reverse { rng, size } | MoveType::Swap { rng, size } => {
@@ -69,6 +70,7 @@ impl MoveType {
             }
         }
     }
+
     pub fn get_all_mov(&self) -> Vec<(usize, usize)> {
         match self {
             MoveType::Reverse { rng: _, size } | MoveType::Swap { rng: _, size } => {
@@ -97,6 +99,24 @@ impl MoveType {
             }
         }
     }
+
+    pub fn set_seed(&mut self, seed: u64) {
+        match self {
+            MoveType::Reverse { rng, size: _ }
+            | MoveType::Swap { rng, size: _ }
+            | MoveType::Tsp { rng, size: _ } => {
+                *rng = Box::new(SmallRng::seed_from_u64(seed));
+            }
+            MoveType::MultiNeighbor {
+                move_types,
+                weights: _,
+            } => {
+                for mov in move_types {
+                    mov.set_seed(seed);
+                }
+            }
+        }
+    }
 }
 
 #[cfg(test)]
@@ -109,7 +129,7 @@ mod tests {
     #[test]
     fn reverse_move_type_test() {
         let mut reverse = MoveType::Reverse {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         assert_eq!(reverse.get_mov(), (2, 3));
@@ -125,7 +145,7 @@ mod tests {
     #[test]
     fn tsp_move_type_test() {
         let mut tsp = MoveType::Tsp {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         assert_eq!(tsp.get_mov(), (2, 3));
@@ -138,7 +158,7 @@ mod tests {
     #[test]
     fn swap_move_type_test() {
         let mut swap = MoveType::Swap {
-            rng: SmallRng::seed_from_u64(0),
+            rng: Box::new(SmallRng::seed_from_u64(0)),
             size: 4,
         };
         assert_eq!(swap.get_mov(), (2, 3));
@@ -153,7 +173,7 @@ mod tests {
     }
     #[test]
     fn multi_move_type_test() {
-        let mut multi = MoveType::MultiNeighbor {
+        let multi = MoveType::MultiNeighbor {
             move_types: vec![],
             weights: vec![],
         };

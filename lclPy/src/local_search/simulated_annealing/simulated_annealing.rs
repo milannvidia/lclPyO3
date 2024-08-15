@@ -12,7 +12,7 @@ pub struct SimulatedAnnealing {
     start_temp: usize,
     minimize: bool,
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
-    pub(crate) termination: Arc<Mutex<dyn TerminationFunction>>,
+    pub(crate) termination: TerminationFunction,
     pub(crate) cool_func: CoolingFunction,
     pub(crate) iter_temp: IterationsTemperature,
 }
@@ -21,11 +21,11 @@ impl SimulatedAnnealing {
         temp: usize,
         minimize: bool,
         problem: &Arc<Mutex<dyn Problem>>,
-        termination: &Arc<Mutex<dyn TerminationFunction>>,
+        termination: &TerminationFunction,
         cooling: &CoolingFunction,
         iteration_calc: &IterationsTemperature,
     ) -> Self {
-        SimulatedAnnealing {
+        let mut res = SimulatedAnnealing {
             temp,
             minimize,
             start_temp: temp,
@@ -33,7 +33,9 @@ impl SimulatedAnnealing {
             problem: problem.clone(),
             cool_func: cooling.clone(),
             iter_temp: iteration_calc.clone(),
-        }
+        };
+        res.set_goal(minimize);
+        res
     }
 }
 impl LocalSearch for SimulatedAnnealing {
@@ -84,7 +86,6 @@ impl LocalSearch for SimulatedAnnealing {
     /// ```
     fn run(&mut self, log: bool) -> Vec<(u128, isize, isize, usize)> {
         let mut problem = self.problem.lock().unwrap();
-        let mut termination = self.termination.lock().unwrap();
         self.temp = self.start_temp;
         let e = std::f64::consts::E;
         let mut iterations: usize = 0;
@@ -95,15 +96,15 @@ impl LocalSearch for SimulatedAnnealing {
         let mut rng = rand::thread_rng();
 
         problem.set_best();
-        termination.init();
+        self.termination.init();
 
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
 
-        while termination.keep_running() {
+        while self.termination.keep_running() {
             for _ in 0..self.iter_temp.get_iterations(self.temp) {
-                if !termination.keep_running() {
+                if !self.termination.keep_running() {
                     break;
                 }
 
@@ -134,10 +135,10 @@ impl LocalSearch for SimulatedAnnealing {
                     }
                 }
                 iterations += 1;
-                termination.iteration_done();
+                self.termination.iteration_done();
             }
             self.temp = self.cool_func.get_next_temp(self.temp);
-            if !termination.check_variable(self.temp as isize) {
+            if !self.termination.check_variable(self.temp as isize) {
                 break;
             }
         }
@@ -154,17 +155,21 @@ impl LocalSearch for SimulatedAnnealing {
         }
     }
 
-    fn set_termination(&mut self, termination: &Arc<Mutex<dyn TerminationFunction>>) {
+    fn set_termination(&mut self, termination: &TerminationFunction) {
         self.termination = termination.clone();
+    }
+
+    fn set_goal(&mut self, minimize: bool) {
+        self.termination.set_goal(minimize)
     }
 }
 #[cfg(test)]
 mod tests {
     use crate::local_search::simulated_annealing::CoolingFunction::GeometricCooling;
     use crate::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
-    use crate::local_search::{LocalSearch, SimulatedAnnealing, TabuSearch};
+    use crate::local_search::{LocalSearch, SimulatedAnnealing};
     use crate::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    use crate::termination::{MaxSec, MinTemp, TerminationFunction};
+    use crate::termination::TerminationFunction;
     use rand::prelude::SmallRng;
     use rand::SeedableRng;
     use std::sync::{Arc, Mutex};
@@ -177,7 +182,7 @@ mod tests {
             vec![5, 4, 0, 7],
             vec![8, 1, 7, 0],
         ];
-        let rng = SmallRng::seed_from_u64(0);
+        let rng = Box::new(SmallRng::seed_from_u64(0));
         let move_type = MoveType::Tsp { rng, size: 4 };
         let eval = Evaluation::Tsp {
             distance_matrix,
@@ -186,8 +191,7 @@ mod tests {
         let problem: Arc<Mutex<dyn Problem>> =
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
         let cooling = GeometricCooling { alpha: 0.75f64 };
-        let termination: Arc<Mutex<dyn TerminationFunction>> =
-            Arc::new(Mutex::new(MinTemp::new(10)));
+        let termination = TerminationFunction::MinTemp { min_temp: 10 };
         let iter = ConstIterTemp { iterations: 1000 };
 
         let mut sim = SimulatedAnnealing::new(2000, true, &problem, &termination, &cooling, &iter);
