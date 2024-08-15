@@ -1,9 +1,0 @@
-/lclPyProject/venv/
-/lclPyProject/docs/
-/lclPyProject/lclPyProject/
-/lclrust/target/
-lclpyRust/target/
-lclrust/target/
-lclPy/.env/
-lclPy/.github/workflows/CI.yml
-.gitignore
