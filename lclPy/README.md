@@ -2,10 +2,14 @@
 
 LclPy is a localsearch library implemented in python and Rust.
 
-- [Getting started](#Getting-started)
-  - [pip](#PyPi/pip)
-  - [Just build](#Build-code)
-  - [Install locally](#Build-and-install-locally)
+- [Getting started](#getting-started)
+  - [pip](#pip)
+  - [Just build](#build-code)
+  - [Install locally](#build-and-install-locally)
+- [Testing](#testing)
+  - [Rust code](#rust-code)
+- [Authors](#authors)
+- [Acknowledgments](#acknowledgments)
 
 ## Getting started
 
@@ -13,10 +17,10 @@ To install this package you have 3 options. When installed if you want to use th
 Make sure to use the "as" attribute to mitigate confusion later.
 
 ```
-from lclpy import lclpy as lcl_rust
+from lclPyO3 import lclPyO3 as lcl_rust
 ```
 
-### PyPi/pip
+### pip
 
 ### Build code
 

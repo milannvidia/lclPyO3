@@ -95,10 +95,10 @@ impl LocalSearch for VariableNeighborhood {
     /// use std::time::Instant;
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::local_search::LocalSearch;
-    ///# use lclpy::local_search::vns::VariableNeighborhood;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::TerminationFunction;
+    ///# use lclPyO3::local_search::LocalSearch;
+    ///# use lclPyO3::local_search::vns::VariableNeighborhood;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::termination::TerminationFunction;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],

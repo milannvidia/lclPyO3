@@ -2,6 +2,7 @@ use super::LocalSearch;
 use crate::problem::Problem;
 use crate::termination::TerminationFunction;
 use crate::MoveType;
+use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use std::vec;
@@ -10,12 +11,14 @@ pub struct TabuSearch {
     pub(crate) problem: Arc<Mutex<dyn Problem>>,
     pub(crate) termination: TerminationFunction,
     minimize: bool,
+    list_size: usize,
 }
 impl TabuSearch {
     pub fn new(
         problem: &Arc<Mutex<dyn Problem>>,
         termination: &TerminationFunction,
         minimize: bool,
+        tabu_list_size: Option<usize>,
     ) -> Self {
         let mut term = termination.clone();
         term.set_goal(minimize);
@@ -23,6 +26,7 @@ impl TabuSearch {
             problem: problem.clone(),
             termination: term,
             minimize,
+            list_size: tabu_list_size.unwrap_or(7),
         }
     }
 }
@@ -50,9 +54,9 @@ impl LocalSearch for TabuSearch {
     /// use std::time::Instant;
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::local_search::{LocalSearch, TabuSearch};
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::TerminationFunction;
+    ///# use lclPyO3::local_search::{LocalSearch, TabuSearch};
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::termination::TerminationFunction;
     ///
     ///# let distance_matrix: Vec<Vec<f64>> = vec![vec![0.0, 2.0, 5.0, 8.0],vec![2.0, 0.0, 4.0, 1.0],vec![5.0, 4.0, 0.0, 7.0],vec![8.0, 1.0, 7.0, 0.0]];
     ///# let move_type=MoveType::tsp(Some(0)) ;
@@ -60,7 +64,7 @@ impl LocalSearch for TabuSearch {
     ///# let problem:Arc<Mutex<dyn Problem>>=Arc::new(Mutex::new(ArrayProblem::new(&move_type,&eval)));
     /// let termination=TerminationFunction::max_sec(1);
     ///
-    /// let mut sim=TabuSearch::new(&problem,&termination,true);
+    /// let mut sim=TabuSearch::new(&problem,&termination,true,None);
     /// let data=sim.run(false).last().unwrap().1;
     ///
     /// assert_eq!(data,15.0);
@@ -72,7 +76,7 @@ impl LocalSearch for TabuSearch {
         let now = Instant::now();
         let mut iterations = 0;
         let mut data: Vec<(u128, f64, f64, u64)> = vec![];
-        let mut tabu_list: Vec<u64> = vec![];
+        let mut tabu_list: VecDeque<u64> = VecDeque::with_capacity(self.list_size);
         if log {
             data.push((now.elapsed().as_nanos(), best, current, iterations));
         }
@@ -101,7 +105,10 @@ impl LocalSearch for TabuSearch {
                 if (current < best) == self.minimize || (best < current) != self.minimize {
                     best = current;
                 }
-                tabu_list.push(best_hash);
+                if tabu_list.len() >= self.list_size {
+                    tabu_list.pop_front();
+                }
+                tabu_list.push_back(best_hash);
                 if log {
                     data.push((now.elapsed().as_nanos(), best, current, iterations));
                 }
@@ -149,7 +156,7 @@ mod tests {
             Arc::new(Mutex::new(ArrayProblem::new(&move_type, &eval)));
         let termination = TerminationFunction::max_iterations(1000);
 
-        let mut sim = TabuSearch::new(&problem, &termination, true);
+        let mut sim = TabuSearch::new(&problem, &termination, true, None);
         let data = sim.run(false).last().unwrap().1;
         assert_eq!(data, 15.0);
     }

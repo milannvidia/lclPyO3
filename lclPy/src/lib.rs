@@ -7,6 +7,7 @@ use std::sync::{Arc, Mutex};
 use steepest_descent::SteepestDescent;
 use tabu_search::TabuSearch;
 use termination::*;
+use vns::VariableNeighborhood;
 pub mod aidfunc;
 pub mod local_search;
 pub mod problem;
@@ -15,6 +16,31 @@ pub mod termination;
 // struct DynTspReader {
 //     read: TspReader,
 // }
+
+// ====================================================================================================================================================================
+// Functions
+// ====================================================================================================================================================================
+
+#[pyfunction]
+#[pyo3(signature=(problems,algorithms,termination_function,runs=None,seeds=None))]
+fn benchmark(
+    problems: Vec<Py<DynProblem>>,
+    algorithms: Vec<Py<DynLocalSearch>>,
+    termination_function: Py<DynTermination>,
+    runs: Option<u64>,
+    seeds: Option<Vec<u64>>,
+) -> Vec<Vec<Vec<(u128, f64, f64, u64)>>> {
+    println!("hii");
+    let r_problems: Vec<Arc<Mutex<dyn Problem>>> =
+        problems.iter().map(|f| f.get().problem.clone()).collect();
+    let r_algorithms: Vec<Arc<Mutex<dyn LocalSearch>>> = algorithms
+        .iter()
+        .map(|f| f.get().local_search.clone())
+        .collect();
+
+    let r_term: TerminationFunction = termination_function.get().termination.clone();
+    aidfunc::benchmark(r_problems, r_algorithms, &r_term, runs, seeds)
+}
 
 // ====================================================================================================================================================================
 // Classes
@@ -194,12 +220,31 @@ impl DynLocalSearch {
         })
     }
     #[staticmethod]
+    #[pyo3(signature = (minimize, problem,termination_function,tabu_list_size=None))]
     fn tabu_search(
         minimize: bool,
         problem: Py<DynProblem>,
         termination_function: Py<DynTermination>,
+        tabu_list_size: Option<usize>,
     ) -> PyResult<Self> {
         let sim = TabuSearch::new(
+            &problem.get().problem,
+            &termination_function.get().termination,
+            minimize,
+            tabu_list_size,
+        );
+        Ok(DynLocalSearch {
+            local_search: Arc::new(Mutex::new(sim)),
+        })
+    }
+
+    #[staticmethod]
+    fn vns(
+        minimize: bool,
+        problem: Py<DynProblem>,
+        termination_function: Py<DynTermination>,
+    ) -> PyResult<Self> {
+        let sim = VariableNeighborhood::new(
             &problem.get().problem,
             &termination_function.get().termination,
             minimize,
@@ -346,8 +391,9 @@ impl DynTermination {
     }
 }
 
+#[allow(non_snake_case)]
 #[pymodule]
-fn lclpy(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn lclPyO3(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynLocalSearch>()?;
     m.add_class::<DynProblem>()?;
     m.add_class::<DynTermination>()?;
@@ -355,5 +401,6 @@ fn lclpy(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynCooling>()?;
     m.add_class::<DynEvaluation>()?;
     m.add_class::<DynMoveType>()?;
+    m.add_function(wrap_pyfunction!(benchmark, m)?)?;
     Ok(())
 }

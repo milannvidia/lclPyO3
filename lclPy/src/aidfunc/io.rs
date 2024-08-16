@@ -78,7 +78,6 @@ pub fn read_distance_matrix(file: &str) -> Result<Vec<Vec<f64>>, io::Error> {
     Ok(matrix)
 }
 
-
 /// Uses read_csv to read a file, calculates the distance and restructures it in a matrix
 ///
 /// # Arguments
@@ -178,7 +177,7 @@ fn dist_globe(a: (f64, f64), b: (f64, f64)) -> f64 {
 /// # Examples
 ///
 /// ```
-/// use lclpy::aidfunc::io::check_if_distance_matrix_symmetric;
+/// use lclPyO3::aidfunc::io::check_if_distance_matrix_symmetric;
 /// let distance_matrix: Vec<Vec<f64>> = vec![
 ///     vec![0.0, 2.0, 5.0, 8.0],
 ///     vec![2.0, 0.0, 4.0, 1.0],

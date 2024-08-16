@@ -8,9 +8,9 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
-    ///# use lclpy::termination::TerminationFunction;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
+    ///# use lclPyO3::termination::TerminationFunction;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -32,8 +32,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -56,8 +56,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -81,8 +81,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
@@ -110,8 +110,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -137,8 +137,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -162,8 +162,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],
@@ -187,8 +187,8 @@ pub trait Problem: Send {
     /// ```
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::problem::MoveType::Tsp;
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::problem::MoveType::Tsp;
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
     ///        vec![2.0, 0.0, 4.0, 1.0],

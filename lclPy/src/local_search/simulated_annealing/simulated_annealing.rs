@@ -61,11 +61,11 @@ impl LocalSearch for SimulatedAnnealing {
     ///# use std::sync::{Arc, Mutex};
     ///# use rand::rngs::SmallRng;
     ///# use rand::SeedableRng;
-    ///# use lclpy::local_search::simulated_annealing::CoolingFunction;
-    ///# use lclpy::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
-    ///# use lclpy::local_search::{LocalSearch, SimulatedAnnealing};
-    ///# use lclpy::problem::{ArrayProblem, Evaluation, MoveType, Problem};
-    ///# use lclpy::termination::TerminationFunction;
+    ///# use lclPyO3::local_search::simulated_annealing::CoolingFunction;
+    ///# use lclPyO3::local_search::simulated_annealing::IterationsTemperature::ConstIterTemp;
+    ///# use lclPyO3::local_search::{LocalSearch, SimulatedAnnealing};
+    ///# use lclPyO3::problem::{ArrayProblem, Evaluation, MoveType, Problem};
+    ///# use lclPyO3::termination::TerminationFunction;
     ///
     ///    let distance_matrix: Vec<Vec<f64>> = vec![
     ///        vec![0.0, 2.0, 5.0, 8.0],
