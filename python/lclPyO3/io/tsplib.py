@@ -182,7 +182,7 @@ def _att(from_x, from_y, to_x, to_y):
     return tij
 
 
-def _default_processing(data, dist_func, type=numpy.float_):
+def _default_processing(data, dist_func, type=numpy.float64):
     """Creates a dict and calculates the distance matrix for a 2D tsp problem.
 
     Parameters

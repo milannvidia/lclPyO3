@@ -1,0 +1,49 @@
+@startuml
+    package local_search{
+        abstract LocalSearch{
+            +run(log)
+            +reset()
+            +set_problem(Problem)
+            +set_termination(TerminationFunction)
+        }
+        package simulated_annealing{
+            class SimulatedAnnealing{
+                +{static} new()->SimulatedAnnealing
+            }
+            enum CoolingFunction{
+                +{static} geometric_cooling(alpha)->CoolingFunction
+                +get_next_temp(temp)
+            }
+            enum IterationsTemperature{
+                +{static} const_iter_temp(iterations)->IterationsTemperature
+                +get_iterations(temp)
+            }
+            SimulatedAnnealing*--CoolingFunction
+            SimulatedAnnealing*--IterationsTemperature
+        
+        }
+        package steepest_descent{
+            Class SteepestDescent{
+                +{static} new(minimize,problem,termination)->SteepestDescent
+            }
+        }
+        package vns{
+            Class VariableNeighborhoodSearch{
+                +{static} new(minimize,problem,termination)->VariableNeighborhoodSearch
+            }
+        }
+        package tabu_search{
+            Class TabuSearch{
+                +{static} new(minimize,problem,termination,tabu_list_size)->TabuSearch
+            }
+        }
+        SteepestDescent -[hidden]-> VariableNeighborhoodSearch
+        VariableNeighborhoodSearch -[hidden]-> TabuSearch
+        TabuSearch -[hidden]-> SimulatedAnnealing
+
+        LocalSearch..>SimulatedAnnealing
+        LocalSearch..>SteepestDescent
+        LocalSearch..>TabuSearch
+        LocalSearch..>VariableNeighborhoodSearch
+    } 
+@enduml

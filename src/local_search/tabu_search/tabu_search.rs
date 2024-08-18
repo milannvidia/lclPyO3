@@ -89,7 +89,11 @@ impl LocalSearch for TabuSearch {
 
             for mov in problem.get_all_mov() {
                 let delta = problem.delta_eval(mov, None);
+
+                problem.do_mov(mov, None);
                 let hash = problem.hash();
+                problem.do_mov(mov, None);
+
                 if !tabu_list.contains(&hash)
                     && ((delta < best_delta) == self.minimize
                         || (delta > best_delta) != self.minimize)
@@ -104,11 +108,13 @@ impl LocalSearch for TabuSearch {
                 problem.do_mov(best_mov.unwrap(), None);
                 if (current < best) == self.minimize || (best < current) != self.minimize {
                     best = current;
+                    problem.set_best();
                 }
                 if tabu_list.len() >= self.list_size {
                     tabu_list.pop_front();
                 }
                 tabu_list.push_back(best_hash);
+
                 if log {
                     data.push((now.elapsed().as_nanos(), best, current, iterations));
                 }

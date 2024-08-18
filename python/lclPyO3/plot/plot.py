@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 
-
 def plot(data, title='Time - evaluation value plot.', width=20, height=10):
     """Plots the data in a time-value plot.
 
@@ -132,3 +131,101 @@ def plot_single_stat(benchmark_single_stat, title='Single stat table',
 
     plt.title(title, fontsize=20)
     plt.show()
+
+def plotRust(data, title='Time - evaluation value plot.', width=20, height=10):
+    """Plots the data in a time-value plot.
+
+    Parameters
+    ----------
+    data : a list of tuples where the data represents the following (time(ns),best_found,score,iterations)
+    title : str, optional
+        The title of the plot. \n
+        Default is 'Time - evaluation value plot.'.
+    width : int, optional
+        The width of the plot.
+    height : int, optional
+        The height of the plot.
+
+    """
+
+    # get the data from the data object
+    time = [t[0]/(10**9) for t in data]
+    values = [t[2] for t in data]
+    best_values = [t[1] for t in data]
+
+    plt.figure(figsize=(width, height))
+
+    plt.plot(time, values, label='value')
+    plt.plot(time, best_values, label='best value found')
+
+    plt.xlabel('time (s)')
+    plt.ylabel('evaluation value')
+
+    plt.title(title)
+
+    plt.legend()
+
+    plt.show()
+
+def iterations_plotRust(data, title='Iterations - evaluation value plot.',
+                    width=20, height=10):
+    """Plots the data in an iterations-value plot.
+
+    Parameters
+    ----------
+    data : collections.namedtuple
+        The data tuple one gets by performing a localsearch algorithm.
+    title : str, optional
+        The title of the plot. \n
+        Default is 'Iterations - evaluation value plot.'.
+    width : int, optional
+        The width of the plot.
+    height : int, optional
+        The height of the plot.
+
+    """
+
+    # get the data from the data object
+    iterations = [t[3] for t in data]
+    values = [t[2] for t in data]
+    best_values = [t[1] for t in data]
+
+    plt.figure(figsize=(width, height))
+    plt.plot(iterations, values, label='value')
+
+    if hasattr(data, 'best_value'):
+        best_values = data.best_value
+
+        plt.plot(iterations, best_values, label='best value found')
+
+    plt.xlabel('iterations')
+    plt.ylabel('evaluation value')
+
+    plt.title(title)
+
+    plt.legend()
+
+    plt.show()
+
+def plotPythonRust(pythonData,rustData,title='Time - evaluation value plot Python Rust.', width=20, height=10):
+    # get the data from the data object
+    rTime = [t[0]/(10**9) for t in rustData]
+    rValues = [t[2] for t in rustData]
+    rBest_values = [t[1] for t in rustData]
+    
+    f, (ax1, ax2) = plt.subplots(1, 2, sharey=True,figsize=(width, height))
+    ax2.plot(rTime,rValues,label='value')
+    ax2.plot(rTime,rBest_values,label='best value')
+
+    time = pythonData.time
+    values = pythonData.value
+    ax1.plot(time,values,label='value')
+    if hasattr(pythonData, 'best_value'):
+        best_values = pythonData.best_value
+        ax1.plot(time,best_values,label='best value')
+
+    plt.ylabel('evaluation value')
+    ax1.set_xlabel('time (s)')
+    ax2.set_xlabel('time (s)')
+    ax1.set_title('Python')
+    ax2.set_title('Rust')

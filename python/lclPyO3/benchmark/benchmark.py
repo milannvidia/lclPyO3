@@ -1,7 +1,7 @@
 from random import seed
 
 
-def benchmark(problems, algorithms, stop_criterion, runs=10, seeds=None):
+def benchmark(algorithms, problems, stop_criterion=None, runs=10, seeds=None, log=False):
     """A function to perform multiple algorithms on multiple soltions.
 
     Note that the problems, algorithms and the stop criterion all need to have
@@ -52,41 +52,48 @@ def benchmark(problems, algorithms, stop_criterion, runs=10, seeds=None):
     problem_number = 0
     seed_number = 0
 
-    print('____Benchmark started___')
+    if(log):
+        print('____Benchmark started___')
     # run everything
     for algorithm in algorithms:
 
         results_single_algorithm = []
-
-        print('|---  Starting runs for algorithm ' + str(algorithm_number))
+        if(log):
+            print('|---  Starting runs for algorithm ' + str(algorithm_number))
 
         for problem in problems:
 
             # setting problems and termination criterions
             algorithm._problem = problem
-            algorithm._termination_criterion = stop_criterion
+            if stop_criterion is not None:
+                algorithm._termination_criterion = stop_criterion
 
             different_seed_results = []
-
-            print('--|---  Starting runs for problem ' + str(problem_number))
+            if(log):
+                print('--|---  Starting runs for problem ' + str(problem_number))
 
             for i in seeds:
-                print('----|---  Starting run for seed ' + str(i))
+                if(log):
+                    print('----|---  Starting run for seed ' + str(i))
                 seed(i)
                 algorithm.reset()
                 different_seed_results.append(algorithm.run())
-                print('----|--- Completed run for seed ' + str(i))
+                if(log):
+                    print('----|--- Completed run for seed ' + str(i))
                 seed_number += 1
 
             results_single_algorithm.append(different_seed_results)
 
-            print('--|--- Completed runs for problem ' + str(problem_number))
+            if(log):
+                print('--|--- Completed runs for problem ' + str(problem_number))
             problem_number += 1
 
         results.append(results_single_algorithm)
-        print('|--- Completed runs for algorithm ' + str(algorithm_number))
+        if(log):
+            print('|--- Completed runs for algorithm ' + str(algorithm_number))
         algorithm_number += 1
 
-    print('____Benchmark ended___')
+    if(log):
+        print('____Benchmark ended___')
 
     return results

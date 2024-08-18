@@ -27,6 +27,7 @@ fn main() {
         &cooling,
         &iteration_calc,
     )));
-    let res = lclPyO3::aidfunc::benchmark(vec![problem], vec![sim], &termination, Some(1), None);
+    let res =
+        lclPyO3::aidfunc::benchmark(vec![sim], vec![problem], Some(termination), Some(1), None);
     println!("{:?}", res);
 }

@@ -1,0 +1,21 @@
+@startuml
+    package termination{
+        Enum TerminationFunction{
+            +{static} always_true()->Termination
+            +{static} max_iterations(iterations)->Termination
+            +{static} max_sec(sec)->Termination
+            +{static} min_temp(temp)->Termination
+            +{static} multi_crit_and([Termination])->Termination
+            +{static} multi_crit_or([Termination])->Termination
+            +{static} must_improve()->Termination
+            +{static} no_improve(max_without_improve)->Termination
+        
+            +keep_running()->bool
+            +init()
+            +check_variable(var)->bool
+            +check_new_variable(var)
+            +iteration_done()
+            +set_goal(minimize)
+        }
+    }
+@enduml

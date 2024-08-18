@@ -43,7 +43,7 @@ def read_csv(filename, dtype="int"):
     if dtype is "int":
         datatype = numpy.int_
     elif dtype is "float":
-        datatype = numpy.float_
+        datatype = numpy.float64
 
     matrix_1 = []
     matrix_2 = []

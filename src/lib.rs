@@ -1,3 +1,4 @@
+#![allow(non_snake_case)]
 use local_search::*;
 use problem::*;
 use pyo3::{exceptions::PyValueError, prelude::*};
@@ -22,14 +23,14 @@ pub mod termination;
 // ====================================================================================================================================================================
 
 #[pyfunction]
-#[pyo3(signature=(problems,algorithms,termination_function,runs=None,seeds=None))]
+#[pyo3(signature=(algorithms,problems,termination_function=None,runs=None,seeds=None))]
 fn benchmark(
-    problems: Vec<Py<DynProblem>>,
     algorithms: Vec<Py<DynLocalSearch>>,
-    termination_function: Py<DynTermination>,
+    problems: Vec<Py<DynProblem>>,
+    termination_function: Option<Py<DynTermination>>,
     runs: Option<u64>,
     seeds: Option<Vec<u64>>,
-) -> Vec<Vec<Vec<(u128, f64, f64, u64)>>> {
+) -> Vec<Vec<Vec<Vec<(u128, f64, f64, u64)>>>> {
     println!("hii");
     let r_problems: Vec<Arc<Mutex<dyn Problem>>> =
         problems.iter().map(|f| f.get().problem.clone()).collect();
@@ -38,8 +39,12 @@ fn benchmark(
         .map(|f| f.get().local_search.clone())
         .collect();
 
-    let r_term: TerminationFunction = termination_function.get().termination.clone();
-    aidfunc::benchmark(r_problems, r_algorithms, &r_term, runs, seeds)
+    let r_term: Option<TerminationFunction> = if termination_function.is_some() {
+        Some(termination_function.unwrap().get().termination.clone())
+    } else {
+        None
+    };
+    aidfunc::benchmark(r_algorithms, r_problems, r_term, runs, seeds)
 }
 
 // ====================================================================================================================================================================
@@ -346,7 +351,7 @@ impl DynTermination {
         }
     }
     #[staticmethod]
-    fn always_true_criterion() -> Self {
+    fn always_true() -> Self {
         DynTermination {
             termination: TerminationFunction::always_true(),
         }
@@ -391,7 +396,6 @@ impl DynTermination {
     }
 }
 
-#[allow(non_snake_case)]
 #[pymodule]
 fn lclPyO3(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<DynLocalSearch>()?;

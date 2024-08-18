@@ -1,0 +1,17 @@
+@startuml
+    package local_search{
+        abstract LocalSearch
+    } 
+    package problem{
+        abstract Problem
+    }
+    package termination{
+        enum TerminationFunction
+    }
+    package aidfun{
+        entity benchmark
+        entity io
+    }
+    LocalSearch o-- Problem
+    LocalSearch *-- TerminationFunction
+@enduml

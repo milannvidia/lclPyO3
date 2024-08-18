@@ -1,0 +1,51 @@
+@startuml
+    package problem{
+        abstract Problem{
+            +get_mov()
+            +get_all_mov()
+            +do_mov(indices)
+            +delta_eval(indices)
+            +eval()
+            +reset()
+            +set_best()
+            +hash()
+            +get_move_type()
+            +set_move_type(MoveType)
+            +set_eval_type(Evaluation)
+            +set_seed()
+        }
+        class ArrayProblem{
+            -state
+            -best_solution
+            -MoveType
+            -Evaluation
+            +{static} new(MoveType,Evaluation)->ArrayProblem
+            +state()
+            +best_solution()
+        }
+        enum MoveType {
+            +{static} reverse(Option<seed>)->MoveType
+            +{static} swap(Option<seed>)->MoveType
+            +{static} tsp(Option<seed>)->MoveType
+            +{static} multineighbor([Movetype])->MoveType
+            +do_move(array, indices)
+            +get_mov()->indices
+            +get_all_mov()->[indices]
+            +set_seed(seed)
+            +set_size(size)
+        }
+        enum Evaluation{
+            +{static} bins(weights, max_fill)->Evaluation
+            +{static} empty_space(weights, max_fill)->Evaluation
+            +{static} empty_space_exp(weights, max_fill)->Evaluation
+            +{static} tsp(distance_matrix, symmetric)->Evaluation
+            +{static} qap(distance_matrix, flow_matrix)->Evaluation
+            +delta_eval(indices, MoveType,state)->score
+            +eval(state)->score
+            +length()->size
+        }
+        ArrayProblem*--MoveType
+        ArrayProblem*--Evaluation
+        Problem..>ArrayProblem
+    }
+@enduml
